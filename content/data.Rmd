@@ -1,0 +1,10 @@
+---
+title: Data & Databases
+author: ''
+date: []
+slug: data
+categories: []
+tags: []
+---
+
+Here comes soon info on data packages in R, data from books and most importantly databases.

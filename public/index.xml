@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Universal</title>
+    <link>/</link>
+    <description>Recent content on Universal</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 16 Oct 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Testing indicator performance</title>
+      <link>/blog/2018/10/16/2018-10-16-testing-indicator-performance/</link>
+      <pubDate>Tue, 16 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2018/10/16/2018-10-16-testing-indicator-performance/</guid>
+      <description>Indicators are useful and versatile tools applied in disciplines such as engineering, chemistry, medicine, economy or sociology. In ecosystem-based management a key role of an indicator is to inform on the current status of the system component as well as the effectiveness of specific management measures to move the component into a different state. In European Union (EU) marine policy, indicator development has recently progressed as part of the implementation of the Marine Strategy Framework Directive (MSFD) to aid the achievement of Good Environmental Status (GES) of the EU’s marine waters by 2020.</description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/about/</guid>
+      <description>Me I am a postdoctoral researcher currently working at the Institute of Marine Ecosystem and Fishery Science. My research interests are centered on teaching and applying marine data science closely linked to ecosystem-based management. Specifically, I like to integrate computer programming with latest advances in statistical modeling for:
+ Understanding the spatio-temporal dynamics of single populations, communities and food webs in pelagic systems. Identifying causes and effects of sudden shifts in ecosystem structure and functioning.</description>
+    </item>
+    
+    <item>
+      <title>Contact</title>
+      <link>/contact/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/contact/</guid>
+      <description>Any comments or questions? Are you curious about something? Do you have any questions? Let me know and I will try to answer any. If you have any information on interesting data bases or R packages I should add to the list, let me know. And if you have any tutorial or online course related to MDS that you would like to share through this platform you are more then welcome!</description>
+    </item>
+    
+    <item>
+      <title>Data &amp; Databases</title>
+      <link>/data/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/data/</guid>
+      <description>Here comes soon info on data packages in R, data from books and most importantly databases.</description>
+    </item>
+    
+    <item>
+      <title>Marine Data Science</title>
+      <link>/mds/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/mds/</guid>
+      <description>Here comes soon more info on data science of marine systems.</description>
+    </item>
+    
+    <item>
+      <title>Online Courses &amp; Tutorials</title>
+      <link>/courses/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/courses/</guid>
+      <description>General Courses Data Analysis With R: This is a course taught by me as part of the curriculum of the Master program MARSYS at the Institute of Marine Ecosystem and Fishery Science, University of Hamburg, Germany. The course can be used as a short-term (e.g. 1 week) intensive training or in a self-study mode at the Bachelor, Master or PhD level. The course introduces the principles of data science and how to mine out insights from data to understand complex behaviors, trends, and inferences.</description>
+    </item>
+    
+    <item>
+      <title>Software</title>
+      <link>/software/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/software/</guid>
+      <description>Here comes soon info on R, RStudio, R packages, SQL, Python…</description>
+    </item>
+    
+  </channel>
+</rss>
