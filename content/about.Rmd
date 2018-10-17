@@ -21,7 +21,8 @@ I am a postdoctoral researcher currently working at the [Institute of Marine Eco
 - Improving indicator developments and integrated ecosystem assessments for sound ecosystem-based managemen
 
 ### CV
-Here is a <a href="../public/pdf/cv_saskia_a_otto.pdf">download link</a> to my full CV [113KB].
+Here is a [download link](/pdf/cv_saskia_a_otto.pdf) to my full CV [113KB].
+
 
 ### Publications
 
