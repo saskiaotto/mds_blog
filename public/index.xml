@@ -1,22 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Universal</title>
+    <title>Marine Data Science</title>
     <link>/</link>
-    <description>Recent content on Universal</description>
+    <description>Recent content on Marine Data Science</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 16 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 17 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>R code test</title>
+      <link>/blog/2018/10/17/r-code-test/</link>
+      <pubDate>Wed, 17 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2018/10/17/r-code-test/</guid>
+      <description>Test how R code looks like This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
+You can embed an R code chunk like this:
+summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.</description>
+    </item>
+    
+    <item>
       <title>Testing indicator performance</title>
-      <link>/blog/2018/10/16/2018-10-16-testing-indicator-performance/</link>
+      <link>/blog/2018/10/16/testing-indicator-performance/</link>
       <pubDate>Tue, 16 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/blog/2018/10/16/2018-10-16-testing-indicator-performance/</guid>
+      <guid>/blog/2018/10/16/testing-indicator-performance/</guid>
       <description>Indicators are useful and versatile tools applied in disciplines such as engineering, chemistry, medicine, economy or sociology. In ecosystem-based management a key role of an indicator is to inform on the current status of the system component as well as the effectiveness of specific management measures to move the component into a different state. In European Union (EU) marine policy, indicator development has recently progressed as part of the implementation of the Marine Strategy Framework Directive (MSFD) to aid the achievement of Good Environmental Status (GES) of the EU’s marine waters by 2020.</description>
     </item>
     
@@ -26,8 +37,9 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/about/</guid>
-      <description>Me I am a postdoctoral researcher currently working at the Institute of Marine Ecosystem and Fishery Science. My research interests are centered on teaching and applying marine data science closely linked to ecosystem-based management. Specifically, I like to integrate computer programming with latest advances in statistical modeling for:
- Understanding the spatio-temporal dynamics of single populations, communities and food webs in pelagic systems. Identifying causes and effects of sudden shifts in ecosystem structure and functioning.</description>
+      <description>Me download link to my full CV [113KB].
+Publications Research articles (peer-reviewed)  Frelat R., Orio A., Casini M., Lehmann A., Mérigot B., Otto S.A., Sguotti C., Möllmann C., (2018). A three-dimensional view on biodiversity changes: spatial, temporal and functional perspectives on fish communities in the Baltic Sea. ICES Journal of Marine Science, 1-13. DOI: 10.1093/icesjms/fsy027
+ Otto, S.A., Kadin, M., Casini, M., Torres, M.A. &amp;amp; Blenckner, T. (2018): A quantitative framework for selecting and validating food web indicators.</description>
     </item>
     
     <item>

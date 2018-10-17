@@ -1155,8 +1155,8 @@ fieldset[disabled] .btn-template-primary.active {
   left: 0;
   width: 100%;
   height: 100%;
-  background: #555555; /* #467fbf */
-  opacity: 0.1;
+  background: #467fbf;
+  opacity: 0.9;
   filter: alpha(opacity=90);
 }
 .home-carousel .owl-carousel {
@@ -1431,7 +1431,7 @@ fieldset[disabled] .btn-template-primary.active {
 }
 .box-simple {
   text-align: center;
-  margin-bottom: 40px; #
+  margin-bottom: 40px;
 }
 .box-simple .icon {
   color: #467fbf;
@@ -1769,20 +1769,14 @@ fieldset[disabled] .btn-template-primary.active {
   background: #fff;
 }
 .bar.background-image-fixed-1 {
-  /*background: url('../img/fixed-background-1.jpg') center top no-repeat;*/
-  /* SAO: I replaced the picture with this one here: */
-  background: url('../img/screenshot_r_course.png') center top no-repeat;
+  background: url('../img/fixed-background-1.jpg') center top no-repeat;
   background-attachment: fixed;
   background-size: cover;
-  opacity: 0.8;
 }
 .bar.background-image-fixed-2 {
-  /*background: url('../img/fixed-background-2.jpg') center top no-repeat;*/
-  /* SAO: I replaced the picture with this one here: */
-  background: url('../img/screenshot_r_course.png') center top no-repeat;
+  background: url('../img/fixed-background-2.jpg') center top no-repeat;
   background-attachment: fixed;
   background-size: cover;
-  opacity: 0.8;
 }
 .bar.color-white h1,
 .bar.color-white h2,
@@ -3535,7 +3529,7 @@ a.list-group-item.active > .badge,
 /*!
  * Yamm!3 - Yet another megamenu for Bootstrap 3
  * http://geedmo.github.com/yamm3
- *
+ * 
  * @geedmo - Licensed under the MIT license
  */
 .yamm .nav,

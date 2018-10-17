@@ -10,8 +10,9 @@ tags: []
 # Me
 
 ```{r, out.width = "600px", echo = FALSE, fig.align = 'left'}
-knitr::include_graphics("../img/about/about_me.jpg")
+#knitr::include_graphics("../img/about/about_me.jpg")
 ```
+<img src="../img/about/about_me.jpg" style="margin: relative;"
 
 I am a postdoctoral researcher currently working at the [Institute of Marine Ecosystem and Fishery Science](https://www.biologie.uni-hamburg.de/en/einrichtungen/imf.html). My research interests are centered on teaching and applying marine data science closely linked to ecosystem-based management. Specifically, I like to integrate computer programming with latest advances in statistical modeling for:
 
@@ -21,7 +22,7 @@ I am a postdoctoral researcher currently working at the [Institute of Marine Eco
 - Improving indicator developments and integrated ecosystem assessments for sound ecosystem-based managemen
 
 ### CV
-Here is a download link to my full CV.
+Here is a <a href="../public/pdf/cv_saskia_a_otto.pdf">download link</a> to my full CV [113KB].
 
 ### Publications
 

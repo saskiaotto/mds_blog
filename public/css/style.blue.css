@@ -1769,18 +1769,14 @@ fieldset[disabled] .btn-template-primary.active {
   background: #fff;
 }
 .bar.background-image-fixed-1 {
-  /*background: url('../img/fixed-background-1.jpg') center top no-repeat;*/
-  background: url('../img/SAO_Screenshot_r_course.png') center top no-repeat;
+  background: url('../img/fixed-background-1.jpg') center top no-repeat;
   background-attachment: fixed;
   background-size: cover;
-  opacity: 0.8;
 }
 .bar.background-image-fixed-2 {
-  /*background: url('../img/fixed-background-2.jpg') center top no-repeat;*/
-  background: url('../img/SAO_Screenshot_r_course.png') center top no-repeat;
+  background: url('../img/fixed-background-2.jpg') center top no-repeat;
   background-attachment: fixed;
   background-size: cover;
-  opacity: 0.8;
 }
 .bar.color-white h1,
 .bar.color-white h2,
@@ -3533,7 +3529,7 @@ a.list-group-item.active > .badge,
 /*!
  * Yamm!3 - Yet another megamenu for Bootstrap 3
  * http://geedmo.github.com/yamm3
- *
+ * 
  * @geedmo - Licensed under the MIT license
  */
 .yamm .nav,
