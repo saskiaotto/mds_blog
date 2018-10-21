@@ -21,11 +21,11 @@ paginate = 10
     name = "Home"
     url  = "/"
     weight = 1
-    
+
 [[menu.main]]
     name = "MDS"
     url  = "/mds/"
-    weight = 2   
+    weight = 2
 
 [[menu.main]]
     name = "Blog"
@@ -41,12 +41,12 @@ paginate = 10
     name = "Data"
     url  = "/data/"
     weight = 5
-    
+
 [[menu.main]]
     name = "Software"
     url  = "/software/"
     weight = 6
-    
+
 [[menu.main]]
     name = "About"
     url  = "/about/"
@@ -55,7 +55,7 @@ paginate = 10
 [[menu.main]]
     name = "Contact"
     url  = "/contact/"
-    weight = 8  
+    weight = 8
 
 # Top bar social links menu
 
@@ -69,8 +69,8 @@ paginate = 10
     weight = 2
     name = "Researchgate"
     url = "http://www.researchgate.net/profile/Saskia_Otto"
-    pre = "<i class='fab fa-2x fa-researchgate'></i>" 
-    
+    pre = "<i class='fab fa-2x fa-researchgate'></i>"
+
 [[menu.topbar]]
     weight = 3
     name = "Twitter"
@@ -96,7 +96,7 @@ paginate = 10
 
     # Style options: default (light-blue), blue, green, marsala, pink, red, turquoise, violet
     style = "blue_custom"
-  
+
 
     # Since this template is static, the contact form uses www.formspree.io as a
     # proxy. The form makes a POST request to their servers to send the actual
@@ -114,13 +114,13 @@ paginate = 10
     email = "saskia.otto@uni-hamburg.de"
 
     about_me = "<p>I am a quantitative marine ecologist who loves combining nerdy programming, statistics, and any activity in and around the oceans.</p>"
-    copyright = "This work is licensed under a <a rel='license' href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International License </a>" 
-    
+    copyright = "This work is licensed under a <a rel='license' href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International License </a>"
+
     # Format dates with Go's time formatting
     date_format = "January 2, 2006"
 
-    logo = "img/mds_logo_globe.png"
-    logo_small = "img/mds_logo_globe_small.png"
+    logo = "img/mds_logo_notext@2x.png"
+    logo_small = "img/mds_logo_notext@2x.png"
     address = """<p><strong>Institute of Marine Ecosystem and Fishery Science (IMF)</strong>
         <br>Center for Earth System Research and Sustainability (CEN)
         <br>University of Hamburg
@@ -133,7 +133,7 @@ paginate = 10
     #longitude = "-77.028333"
 
 [Permalinks]
-    blog = "/blog/:year/:month/:day/:slug/" 
+    blog = "/blog/:year/:month/:day/:slug/"
 
 # Enable or disable top bar with social icons
 [params.topbar]
