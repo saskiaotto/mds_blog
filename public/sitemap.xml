@@ -32,7 +32,19 @@
   </url>
   
   <url>
+    <loc>/categories/data-visualisation/</loc>
+    <lastmod>2018-10-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/data/</loc>
+  </url>
+  
+  <url>
+    <loc>/categories/indicator/</loc>
+    <lastmod>2018-10-16T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
@@ -46,6 +58,12 @@
   </url>
   
   <url>
+    <loc>/tags/modelling/</loc>
+    <lastmod>2018-10-17T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/courses/</loc>
   </url>
   
@@ -55,6 +73,7 @@
   
   <url>
     <loc>/tags/</loc>
+    <lastmod>2018-10-17T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

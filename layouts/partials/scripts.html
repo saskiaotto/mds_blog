@@ -1,0 +1,89 @@
+{{ template "_internal/google_analytics.html" . }}
+<script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0/jquery.counterup.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-parallax/1.1.3/jquery-parallax.js"></script>
+{{ if .Site.Params.googleMapsApiKey }}
+<script src="//maps.googleapis.com/maps/api/js?key={{.Site.Params.googleMapsApiKey}}&v=3.exp"></script>
+{{ else }}
+<script src="//maps.googleapis.com/maps/api/js?v=3.exp"></script>
+{{ end }}
+<script src="{{ .Site.BaseURL }}js/hpneo.gmaps.js"></script>
+<script src="{{ .Site.BaseURL }}js/gmaps.init.js"></script>
+<script src="{{ .Site.BaseURL }}js/front.js"></script>
+
+<!-- owl carousel -->
+<script src="{{ .Site.BaseURL }}js/owl.carousel.min.js"></script>
+
+<!-- this code moves the in-page anchor down below the navbar when clicking on toc -->
+<!-- taken from: https://github.com/twbs/bootstrap/issues/1768 -->
+<script>
+  var shiftWindow = function() { scrollBy(0, -200) };
+  if (location.hash) shiftWindow();
+  window.addEventListener("hashchange", shiftWindow);
+</script>
+
+
+<!-- Make toc stay sticky: ->
+<!-- this worked finally (although box width different in data and software)
+https://stackoverflow.com/questions/1216114/how-can-i-make-a-div-stick-to-the-top-of-the-screen-once-its-been-scrolled-to -->
+<script>
+
+function make_sticky(id) {
+    var e = $(id);
+    var w = $(window);
+    $('<div/>').insertBefore(id);
+    $('<div/>').hide().css('height',e.outerHeight()).insertAfter(id);
+    var n = e.next();
+    var p = e.prev();
+    function sticky_relocate() {
+      var window_top = w.scrollTop();
+      var div_top = p.offset().top;
+      if (window_top > div_top) {
+        e.addClass('sticky');
+        n.show();
+      } else {
+        e.removeClass('sticky');
+        n.hide();
+      }
+    }
+    w.scroll(sticky_relocate);
+    sticky_relocate();
+}
+make_sticky('#toc');
+</script>
+
+
+<!-- this partly worked but box became wider when fixed and jumped between formats -->
+<!-- <script>
+var startProductBarPos=-1;
+window.onscroll=function(){
+  var bar = document.getElementById('toc');
+  if(startProductBarPos<0)startProductBarPos=findPosY(bar);
+
+  if(pageYOffset>startProductBarPos){
+    bar.style.position='fixed';
+    bar.style.top=200;
+  }else{
+    bar.style.position='relative';
+  }
+
+};
+
+function findPosY(obj) {
+  var curtop = 0;
+  if (typeof (obj.offsetParent) != 'undefined' && obj.offsetParent) {
+    while (obj.offsetParent) {
+      curtop += obj.offsetTop;
+      obj = obj.offsetParent;
+    }
+    curtop += obj.offsetTop;
+  }
+  else if (obj.y)
+    curtop += obj.y;
+  return curtop;
+}
+</script> -->

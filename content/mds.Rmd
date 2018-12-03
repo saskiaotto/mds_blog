@@ -7,4 +7,184 @@ categories: []
 tags: []
 ---
 
-Here comes soon more info on data science of marine systems.
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+  warning = FALSE, message = FALSE
+  )
+```
+
+## What is Marine Data Science (MDS)?
+
+MDS is all about **uncovering findings from marine data** such as **oceanographical** data collected using both *in situ* methods and remote sensing. Typical parameters measured on-board relate to near-surface meteorological conditions (air temperature, wind speed, wind direction, cloudiness, etc.), sea surface conditions (e.g. sea surface temperature (SST), salinity, wave height, and wave direction) as well as subsurface water characteristics (vertical profiles of temperature, salinity, dissolved nutrients, ocean currents, or ocean bottom depth). Marine biological data  comprises of spatial and temporal species **occurrence** and **abundance** data (e.g., trawl data of fish, net sampling of plankton, benthic grab samples or visual counts of mammals or sea birds), **taxonomic** information, **trait** data, **sequence** and high-throughput screening (HTS) data, as well as **digital image** data from optical sensor systems or **hydroacoustic** data from echo sounders. 
+<br>
+<br>
+When given a challenging question, data scientists become detectives and investigate leads and try to understand patterns within the data. It typically starts with data exploration followed by quantitative techniques drawn from mathematics, statistics, information science, and computer science in order to get a level deeper, e.g., inferential models, segmentation analysis, time series forecasting or synthetic control experiments. The overall intent is to scientifically piece together a forensic view of what the data is really saying about marine system dynamics. The data to be used, however, does not need to represent exclusively marine biotic and abiotic data. In fact, any type of data describing a climatological, terrestrial or socio-economic component that could affect the marine system could be analysed. Amongst these, regional and large-scale climatological indices, fisheries, agricultural, and demographic data are commonly used to study the extent of external forcing on the system and potential feedback mechanisms.
+<br>
+<br>
+With the vast amount of data that are nowadays produced (~90 percent of the data in the world today has been created in the past two years[^1]), twenty-first century marine science becomes increasingly analytical and computational across all disciplines. Since 2012, data science has become a popular buzzword when the Harvard Business Review called it "The Sexiest Job of the 21st Century"[^2] and is often used synonymously with statistics although it comprises of more disciplines. 
+
+
+## Elements of data science
+
+Data science is highly interdisciplinary and a blend of skills in three major areas:
+
+<video id="myVideo" width="640" height="480" autoplay loop>
+  <source src="/movies/elements_of_mds.mp4" type="video/mp4">
+  Your browser does not support HTML5 video.
+</video>
+
+<script>
+var vid = document.getElementById("myVideo");
+vid.playbackRate = 0.5;
+</script> 
+
+
+Hence, new generation of marine scientists need to be well trained in
+
+- analytical and interdisciplinary thinking
+- computer programming → at least one language
+- visualizations
+- data mining, statistical modelling, machine learning, and predictive analytics
+
+<br>
+
+### Popular data science methods
+
+The online community platform of data scientists and machine learners [kaggle](https://www.kaggle.com/) conducted in 2017 an industry-wide survey amongst 16,000 data scientist from all over the world. The respondents were asked about their educational background, working environment and programming languages and methods used at work or in the near future. You can find a summery of the survey here [https://www.kaggle.com/surveys/2017](https://www.kaggle.com/surveys/2017) and the complete survey results here [https://www.kaggle.com/amberthomas/kaggle-2017-survey-results](https://www.kaggle.com/amberthomas/kaggle-2017-survey-results). The data can also be download at [https://www.kaggle.com/kaggle/kaggle-survey-2017](https://www.kaggle.com/kaggle/kaggle-survey-2017).
+
+<br>
+
+#### Let's see which methods respondents from all fields or academia currently use most at work:
+
+```{r, echo=FALSE}
+library(tidyverse)
+library(rlang)
+library(wordcloud)
+
+cleanMCData <- read.csv('multipleChoiceResponses.csv', stringsAsFactors = TRUE, header = TRUE)
+question <- "WorkMethodsSelect"
+methods_now <- cleanMCData %>% 
+  filter(!UQ(sym(question)) == "") %>%
+  select(question) %>% 
+  mutate(total_count = n()) %>% 
+  mutate(selections = strsplit(as.character(UQ(sym(question))), 
+    '\\([^)]+,(*SKIP)(*FAIL)|,\\s*', perl = TRUE)) %>%
+  unnest(selections) %>% 
+  group_by(selections) %>% 
+    summarise(total_count = max(total_count),
+              count = n()) %>% 
+    mutate(percent = (count / total_count) * 100) %>% 
+    arrange(count) %>%
+    filter(percent > 20) %>%
+  mutate(selections = fct_inorder(factor(selections)))
+
+methods_now_acad <- cleanMCData %>% 
+  #filter(str_detect(CurrentEmployerType, c("college", "university"))) %>%
+  filter(str_detect(EmployerIndustry, c("Academic"))) %>%
+  filter(!UQ(sym(question)) == "") %>%
+  select(question) %>% 
+  mutate(total_count = n()) %>% 
+  mutate(selections = strsplit(as.character(UQ(sym(question))), 
+    '\\([^)]+,(*SKIP)(*FAIL)|,\\s*', perl = TRUE)) %>%
+  unnest(selections) %>% 
+  group_by(selections) %>% 
+    summarise(total_count = max(total_count),
+              count = n()) %>% 
+    mutate(percent = (count / total_count) * 100) %>% 
+    arrange(count) %>%
+    filter(percent > 20) %>%
+  mutate(selections = fct_inorder(factor(selections)))
+```
+
+```{r, fig.width=12, fig.height=4, fig.align="left", tidy=TRUE}
+# comment
+p_all <- methods_now %>%
+  ggplot(aes(x = selections, y = percent, fill = selections)) +
+    geom_col() + 
+    scale_fill_viridis_d(direction = -1) +
+    guides(fill = "none") +
+    labs(x = "Methods used", y = "Percent", title = "All working environments") + 
+    coord_flip() + 
+    theme_classic()
+p_acad <- methods_now_acad %>%
+  ggplot(aes(x = selections, y = percent, fill = selections)) +
+    geom_col() + 
+    scale_fill_viridis_d(direction = -1) +
+    guides(fill = "none") +
+    labs(x = "Methods used", y = "Percent", title = "Academia") + 
+    coord_flip() + 
+    theme_classic()
+gridExtra::grid.arrange(p_all, p_acad, ncol = 2)
+```
+
+Beside data visualization, logistic regression and cross-validation are the most commonly used data science methods, also in academia.
+
+<br>
+
+#### Which machine learning or data science method are data scientists most excited about learning in the next year?
+```{r, echo=FALSE}
+question <- "MLMethodNextYearSelect"
+next_yr_all <- cleanMCData %>% 
+  filter(!UQ(sym(question)) == "") %>%
+  select(question) %>% 
+  mutate(total_count = n()) %>% 
+  mutate(selections = strsplit(as.character(UQ(sym(question))), 
+    '\\([^)]+,(*SKIP)(*FAIL)|,\\s*', perl = TRUE)) %>%
+  unnest(selections) %>% 
+  group_by(selections) %>% 
+  summarise(total_count = max(total_count),
+    count = n()) %>% 
+  mutate(percent = round((count / total_count) * 100,1)) %>%
+  rename(method = selections) %>%
+  select(method, percent) %>%
+  arrange(desc(percent)) %>%
+  as_tibble
+
+next_yr_acad <- cleanMCData %>% 
+  #filter(str_detect(CurrentEmployerType, c("college", "university"))) %>%
+  filter(str_detect(EmployerIndustry, c("Academic"))) %>%
+  filter(!UQ(sym(question)) == "") %>%
+  select(question) %>% 
+  mutate(total_count = n()) %>% 
+  mutate(selections = strsplit(as.character(UQ(sym(question))), 
+    '\\([^)]+,(*SKIP)(*FAIL)|,\\s*', perl = TRUE)) %>%
+  unnest(selections) %>% 
+  group_by(selections) %>% 
+  summarise(total_count = max(total_count),
+    count = n()) %>% 
+  mutate(percent = round((count / total_count) * 100,1)) %>%
+  rename(method = selections) %>%
+  select(method, percent) %>%
+  arrange(desc(percent)) %>%
+  as_tibble
+
+next_yr <- left_join(next_yr_all, next_yr_acad, by = "method") %>%
+  rename(percent_all = percent.x,
+    percent_academic = percent.y
+    ) %>% replace_na(list(percent_all = 0, percent_academic = 0))
+
+
+next_yr %>% knitr::kable(format = "html", 
+  col.names = c("Methods", "All (%)", "Academia (%)"),
+  caption = "Usage of methods per working environment in percentage (scroll down to see more methods)") %>%
+  kableExtra::kable_styling(
+    bootstrap_options = c("striped", "condensed", "responsive")#, 
+    #full_width = F
+    #position = "float_left"
+    ) %>%
+  kableExtra::scroll_box(width = "75%", height = "400px",
+    box_css = "border: transparent; padding: 5px; ", extra_css = "margin-left:15%; margin-right:15%;")
+```
+
+<br>
+Independent of the working environment, deep learning and neural networks are by far the methods data scientists are most excited to learn.  
+
+
+
+
+<!-- Footnotes: -->
+[^1]: Report at the  [IBM Consumer Products Industry](https://www.ibm.com/blogs/insights-on-business/consumer-products/2-5-quintillion-bytes-of-data-created-every-day-how-does-cpg-retail-manage-it/)
+
+[^2]: Davenport, Thomas H.; Patil, DJ (Oct 2012), [Data Scientist: The Sexiest Job of the 21st Century](https://hbr.org/2012/10/data-scientist-the-sexiest-job-of-the-21st-century), Harvard Business Review
+
+

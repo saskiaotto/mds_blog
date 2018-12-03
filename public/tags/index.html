@@ -29,6 +29,8 @@
   
   <link rel="stylesheet" href="/css/bootstrap.css" >
 
+
+
   
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
   
@@ -36,21 +38,30 @@
   
   
   
-  <link rel="stylesheet" href="/css/sunburst_custom.css" rel="stylesheet" id="theme-stylesheet">
+  <link rel="stylesheet" href="/css/github_custom.css" rel="stylesheet" id="theme-stylesheet">
   <script src="/js/highlight.pack.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+  
+  
+  
+
 
   
   <link href="/css/animate.css" rel="stylesheet">
 
   
   
-    <link href="/css/style.blue_custom.css" rel="stylesheet" id="theme-stylesheet">
+  
+    <link href="/css/style.default.css" rel="stylesheet" id="theme-stylesheet">
   
 
 
   
-  <link href="/css/custom.css" rel="stylesheet">
+  <link href="/css/style.blue_custom.css" rel="stylesheet">
+
 
   
   
@@ -193,7 +204,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1>Tags</h1>
+                <h1 class="title toc-ignore">Tags</h1>
             </div>
         </div>
     </div>
@@ -232,6 +243,49 @@
 
                         
 
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+      <h3 class="panel-title">Search</h3>
+    </div>
+
+    <div class="panel-body">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" role="search">
+            <div class="input-group">
+                <input type="search" name="q" class="form-control" placeholder="Search">
+                <input type="hidden" name="sitesearch" value="/">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-template-main"><i class="fa fa-search"></i></button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+      <h3 class="panel-title">Categories</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="nav nav-pills nav-stacked">
+            
+            <li><a href="/categories/data-visualisation">data-visualisation (1)</a>
+            </li>
+            
+            <li><a href="/categories/indicator">indicator (1)</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
 
 
 
@@ -240,6 +294,20 @@
 
 
 
+<div class="panel sidebar-menu">
+    <div class="panel-heading">
+      <h3 class="panel-title">Tags</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="tag-cloud">
+            
+            <li><a href="/tags/modelling"><i class="fa fa-tags"></i> modelling</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
 
 
 
@@ -266,6 +334,7 @@
         
         <div class="col-md-4 col-sm-6">
             <h4>About me</h4>
+            <img src="/img/profile_v1@2x.png" alt="profile" style="float:left;width:75px;height:75px;padding:5px;"/>
 
             I am a quantitative marine ecologist who loves combining nerdy programming, statistics, and any activity in and around the oceans.
 
@@ -334,15 +403,11 @@
 
           <h4>Contact</h4>
 
-            <strong>Institute of Marine Ecosystem and Fishery Science (IMF)</strong>
-        <br>Center for Earth System Research and Sustainability (CEN)
+            <strong><a href="https://www.biologie.uni-hamburg.de/en/einrichtungen/imf.html">Institute of Marine Ecosystem and Fishery Science</a></strong>
+        <br>Center for Earth System Research and Sustainability
         <br>University of Hamburg
-        <br>Grosse Elbstrasse 133
-        <br>22767 Hamburg
-        <strong>Germany</strong>
-      </p>
+        <br><strong>Germany</strong><br>
       
-
 
             <a href="/contact" class="btn btn-small btn-template-main">Go to contact page</a>
 
@@ -402,6 +467,46 @@
 
 
 <script src="/js/owl.carousel.min.js"></script>
+
+
+
+<script>
+  var shiftWindow = function() { scrollBy(0, -200) };
+  if (location.hash) shiftWindow();
+  window.addEventListener("hashchange", shiftWindow);
+</script>
+
+
+
+<script>
+
+function make_sticky(id) {
+    var e = $(id);
+    var w = $(window);
+    $('<div/>').insertBefore(id);
+    $('<div/>').hide().css('height',e.outerHeight()).insertAfter(id);
+    var n = e.next();
+    var p = e.prev();
+    function sticky_relocate() {
+      var window_top = w.scrollTop();
+      var div_top = p.offset().top;
+      if (window_top > div_top) {
+        e.addClass('sticky');
+        n.show();
+      } else {
+        e.removeClass('sticky');
+        n.hide();
+      }
+    }
+    w.scroll(sticky_relocate);
+    sticky_relocate();
+}
+make_sticky('#toc');
+</script>
+
+
+
+
 
 
   </body>

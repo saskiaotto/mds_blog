@@ -1,0 +1,43 @@
+<div class="container" id="toc_software">
+  <div class="row">
+
+      <!-- main content area -->
+      <div class="col-md-9"> <!-- class="col-sm-9" role="main" -->
+        <section>
+            {{ .Content }}
+        </section>
+      </div> <!--/col9-->
+
+      <!-- sidebar, with manually set ToC-->
+      <div class="col-md-3" >
+        <div id="toc">
+          <h4 style="color:#6D6D70;">Overview</h4>
+          <ul style="padding:10px;">
+            <li><a href="#which-programming-languages-should-you-learn-for-marine-data-science">Programming languages to learn</a>
+              <ul>
+                <li><a href="#overview-of-programming-languages-and-applications">Overview of programming languages and applications</a></li>
+              </ul>
+            </li>
+            <li><a href="#r-packages">R packages</a>
+              <ul>
+                <li><a href="#accessingretrieving-data">Accessing/retrieving data</a></li>
+                <li><a href="#data-wrangling-and-processing">Data wrangling and processing</a></li>
+                <li><a href="#general-visualisation-packages">General visualisation packages</a></li>
+                <li><a href="#time-series">Time series</a></li>
+                <li><a href="#spatial-analysis">Spatial analysis</a></li>
+                <li><a href="#oceanographic-analysis">Oceanographic analysis</a></li>
+                <li><a href="#fishy-packages-for-analysis">Fishy packages for analysis</a></li>
+                <li><a href="#modelling-species-responses-and-other-data-supervised-learning">Modelling species responses and other data (supervised learning)</a></li>
+                <li><a href="#multivariate-analyses-supervised-and-unsupervised">Multivariate analyses (supervised and unsupervised)</a></li>
+                <li><a href="#other-species-specific-packages">Other species-specific packages</a></li>
+                <li><a href="#text-analysis">Text analysis</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!--/toc-->
+      </div><!--/col3-->
+
+  </div><!--/row-->
+</div><!--/container-->
+
+{{ partial "map.html" . }}

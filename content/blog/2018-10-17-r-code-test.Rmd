@@ -3,8 +3,8 @@ title: R code test
 author: Saskia O.
 date: '2018-10-17'
 slug: r-code-test
-categories: []
-tags: []
+categories: [data visualisation]
+tags: [modelling]
 ---
 
 # Test how R code looks like

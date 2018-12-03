@@ -29,6 +29,8 @@
   
   <link rel="stylesheet" href="/css/bootstrap.css" >
 
+
+
   
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
   
@@ -36,21 +38,30 @@
   
   
   
-  <link rel="stylesheet" href="/css/sunburst_custom.css" rel="stylesheet" id="theme-stylesheet">
+  <link rel="stylesheet" href="/css/github_custom.css" rel="stylesheet" id="theme-stylesheet">
   <script src="/js/highlight.pack.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+  
+  
+  
+
 
   
   <link href="/css/animate.css" rel="stylesheet">
 
   
   
-    <link href="/css/style.blue_custom.css" rel="stylesheet" id="theme-stylesheet">
+  
+    <link href="/css/style.default.css" rel="stylesheet" id="theme-stylesheet">
   
 
 
   
-  <link href="/css/custom.css" rel="stylesheet">
+  <link href="/css/style.blue_custom.css" rel="stylesheet">
+
 
   
   
@@ -81,7 +92,7 @@
 </head>
 
 
-  <body>
+  <body> 
 
     <div id="all">
 
@@ -188,16 +199,18 @@
 
 
         </header>
+        
 
         <div id="heading-breadcrumbs">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1>Marine Data Science</h1>
+                <h1 class="title toc-ignore">Marine Data Science</h1>
             </div>
         </div>
     </div>
 </div>
+
 
 
         <div id="content">
@@ -210,7 +223,362 @@
                     <div class="col-md-12">
 
                         <div>
-                          <p>Here comes soon more info on data science of marine systems.</p>
+                          <script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+
+<div id="what-is-marine-data-science-mds" class="section level2">
+<h2>What is Marine Data Science (MDS)?</h2>
+<p>MDS is all about <strong>uncovering findings from marine data</strong> such as <strong>oceanographical</strong> data collected using both <em>in situ</em> methods and remote sensing. Typical parameters measured on-board relate to near-surface meteorological conditions (air temperature, wind speed, wind direction, cloudiness, etc.), sea surface conditions (e.g. sea surface temperature (SST), salinity, wave height, and wave direction) as well as subsurface water characteristics (vertical profiles of temperature, salinity, dissolved nutrients, ocean currents, or ocean bottom depth). Marine biological data comprises of spatial and temporal species <strong>occurrence</strong> and <strong>abundance</strong> data (e.g., trawl data of fish, net sampling of plankton, benthic grab samples or visual counts of mammals or sea birds), <strong>taxonomic</strong> information, <strong>trait</strong> data, <strong>sequence</strong> and high-throughput screening (HTS) data, as well as <strong>digital image</strong> data from optical sensor systems or <strong>hydroacoustic</strong> data from echo sounders. <br> <br> When given a challenging question, data scientists become detectives and investigate leads and try to understand patterns within the data. It typically starts with data exploration followed by quantitative techniques drawn from mathematics, statistics, information science, and computer science in order to get a level deeper, e.g., inferential models, segmentation analysis, time series forecasting or synthetic control experiments. The overall intent is to scientifically piece together a forensic view of what the data is really saying about marine system dynamics. The data to be used, however, does not need to represent exclusively marine biotic and abiotic data. In fact, any type of data describing a climatological, terrestrial or socio-economic component that could affect the marine system could be analysed. Amongst these, regional and large-scale climatological indices, fisheries, agricultural, and demographic data are commonly used to study the extent of external forcing on the system and potential feedback mechanisms. <br> <br> With the vast amount of data that are nowadays produced (~90 percent of the data in the world today has been created in the past two years<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>), twenty-first century marine science becomes increasingly analytical and computational across all disciplines. Since 2012, data science has become a popular buzzword when the Harvard Business Review called it “The Sexiest Job of the 21st Century”<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> and is often used synonymously with statistics although it comprises of more disciplines.</p>
+</div>
+<div id="elements-of-data-science" class="section level2">
+<h2>Elements of data science</h2>
+<p>Data science is highly interdisciplinary and a blend of skills in three major areas:</p>
+<video id="myVideo" width="640" height="480" autoplay loop>
+<source src="/movies/elements_of_mds.mp4" type="video/mp4"> Your browser does not support HTML5 video.
+</video>
+<script>
+var vid = document.getElementById("myVideo");
+vid.playbackRate = 0.5;
+</script>
+<p>Hence, new generation of marine scientists need to be well trained in</p>
+<ul>
+<li>analytical and interdisciplinary thinking</li>
+<li>computer programming → at least one language</li>
+<li>visualizations</li>
+<li>data mining, statistical modelling, machine learning, and predictive analytics</li>
+</ul>
+<p><br></p>
+<div id="popular-data-science-methods" class="section level3">
+<h3>Popular data science methods</h3>
+<p>The online community platform of data scientists and machine learners <a href="https://www.kaggle.com/">kaggle</a> conducted in 2017 an industry-wide survey amongst 16,000 data scientist from all over the world. The respondents were asked about their educational background, working environment and programming languages and methods used at work or in the near future. You can find a summery of the survey here <a href="https://www.kaggle.com/surveys/2017" class="uri">https://www.kaggle.com/surveys/2017</a> and the complete survey results here <a href="https://www.kaggle.com/amberthomas/kaggle-2017-survey-results" class="uri">https://www.kaggle.com/amberthomas/kaggle-2017-survey-results</a>. The data can also be download at <a href="https://www.kaggle.com/kaggle/kaggle-survey-2017" class="uri">https://www.kaggle.com/kaggle/kaggle-survey-2017</a>.</p>
+<p><br></p>
+<div id="lets-see-which-methods-respondents-from-all-fields-or-academia-currently-use-most-at-work" class="section level4">
+<h4>Let’s see which methods respondents from all fields or academia currently use most at work:</h4>
+<pre class="r"><code># comment
+p_all &lt;- methods_now %&gt;% ggplot(aes(x = selections, y = percent, fill = selections)) + 
+    geom_col() + scale_fill_viridis_d(direction = -1) + guides(fill = &quot;none&quot;) + 
+    labs(x = &quot;Methods used&quot;, y = &quot;Percent&quot;, title = &quot;All working environments&quot;) + 
+    coord_flip() + theme_classic()
+p_acad &lt;- methods_now_acad %&gt;% ggplot(aes(x = selections, y = percent, fill = selections)) + 
+    geom_col() + scale_fill_viridis_d(direction = -1) + guides(fill = &quot;none&quot;) + 
+    labs(x = &quot;Methods used&quot;, y = &quot;Percent&quot;, title = &quot;Academia&quot;) + coord_flip() + 
+    theme_classic()
+gridExtra::grid.arrange(p_all, p_acad, ncol = 2)</code></pre>
+<p><img src="/mds_files/figure-html/unnamed-chunk-2-1.png" width="1152" style="display: block; margin: auto auto auto 0;" /></p>
+<p>Beside data visualization, logistic regression and cross-validation are the most commonly used data science methods, also in academia.</p>
+<p><br></p>
+</div>
+<div id="which-machine-learning-or-data-science-method-are-data-scientists-most-excited-about-learning-in-the-next-year" class="section level4">
+<h4>Which machine learning or data science method are data scientists most excited about learning in the next year?</h4>
+<div style="border: transparent; padding: 5px; margin-left:15%; margin-right:15%;overflow-y: scroll; height:400px; overflow-x: scroll; width:75%; ">
+<table class="table table-striped table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-3">Table 1: </span>Usage of methods per working environment in percentage (scroll down to see more methods)
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Methods
+</th>
+<th style="text-align:right;">
+All (%)
+</th>
+<th style="text-align:right;">
+Academia (%)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Deep learning
+</td>
+<td style="text-align:right;">
+40.3
+</td>
+<td style="text-align:right;">
+41.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Neural Nets
+</td>
+<td style="text-align:right;">
+12.8
+</td>
+<td style="text-align:right;">
+10.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Time Series Analysis
+</td>
+<td style="text-align:right;">
+6.3
+</td>
+<td style="text-align:right;">
+6.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bayesian Methods
+</td>
+<td style="text-align:right;">
+4.7
+</td>
+<td style="text-align:right;">
+5.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Text Mining
+</td>
+<td style="text-align:right;">
+4.6
+</td>
+<td style="text-align:right;">
+5.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Genetic &amp; Evolutionary Algorithms
+</td>
+<td style="text-align:right;">
+3.9
+</td>
+<td style="text-align:right;">
+3.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Social Network Analysis
+</td>
+<td style="text-align:right;">
+3.4
+</td>
+<td style="text-align:right;">
+3.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Anomaly Detection
+</td>
+<td style="text-align:right;">
+2.8
+</td>
+<td style="text-align:right;">
+2.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ensemble Methods (e.g. boosting, bagging)
+</td>
+<td style="text-align:right;">
+2.5
+</td>
+<td style="text-align:right;">
+2.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:right;">
+2.4
+</td>
+<td style="text-align:right;">
+2.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Monte Carlo Methods
+</td>
+<td style="text-align:right;">
+2.1
+</td>
+<td style="text-align:right;">
+2.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cluster Analysis
+</td>
+<td style="text-align:right;">
+2.0
+</td>
+<td style="text-align:right;">
+2.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Regression
+</td>
+<td style="text-align:right;">
+2.0
+</td>
+<td style="text-align:right;">
+1.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+I don’t plan on learning a new ML/DS method
+</td>
+<td style="text-align:right;">
+1.8
+</td>
+<td style="text-align:right;">
+2.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Decision Trees
+</td>
+<td style="text-align:right;">
+1.4
+</td>
+<td style="text-align:right;">
+1.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Random Forests
+</td>
+<td style="text-align:right;">
+1.4
+</td>
+<td style="text-align:right;">
+1.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Support Vector Machines (SVM)
+</td>
+<td style="text-align:right;">
+1.4
+</td>
+<td style="text-align:right;">
+1.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Survival Analysis
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+1.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Proprietary Algorithms
+</td>
+<td style="text-align:right;">
+0.9
+</td>
+<td style="text-align:right;">
+0.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Factor Analysis
+</td>
+<td style="text-align:right;">
+0.7
+</td>
+<td style="text-align:right;">
+0.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Link Analysis
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+0.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Association Rules
+</td>
+<td style="text-align:right;">
+0.4
+</td>
+<td style="text-align:right;">
+0.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rule Induction
+</td>
+<td style="text-align:right;">
+0.4
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Uplift Modeling
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MARS
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><br> Independent of the working environment, deep learning and neural networks are by far the methods data scientists are most excited to learn.</p>
+<!-- Footnotes: -->
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Report at the <a href="https://www.ibm.com/blogs/insights-on-business/consumer-products/2-5-quintillion-bytes-of-data-created-every-day-how-does-cpg-retail-manage-it/">IBM Consumer Products Industry</a><a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Davenport, Thomas H.; Patil, DJ (Oct 2012), <a href="https://hbr.org/2012/10/data-scientist-the-sexiest-job-of-the-21st-century">Data Scientist: The Sexiest Job of the 21st Century</a>, Harvard Business Review<a href="#fnref2">↩</a></p></li>
+</ol>
+</div>
 
                         </div>
 
@@ -232,6 +600,7 @@
         
         <div class="col-md-4 col-sm-6">
             <h4>About me</h4>
+            <img src="/img/profile_v1@2x.png" alt="profile" style="float:left;width:75px;height:75px;padding:5px;"/>
 
             I am a quantitative marine ecologist who loves combining nerdy programming, statistics, and any activity in and around the oceans.
 
@@ -300,15 +669,11 @@
 
           <h4>Contact</h4>
 
-            <strong>Institute of Marine Ecosystem and Fishery Science (IMF)</strong>
-        <br>Center for Earth System Research and Sustainability (CEN)
+            <strong><a href="https://www.biologie.uni-hamburg.de/en/einrichtungen/imf.html">Institute of Marine Ecosystem and Fishery Science</a></strong>
+        <br>Center for Earth System Research and Sustainability
         <br>University of Hamburg
-        <br>Grosse Elbstrasse 133
-        <br>22767 Hamburg
-        <strong>Germany</strong>
-      </p>
+        <br><strong>Germany</strong><br>
       
-
 
             <a href="/contact" class="btn btn-small btn-template-main">Go to contact page</a>
 
@@ -368,6 +733,46 @@
 
 
 <script src="/js/owl.carousel.min.js"></script>
+
+
+
+<script>
+  var shiftWindow = function() { scrollBy(0, -200) };
+  if (location.hash) shiftWindow();
+  window.addEventListener("hashchange", shiftWindow);
+</script>
+
+
+
+<script>
+
+function make_sticky(id) {
+    var e = $(id);
+    var w = $(window);
+    $('<div/>').insertBefore(id);
+    $('<div/>').hide().css('height',e.outerHeight()).insertAfter(id);
+    var n = e.next();
+    var p = e.prev();
+    function sticky_relocate() {
+      var window_top = w.scrollTop();
+      var div_top = p.offset().top;
+      if (window_top > div_top) {
+        e.addClass('sticky');
+        n.show();
+      } else {
+        e.removeClass('sticky');
+        n.hide();
+      }
+    }
+    w.scroll(sticky_relocate);
+    sticky_relocate();
+}
+make_sticky('#toc');
+</script>
+
+
+
+
 
 
   </body>

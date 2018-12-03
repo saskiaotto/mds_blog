@@ -9,7 +9,11 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
   overflow-x: auto;
   padding: 0.5em;
   color: #333;
-  background: #d7d7d7; /*#f8f8f8; */
+  background: #F5F5F5 ; /*#f8f8f8;d7d7d7 */
+  border-color: #bab8b8;
+  border-radius: 4px;
+  border-style: solid;
+  border-width: thin;
 }
 
 .hljs-comment,

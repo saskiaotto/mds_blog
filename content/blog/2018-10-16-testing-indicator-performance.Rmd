@@ -3,8 +3,8 @@ title: Testing indicator performance
 author: Saskia
 date: '2018-10-16'
 slug: testing-indicator-performance
-categories: []
-tags: []
+categories: [indicator]
+tags: [modelling]
 banner: "img/banners/indicators.jpg"
 ---
 

@@ -29,6 +29,8 @@
   
   <link rel="stylesheet" href="/css/bootstrap.css" >
 
+
+
   
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
   
@@ -36,21 +38,30 @@
   
   
   
-  <link rel="stylesheet" href="/css/sunburst_custom.css" rel="stylesheet" id="theme-stylesheet">
+  <link rel="stylesheet" href="/css/github_custom.css" rel="stylesheet" id="theme-stylesheet">
   <script src="/js/highlight.pack.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+  
+  
+  
+
 
   
   <link href="/css/animate.css" rel="stylesheet">
 
   
   
-    <link href="/css/style.blue_custom.css" rel="stylesheet" id="theme-stylesheet">
+  
+    <link href="/css/style.default.css" rel="stylesheet" id="theme-stylesheet">
   
 
 
   
-  <link href="/css/custom.css" rel="stylesheet">
+  <link href="/css/style.blue_custom.css" rel="stylesheet">
+
 
   
   
@@ -81,7 +92,7 @@
 </head>
 
 
-  <body>
+  <body> 
 
     <div id="all">
 
@@ -188,16 +199,18 @@
 
 
         </header>
+        
 
         <div id="heading-breadcrumbs">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1>About</h1>
+                <h1 class="title toc-ignore">About</h1>
             </div>
         </div>
     </div>
 </div>
+
 
 
         <div id="content">
@@ -212,17 +225,14 @@
                         <div>
                           <div id="me" class="section level1">
 <h1>Me</h1>
-<p><img src="../img/about/about_me.jpg"  class="w3-round" alt="Me" style="max-width: 100%; height: auto; with: auto\9;"> <br></p>
-<p>I am a postdoctoral researcher currently working at the <a href="https://www.biologie.uni-hamburg.de/en/einrichtungen/imf.html">Institute of Marine Ecosystem and Fishery Science</a>. My research interests are centered on teaching and applying marine data science closely linked to ecosystem-based management. Specifically, I like to integrate computer programming with latest advances in statistical modeling for:</p>
-<ul>
-<li>Understanding the spatio-temporal dynamics of single populations, communities and food webs in pelagic systems.</li>
-<li>Identifying causes and effects of sudden shifts in ecosystem structure and functioning.</li>
-<li>Studying the nature of non-linear dynamics in complex adaptive systems.</li>
-<li>Improving indicator developments and integrated ecosystem assessments for sound ecosystem-based managemen</li>
-</ul>
+<p><img src="../img/about/about_me.jpg"  class="w3-round" alt="Me" style="max-width: 100%; height: auto; with: auto\9;"> <br> <br> <br></p>
+<p>I am a postdoctoral researcher and lecturer at the <a href="https://www.biologie.uni-hamburg.de/en/einrichtungen/imf.html">Institute of Marine Ecosystem and Fishery Science</a> (formerly known as Institute for Hydrobiology and Fisheries Sciences). I have been working in the field of marine and freshwater ecology since my academic studies as researcher or consultant with a broad focus ranging from fish ecophysiology, diversity of marine temperate fouling communities, management of coral reefs and impacts of heavy metal pollution in the tropics to temperate freshwater fish communities and brackish pelagic food webs in recent years.</p>
+<p>My main research interest lies in the application of marine data science closely linked to ecosystem-based management. Specifically, I like to integrate computer programming with latest advances in statistical modeling for understanding the spatio-temporal dynamics of single populations to entire food webs in pelagic systems. Here, I particularly study the nature of non-linear dynamics and how multiple stressors act at multiple scales leading to sudden shifts in ecosystem structure and functioning with potential socio-economic consequences. One of my key aims is to improve ecosystem-based management by feeding ecological insights into a more integrated assessment approach and providing indicator frameworks and tools for managers.</p>
+<p>My lecturing responsibility is the data science education in our Master program <a href="https://www.biologie.uni-hamburg.de/en/studium/master/marine-oekosystem-und-fischereiwissenschaften.html">MARSYS-MARine EcoSYStem and Fishery Sciences</a>, covering an introduction to R, linear, non-linear and additive modelling as well as multivariate analyses. Here, I am particularly interested in how students interact with data in ways that impact analysis, understanding, and scientific communication.</p>
 <div id="cv" class="section level3">
 <h3>CV</h3>
 <p>Here is a <a href="/pdf/cv_saskia_a_otto.pdf">download link</a> to my full CV [113KB].</p>
+<!-- My CV is available in [HTML]() or [PDF(/pdf/cv_saskia_a_otto.pdf) [113KB] form. -->
 </div>
 <div id="publications" class="section level3">
 <h3>Publications</h3>
@@ -296,6 +306,7 @@
         
         <div class="col-md-4 col-sm-6">
             <h4>About me</h4>
+            <img src="/img/profile_v1@2x.png" alt="profile" style="float:left;width:75px;height:75px;padding:5px;"/>
 
             I am a quantitative marine ecologist who loves combining nerdy programming, statistics, and any activity in and around the oceans.
 
@@ -364,15 +375,11 @@
 
           <h4>Contact</h4>
 
-            <strong>Institute of Marine Ecosystem and Fishery Science (IMF)</strong>
-        <br>Center for Earth System Research and Sustainability (CEN)
+            <strong><a href="https://www.biologie.uni-hamburg.de/en/einrichtungen/imf.html">Institute of Marine Ecosystem and Fishery Science</a></strong>
+        <br>Center for Earth System Research and Sustainability
         <br>University of Hamburg
-        <br>Grosse Elbstrasse 133
-        <br>22767 Hamburg
-        <strong>Germany</strong>
-      </p>
+        <br><strong>Germany</strong><br>
       
-
 
             <a href="/contact" class="btn btn-small btn-template-main">Go to contact page</a>
 
@@ -432,6 +439,46 @@
 
 
 <script src="/js/owl.carousel.min.js"></script>
+
+
+
+<script>
+  var shiftWindow = function() { scrollBy(0, -200) };
+  if (location.hash) shiftWindow();
+  window.addEventListener("hashchange", shiftWindow);
+</script>
+
+
+
+<script>
+
+function make_sticky(id) {
+    var e = $(id);
+    var w = $(window);
+    $('<div/>').insertBefore(id);
+    $('<div/>').hide().css('height',e.outerHeight()).insertAfter(id);
+    var n = e.next();
+    var p = e.prev();
+    function sticky_relocate() {
+      var window_top = w.scrollTop();
+      var div_top = p.offset().top;
+      if (window_top > div_top) {
+        e.addClass('sticky');
+        n.show();
+      } else {
+        e.removeClass('sticky');
+        n.hide();
+      }
+    }
+    w.scroll(sticky_relocate);
+    sticky_relocate();
+}
+make_sticky('#toc');
+</script>
+
+
+
+
 
 
   </body>

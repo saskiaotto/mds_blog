@@ -8,7 +8,7 @@ Sunburst-like style (c) Vasily Polovnyov <vast@whiteants.net>
   display: block;
   overflow-x: auto;
   padding: 0.5em;
-  background: #002451; /* before: #000; */
+  background: #7C8387 ; /* before: #002451 #000; */
   color: #f8f8f8;
 }
 

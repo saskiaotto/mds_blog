@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Indicator on Marine Data Science</title>
+    <link>/categories/indicator/</link>
+    <description>Recent content in Indicator on Marine Data Science</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2018 - present [Saskia Otto](https://github.com/saskiaotto)</copyright>
+    <lastBuildDate>Tue, 16 Oct 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/indicator/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Testing indicator performance</title>
+      <link>/blog/2018/10/16/testing-indicator-performance/</link>
+      <pubDate>Tue, 16 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2018/10/16/testing-indicator-performance/</guid>
+      <description>Indicators are useful and versatile tools applied in disciplines such as engineering, chemistry, medicine, economy or sociology. In ecosystem-based management a key role of an indicator is to inform on the current status of the system component as well as the effectiveness of specific management measures to move the component into a different state. In European Union (EU) marine policy, indicator development has recently progressed as part of the implementation of the Marine Strategy Framework Directive (MSFD) to aid the achievement of Good Environmental Status (GES) of the EU’s marine waters by 2020.</description>
+    </item>
+    
+  </channel>
+</rss>

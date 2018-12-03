@@ -6,6 +6,7 @@
     <description>Recent content on Marine Data Science</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <copyright>&amp;copy; 2018 - present [Saskia Otto](https://github.com/saskiaotto)</copyright>
     <lastBuildDate>Wed, 17 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
@@ -37,8 +38,7 @@ summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 2
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/about/</guid>
-      <description>Me I am a postdoctoral researcher currently working at the Institute of Marine Ecosystem and Fishery Science. My research interests are centered on teaching and applying marine data science closely linked to ecosystem-based management. Specifically, I like to integrate computer programming with latest advances in statistical modeling for:
- Understanding the spatio-temporal dynamics of single populations, communities and food webs in pelagic systems. Identifying causes and effects of sudden shifts in ecosystem structure and functioning.</description>
+      <description>Me I am a postdoctoral researcher and lecturer at the Institute of Marine Ecosystem and Fishery Science (formerly known as Institute for Hydrobiology and Fisheries Sciences). I have been working in the field of marine and freshwater ecology since my academic studies as researcher or consultant with a broad focus ranging from fish ecophysiology, diversity of marine temperate fouling communities, management of coral reefs and impacts of heavy metal pollution in the tropics to temperate freshwater fish communities and brackish pelagic food webs in recent years.</description>
     </item>
     
     <item>
@@ -51,12 +51,12 @@ summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 2
     </item>
     
     <item>
-      <title>Data &amp; Databases</title>
+      <title>Databases &amp; Data Packages</title>
       <link>/data/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/data/</guid>
-      <description>Here comes soon info on data packages in R, data from books and most importantly databases.</description>
+      <description>Databases In the following you find a list of databases and repositories that provide different type of marine data for specific regions free of charge. The list is not intended to be exhaustive but more to give you an easy start and many of these database can be webscraped directly from within R using specific packages that I also list here. If you feel there is any global or regional database missing where users can download marine data, don’t hesitate to contact me!</description>
     </item>
     
     <item>
@@ -65,7 +65,7 @@ summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 2
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/mds/</guid>
-      <description>Here comes soon more info on data science of marine systems.</description>
+      <description>What is Marine Data Science (MDS)? MDS is all about uncovering findings from marine data such as oceanographical data collected using both in situ methods and remote sensing. Typical parameters measured on-board relate to near-surface meteorological conditions (air temperature, wind speed, wind direction, cloudiness, etc.), sea surface conditions (e.g. sea surface temperature (SST), salinity, wave height, and wave direction) as well as subsurface water characteristics (vertical profiles of temperature, salinity, dissolved nutrients, ocean currents, or ocean bottom depth).</description>
     </item>
     
     <item>
@@ -74,7 +74,8 @@ summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 2
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/courses/</guid>
-      <description>General Courses Data Analysis With R: This is a course taught by me as part of the curriculum of the Master program MARSYS at the Institute of Marine Ecosystem and Fishery Science, University of Hamburg, Germany. The course can be used as a short-term (e.g. 1 week) intensive training or in a self-study mode at the Bachelor, Master or PhD level. The course introduces the principles of data science and how to mine out insights from data to understand complex behaviors, trends, and inferences.</description>
+      <description>In addition to the blog tutorials you here find a list of external courses and tutorials on marine data science taught by me (on https://github.com/mareds) or colleagues.
+General Courses Data Analysis With R: This is a course taught by me as part of the curriculum of the Master program MARSYS at the Institute of Marine Ecosystem and Fishery Science, University of Hamburg, Germany. The course can be used as a short-term (e.</description>
     </item>
     
     <item>
@@ -83,7 +84,7 @@ summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 2
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/software/</guid>
-      <description>Here comes soon info on R, RStudio, R packages, SQL, Python…</description>
+      <description>Which programming languages should you learn for marine data science? First of all, there is no easy answer and no consensus either. Choosing from the broad range of programming languages the right one to invest time and effort learning it the next month or years is not trivial. It all boils down to what you plan to do with it and whether you want an open source program or can afford a license.</description>
     </item>
     
   </channel>
