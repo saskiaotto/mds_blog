@@ -24,6 +24,9 @@ Lightest red: #E68387;
 
 Orange: #F8B500;
 
+Schrifttyp dunkler machen?
+#2E2F3E;
+
 
 Theme:
 dark blue: #467FBF;
@@ -1868,7 +1871,7 @@ fieldset[disabled] .btn-template-primary.active {
   opacity: 0.8;
 } */
 
-@media (max-width: 1025px) {
+@media (max-width: 1112px) {
 
   .bar.background-image-fixed-1 {
     background-size: cover;
@@ -3269,7 +3272,8 @@ fieldset[disabled] .navbar-default .btn-link:focus {
 /* scaffolding */
 body {
   font-family: "Roboto", Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  /* font-family: -system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"; */
+  font-size: 16px;
   line-height: 1.42857143;
   color: #555555;
 }
@@ -3725,18 +3729,17 @@ form button.btn-template-main {
 } */
 
 video.video-75 {
-  width: 640px;
-  height: 480px;
   width: 75%;
   height: auto;
   display: block;
+  margin-left: auto;
   margin-right: auto;
 }
 
 
 @media (max-width: 576px) {
 
-  .hide-xs {
+  video.video-75  {
     display: none;
   }
 

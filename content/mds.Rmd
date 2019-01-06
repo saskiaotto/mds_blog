@@ -29,16 +29,14 @@ With the vast amount of data that are nowadays produced (~90 percent of the data
 
 Data science is highly interdisciplinary and a blend of skills in three major areas:
 
-<!-- <div class="embed-responsive embed-responsive-16by9 hide-xs"> -->
-  <video class="video-75 hide-xs" id="mds-video" autoplay loop>
-    <source src="/movies/elements_of_mds.mp4" type="video/mp4">
-    <p>Your browser does not support HTML5 video.</p>
-  </video>
-<!-- </div> -->
+<video class="video-75 hide-xs" id="mds-video" autoplay loop>
+  <source src="/movies/elements_of_mds.mp4" type="video/mp4">
+  Your browser does not support HTML5 video.
+</video>
 
 <script>
-var vid = document.getElementById("mds-video");
-vid.playbackRate = 0.5;
+  var vid = document.getElementById("mds-video");
+  vid.playbackRate = 0.5;
 </script>
 
 
