@@ -17,14 +17,17 @@ tags: []
 <div id="elements-of-data-science" class="section level2">
 <h2>Elements of data science</h2>
 <p>Data science is highly interdisciplinary and a blend of skills in three major areas:</p>
-<video id="myVideo" width="640" height="480" autoplay loop>
-<source src="/movies/elements_of_mds.mp4" type="video/mp4"> Your browser does not support HTML5 video.
-</video>
+<!-- <div class="embed-responsive embed-responsive-16by9 hide-xs"> -->
+<video class="video-75 hide-xs" id="mds-video" autoplay loop> <source src="/movies/elements_of_mds.mp4" type="video/mp4">
+<p>
+Your browser does not support HTML5 video.
+</p>
+<p></video> <!-- </div> --></p>
 <script>
-var vid = document.getElementById("myVideo");
+var vid = document.getElementById("mds-video");
 vid.playbackRate = 0.5;
 </script>
-<p>Hence, new generation of marine scientists need to be well trained in</p>
+<p>Hence, new generations of marine scientists need to be well trained in</p>
 <ul>
 <li>analytical and interdisciplinary thinking</li>
 <li>computer programming → at least one language</li>
@@ -41,16 +44,18 @@ vid.playbackRate = 0.5;
 <pre class="r"><code># comment
 p_all &lt;- methods_now %&gt;% ggplot(aes(x = selections, y = percent, fill = selections)) + 
     geom_col() + scale_fill_viridis_d(direction = -1) + guides(fill = &quot;none&quot;) + 
-    labs(x = &quot;Methods used&quot;, y = &quot;Percent&quot;, title = &quot;All working environments&quot;) + 
-    coord_flip() + theme_classic()
+    labs(x = &quot;Methods used&quot;, y = &quot;Percent&quot;) + coord_flip() + theme_classic()
 p_acad &lt;- methods_now_acad %&gt;% ggplot(aes(x = selections, y = percent, fill = selections)) + 
     geom_col() + scale_fill_viridis_d(direction = -1) + guides(fill = &quot;none&quot;) + 
-    labs(x = &quot;Methods used&quot;, y = &quot;Percent&quot;, title = &quot;Academia&quot;) + coord_flip() + 
-    theme_classic()
+    labs(x = &quot;Methods used&quot;, y = &quot;Percent&quot;) + coord_flip() + theme_classic()
 gridExtra::grid.arrange(p_all, p_acad, ncol = 2)</code></pre>
-<p><img src="/mds_files/figure-html/unnamed-chunk-2-1.png" width="1152" style="display: block; margin: auto auto auto 0;" /></p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-2"></span>
+<img src="/mds_files/figure-html/unnamed-chunk-2-1.png" alt="Barplot of most common methods amongst data scientists in all working environments (left) and in academia only (right)." width="80%" />
+<p class="caption">
+Figure 1: Barplot of most common methods amongst data scientists in all working environments (left) and in academia only (right).
+</p>
+</div>
 <p>Beside data visualization, logistic regression and cross-validation are the most commonly used data science methods, also in academia.</p>
-<p><br></p>
 </div>
 <div id="which-machine-learning-or-data-science-method-are-data-scientists-most-excited-about-learning-in-the-next-year" class="section level4">
 <h4>Which machine learning or data science method are data scientists most excited about learning in the next year?</h4>
@@ -351,7 +356,7 @@ MARS
 </tbody>
 </table>
 </div>
-<p><br> Independent of the working environment, deep learning and neural networks are by far the methods data scientists are most excited to learn.</p>
+<p>Independent of the working environment, deep learning and neural networks are by far the methods data scientists are most excited to learn.</p>
 <!-- Footnotes: -->
 </div>
 </div>

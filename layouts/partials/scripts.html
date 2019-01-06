@@ -18,10 +18,38 @@
 <!-- owl carousel -->
 <script src="{{ .Site.BaseURL }}js/owl.carousel.min.js"></script>
 
+<!-- Customize owl carousel (SAO) -->
+
+<script>
+$(document).ready(function() {
+
+  $("#owl-home").owlCarousel({
+
+    autoPlay: false,
+    items: 2
+    // navigation : false, // Show next and prev buttons
+    // slideSpeed : 900,
+    // paginationSpeed : 900,
+    // singleItem:true
+
+    // "singleItem:true" is a shortcut for:
+    // items : 1,
+    // itemsDesktop : false,
+    // itemsDesktopSmall : false,
+    // itemsTablet: false,
+    // itemsMobile : false
+
+  });
+
+});
+</script>
+
+
+
 <!-- this code moves the in-page anchor down below the navbar when clicking on toc -->
 <!-- taken from: https://github.com/twbs/bootstrap/issues/1768 -->
 <script>
-  var shiftWindow = function() { scrollBy(0, -200) };
+  var shiftWindow = function() { scrollBy(0, -175) };
   if (location.hash) shiftWindow();
   window.addEventListener("hashchange", shiftWindow);
 </script>
@@ -30,7 +58,7 @@
 <!-- Make toc stay sticky: ->
 <!-- this worked finally (although box width different in data and software)
 https://stackoverflow.com/questions/1216114/how-can-i-make-a-div-stick-to-the-top-of-the-screen-once-its-been-scrolled-to -->
-<script>
+<!-- <script>
 
 function make_sticky(id) {
     var e = $(id);
@@ -54,7 +82,7 @@ function make_sticky(id) {
     sticky_relocate();
 }
 make_sticky('#toc');
-</script>
+</script> -->
 
 
 <!-- this partly worked but box became wider when fixed and jumped between formats -->
@@ -86,4 +114,17 @@ function findPosY(obj) {
     curtop += obj.y;
   return curtop;
 }
+</script> -->
+
+<!--
+<script>
+(function() {
+    const links = document.getElementsByTagName('a')
+    const currentUrl = location.href
+    for (const link of links) {
+        if (link.href === currentUrl) {
+            link.classList.add('active')
+        }
+    }
+}())
 </script> -->

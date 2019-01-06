@@ -1,0 +1,133 @@
+<section id="about-me">
+
+  <!-- main content area from Rmd file -->
+  <div class="container">
+
+    <div class="row my-clearfix">
+      <div class="col-md-12">
+        <h1>About me</h1>
+        <img src="../img/about/about_me.jpg" alt="Me">
+        <div>
+
+          {{ .Content }}
+
+        </div>
+      </div>
+    </div>
+
+    <div class="row my-clearfix">
+
+      <div class="col-sm-4">
+        <h2>Interests</h2>
+        <ul id="ul-interests">
+          <li>Spatio-temporal food web dynamics</li>
+          <li>Ecosystem assessment &amp; indicator development</li>
+          <li>Statistical modelling</li>
+          <li>Programming</li>
+          <li>Human-data interaction</li>
+          <li>Visual illustration</li>
+          <li>Paddling, climbing, diving, hiking</li>
+        </ul>
+      </div>
+
+      <div class="col-sm-5">
+        <h2>Education</h2>
+        <ul class="fa-ul" id="ul-edu">
+          <li>
+            <i class="fa-li fa fa-graduation-cap"></i>
+            <div class="description">
+              <p class="course">PhD in Biology (Dr. rer. nat.), 2012</p>
+              <p class="institution">University of Hamburg</p>
+            </div>
+          </li>
+          <li>
+            <i class="fa-li fa fa-graduation-cap"></i>
+            <div class="description">
+              <p class="course">Diploma in Biology, 2005</p>
+              <p class="institution">Humboldt-University of Berlin</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-sm-3 my-clearfix">
+        <div id="cv-link">
+          <!-- <a id="btn-cv" href="/cv/cv.html"><span>Link to full CV</span></a> -->
+          <a id="btn-cv" href="/cv/cv.html">Link to full CV</a>
+        <div>
+      </div>
+
+    </div> <!-- row -->
+
+  </div> <!-- container -->
+</section>
+
+<!--Website section  -->
+<section id="about-website">
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+
+        <header>
+          <h1>About the website</h1>
+
+          <p>
+            This website was built using the R package <a href="https://bookdown.org/yihui/blogdown/">blogdown</a>,
+            and is based on R Markddown and the <a href="https://gohugo.io/">Hugo</a> framework. The design of the
+            website is based on the template <em>hugo universal</em>, originally developed by
+            <a href="https://bootstrapious.com/free-templates">Bootstrapious</a> and ported to Hugo by
+            <a href="https://github.com/devcows/hugo-universal-theme">DevCow</a>.
+          </p>
+          <p>
+            Some of the code was directly written in HTML, CSS and Javascript (e.g. the  CV and about page, ToC).
+            All code (.Rmd) is available in the github repository <a href="https://github.com/saskiaotto/mds_blog">saskiaotto/mds_blog</a>.
+            Feel free to browse, download, and even contribute by forking.
+          </p>
+        </header>
+
+        <!-- disclaimer -->
+        <article id="disclaimer">
+          <h1>Legal Disclosure</h1>
+          <p>The following information is required under German law (TMG - Tele Media Act)</p>
+          <h2>Responsible for the content of this website</h2>
+          <p>
+            <span>Saskia Otto</span>
+            <br><br>Baron-Voght-Str. 132b<br>22607 Hamburg<br>
+            E-Mail: <a href="mailto:saskia.otto@uni-hamburg.de">saskia.otto@uni-hamburg.de</a><br>
+            Internet address: <a href="https://www.marinedatascience.co" target="_blank">www.marinedatascience.co</a><br><br>
+          </p>
+          <h2>Disclaimer</h2>
+          <h3>1 Limitation of liability for internal content</h3>
+          <p>The content of this website has been compiled with meticulous care and to the best of the author's knowledge. However, the author cannot assume any liability for the up-to-dateness, completeness or accuracy of any of the pages.</p>
+          <p>Pursuant to section 7, para. 1 of the TMG, the author is liable for her own content on these pages in accordance with general laws. However, pursuant to sections 8 to 10 of the TMG, the author is not under obligation to monitor external information provided or stored on this website. Once a specific infringement of the law has become aware, the content in question will be immediately removed. Any liability concerning this matter can only be assumed from the point in time at which the infringement becomes known to the author.</p>
+          <h3>2 Limitation of liability for external links</h3>
+          <p>The author is not responsible for any contents linked or referred to from his pages - unless he has full knowledge of illegal contents and would be able to prevent the visitors of his site from viewing those pages. If any damage occurs by the use of information presented there, only the author of the respective pages might be liable, not the one who has linked to these pages. Furthermore the author is not liable for any postings or messages published by users of discussion boards, guestbooks or mailing lists provided on his page.</p>
+          <h3>3 Copyright</h3>
+          <p>The author intended not to use any copyrighted material for the publication or, if not possible, to indicate the copyright of the respective object.</p>
+          <p>Any content and work created by the author is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+            Creative Commons Attribution-ShareAlike 4.0 International License </a> except for the borrowed
+            and mentioned with proper <em>source:</em> statements.</p>
+          <a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">
+            <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png">
+          </a>
+          <h3>4 Data protection</h3>
+          <p>In general, when visiting the website www.marinedatascience.co, no personal data are saved. However, these data can be given on a voluntary basis. No data will be passed on to third parties without your consent. The author points out that in regard to unsecured data transmission in the internet (e.g. via email), security cannot be guaranteed. Such data could possibly be accessed by third parties.</p>
+          <h4>Google Analytics</h4>
+          <p>This website uses Google Analytics, a web analytics service provided by Google, Inc. (»Google«). Google Analytics uses cookies, which are text files placed on your computer, to help the website analyze how users use the site. The information generated by the cookie about your use of the website (including your IP address) will be transmitted to and stored by Google on servers in the United States. In case of activation of the IP anonymization, Google will truncate/anonymize the last octet of the IP address for Member States of the European Union as well as for other parties to the Agreement on the European Economic Area. Only in exceptional cases, the full IP address is sent to and shortened by Google servers in the USA. On behalf of the website provider Google will use this information for the purpose of evaluating your use of the website, compiling reports on website activity for website operators and providing other services relating to website activity and internet usage to the website provider. Google will not associate your IP address with any other data held by Google. By using this website, you consent to the processing of data about you by Google in the manner and for the purposes set out above.</p>
+          <h4>How to prevent being tracked by Google Analytics</h4>
+          <p>You may refuse the use of cookies by selecting the appropriate settings on your browser. However, please note that if you do this, you may not be able to use the full functionality of this website. Furthermore you can prevent Google’s collection and use of data (cookies and IP address) by downloading and installing the <a href=" https://tools.google.com/dlpage/gaoptout?hl=en">browser plug-in</a>.</p>
+          <h3>5 Legal validity of this disclaimer</h3>
+          <p>This disclaimer is to be regarded as part of the internet publication which you were referred from. If sections or individual terms of this statement are not legal or correct, the content or validity of the other parts remain uninfluenced by this fact.</p>
+          <p class="text-source">[ sources for English disclaimer text:
+            <a class="text-source" href="https://language-boutique.de/">Language Boutique</a>,
+            <a class="text-source"href="https://www.e-recht24.de/">eRecht24</a> ]
+          </p>
+        </article>
+
+      </div> <!--/col-->
+    </div> <!--/row-->
+  </div> <!--/container-->
+
+</section>

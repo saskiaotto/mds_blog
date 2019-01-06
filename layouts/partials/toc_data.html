@@ -1,40 +1,40 @@
 <div class="container" id="toc_data">
-  <!-- <div class="row"> -->
+  <div class="row">
 
-      <!-- main content area -->
-      <div class="col-md-9"> <!-- class="col-sm-9" role="main" -->
-        <section>
-            {{ .Content }}
-        </section>
-      </div> <!--/col9-->
+    <!-- main content area -->
+    <div class="col-md-9"> <!-- class="col-sm-9" role="main" -->
+      <section>
+          {{ .Content }}
+      </section>
+    </div> <!--/col9-->
 
-      <!-- sidebar, with manually set ToC-->
-      <div class="col-md-3" >
-        <div id="toc">
-          <h4 style="color:#6D6D70;">Overview</h4>
-          <ul style="padding:10px;">
-            <li><a href="##databases">Databases</a>
-              <ul>
-                <li><a href="#general-databases">General databases</a></li>
-                <li><a href="#oceanographical-data">Oceanographical data</a></li>
-                <li><a href="#climatological-data">Climatological data</a></li>
-                <li><a href="#geospatial-data">Geospatial data</a></li>
-                <li><a href="#taxonomy-traits-biogeography">Taxonomy, Traits &amp; Biogeography</a></li>
-                <li><a href="#genetic-databases">Genetic databases</a></li>
-                <li><a href="#fish-stock-assessments-fishery-data">Fish stock assessments &amp; Fishery data</a></li>
-                <li><a href="#ecological-indicators">Ecological indicators</a></li>
-                <li><a href="#regime-shifts">Regime shifts</a></li>
-                <li><a href="#other-repositories">Other Repositories</a></li>
-              </ul>
-            </li>
-            <li><a href="#data-packages-in-r">Data packages in R</a>
-            </li>
-          </ul>
+    <!-- sidebar, with manually set ToC-->
+    <div class="col-md-3">
+      <div class="panel sidebar-menu" id="toc">
 
-        </div><!--/toc-->
-      </div><!--/col3-->
+        <h4 style="color:#6D6D70;">Overview</h4>
+        <ul class="ul-1">
+          <li><a href="#databases">Databases</a>
+            <ul class="ul-2">
+              <li><a href="#general-databases">General databases</a></li>
+              <li><a href="#oceanographical-data">Oceanographical data</a></li>
+              <li><a href="#climatological-data">Climatological data</a></li>
+              <li><a href="#geospatial-data">Geospatial data</a></li>
+              <li><a href="#taxonomy-traits-biogeography">Taxonomy, Traits &amp; Biogeography</a></li>
+              <li><a href="#genetic-databases">Genetic databases</a></li>
+              <li><a href="#fish-stock-assessments-fishery-data">Fish stock assessments &amp; Fishery data</a></li>
+              <li><a href="#ecological-indicators">Ecological indicators</a></li>
+              <li><a href="#regime-shifts">Regime shifts</a></li>
+              <li><a href="#other-repositories">Other Repositories</a></li>
+            </ul>
+          </li>
+          <li><a href="#data-packages-in-r">Data packages in R</a>
+          </li>
+        </ul>
 
-  <!-- </div><!--/row-->
-</div><!--/container-->
+      </div><!--/toc-->
+    </div><!--/col3-->
 
-{{ partial "map.html" . }}
+
+  </div> <!--/row-->
+</div> <!--/container-->

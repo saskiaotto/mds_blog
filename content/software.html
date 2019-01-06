@@ -45,8 +45,8 @@ id: "toc_software"
 <pre class="r"><code>programs_used %&gt;% with(wordcloud(selections, n, scale = c(3, 0.2), max.words = 150, 
     random.order = FALSE, rot.per = 0.35, use.r.layout = TRUE, colors = brewer.pal(6, 
         &quot;Blues&quot;)[c(4, 5, 6, 7, 8, 9)]))</code></pre>
-<div class="figure" style="text-align: left"><span id="fig:unnamed-chunk-2"></span>
-<img src="/software_files/figure-html/unnamed-chunk-2-1.png" alt="Wordcloud of most common languages and tools amongst all data scientist." width="768" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-2"></span>
+<img src="/software_files/figure-html/unnamed-chunk-2-1.png" alt="Wordcloud of most common languages and tools amongst all data scientist." width="100%" />
 <p class="caption">
 Figure 1: Wordcloud of most common languages and tools amongst all data scientist.
 </p>
@@ -62,13 +62,13 @@ p_stat &lt;- programs_stat %&gt;% ggplot(aes(x = selections, y = percent, fill =
     100) + ylab(&quot;&quot;) + coord_flip() + ylab(&quot;Percent&quot;) + xlab(&quot;&quot;)
 
 gridExtra::grid.arrange(p_acad, p_stat, ncol = 2)</code></pre>
-<div class="figure" style="text-align: left"><span id="fig:unnamed-chunk-4"></span>
-<img src="/software_files/figure-html/unnamed-chunk-4-1.png" alt="Barplot of most common languages and tools amongst academic data scientist (left) and statisticians (right)." width="768" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-4"></span>
+<img src="/software_files/figure-html/unnamed-chunk-4-1.png" alt="Barplot of most common languages and tools amongst academic data scientist (left) and statisticians (right)." width="100%" />
 <p class="caption">
 Figure 2: Barplot of most common languages and tools amongst academic data scientist (left) and statisticians (right).
 </p>
 </div>
-<p><br> <!-- Obviously, the most common languages used are Python, R, and SQL and Jupyter Notebooks as tool. In academia, SQL is less important and instead Matlab often applied.  --></p>
+<!-- Obviously, the most common languages used are Python, R, and SQL and Jupyter Notebooks as tool. In academia, SQL is less important and instead Matlab often applied.  -->
 <!-- Python was the most commonly used data analysis tool across employed data scientists overall, but more Statisticians are still loyal to R. -->
 </div>
 <div id="recommended-programming-language" class="section level4">
@@ -77,13 +77,13 @@ Figure 2: Barplot of most common languages and tools amongst academic data scien
 <pre class="r"><code>recom_lang %&gt;% ggplot(aes(x = selections, y = percent, fill = selections)) + 
     geom_col() + guides(fill = &quot;none&quot;) + scale_fill_viridis_d(direction = 1, 
     option = &quot;inferno&quot;) + theme_classic() + ylab(&quot;Percent&quot;) + xlab(&quot;Recommended Language&quot;)</code></pre>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-6"></span>
-<img src="/software_files/figure-html/unnamed-chunk-6-1.png" alt="Barplot showing the programming languages data scientist recommend most for newbies (ranked by their percentage off recommendation)." width="768" />
+<div class="figure"><span id="fig:unnamed-chunk-6"></span>
+<img src="/software_files/figure-html/unnamed-chunk-6-1.png" alt="Barplot showing the programming languages data scientist recommend most for newbies (ranked by their percentage off recommendation)." width="100%" />
 <p class="caption">
 Figure 3: Barplot showing the programming languages data scientist recommend most for newbies (ranked by their percentage off recommendation).
 </p>
 </div>
-<p><br> In marine sciences, the most common programming language is probably R, as it is most rich in packages and libraries related to methods applied in this field, closely followed by Matlab. However, if you plan to dive into the world of numerical modelling or you will work with big datasets such as genomics you are most likely better off with Python. I personally love R and have worked with it for many years, though at the time of my PhD it wasn’t as easy to learn - without the many online tutorials and huge archives of questions and solutions at stack overflow that nowadays exist. For my own data storage I use relational databases, so SQL is my language of choice. And to communicate results and for teaching data science I also started to learn HTML and CSS. While the integration of RMarkdown into RStudio is great for producing output as PDF, presentation, HTML page or even entire website you need to learn a bit of HTML and CSS and potentially JavaScript, Bootstrap, etc. if you want to add your personal touch to it. <br></p>
+<p>In marine sciences, the most common programming language is probably R, as it is most rich in packages and libraries related to methods applied in this field, closely followed by Matlab. However, if you plan to dive into the world of numerical modelling or you will work with big datasets such as genomics you are most likely better off with Python. I personally love R and have worked with it for many years, though at the time of my PhD it wasn’t as easy to learn - without the many online tutorials and huge archives of questions and solutions at stack overflow that nowadays exist. For my own data storage I use relational databases, so SQL is my language of choice. And to communicate results and for teaching data science I also started to learn HTML and CSS. While the integration of RMarkdown into RStudio is great for producing output as PDF, presentation, HTML page or even entire website you need to learn a bit of HTML and CSS and potentially JavaScript, Bootstrap, etc. if you want to add your personal touch to it. <br></p>
 </div>
 <div id="overview-of-programming-languages-and-applications" class="section level3">
 <h3>Overview of programming languages and applications</h3>
@@ -92,8 +92,15 @@ Figure 3: Barplot showing the programming languages data scientist recommend mos
 <!-- <h4 style="padding-top:20px;"><a href="https://www.r-project.org">www.r-project.org</a></h4>  -->
 <div id="www.r-project.org" class="section level4">
 <h4><a href="https://www.r-project.org">www.r-project.org</a></h4>
-<iframe width="640" height="360" style="margin:10px;" src="https://www.youtube.com/embed/y-HOQnMsylA?feature=player_detailpage" frameborder="0" allowfullscreen>
-</iframe>
+<!-- iframe is recommended for youtube videos: 
+and the div class around to keep aspect ratio and width of 100%
+-->
+<p><br></p>
+<div class="embed-responsive embed-responsive-16by9">
+<p><iframe class="embed-responsive-item"   
+    src="https://www.youtube.com/embed/y-HOQnMsylA?feature=player_detailpage" 
+    frameborder="0" allowfullscreen></iframe></p>
+</div>
 <p><strong>R</strong> is a free software environment for statistical computing and graphics. It compiles and runs on a wide variety of UNIX platforms, Windows and MacOS. R was released in 1995 as a direct descendant of the older S programming language and is currently supported by the R Foundation for Statistical Computing. It is, like S, designed around a true computer language, and it allows users to add additional functionality by defining new functions. Much of the system is itself written in the R dialect of S, which makes it easy for users to follow the algorithmic choices made. For computationally-intensive tasks, C, C++ and Fortran code can be linked and called at run time. Advanced users can write C code to manipulate R objects directly.</p>
 <p>In some ways R is not a typical programming language, as it’s not a general purpose one. R’s roots lies in statistics, as it has been developed specifically to deal with such needs. It provides a wide variety of statistical (linear and nonlinear modelling, classical statistical tests, time-series analysis, classification, clustering, etc.) and graphical techniques, and is highly extensible. This is one of its particular stengths, its package system that allows the functional extension of R. There are about eight packages supplied with the R distribution and many more are available through the CRAN family of Internet sites covering a very wide range of modern statistics. At present the official CRAN package repository features &gt; 10,000 packages covering common and not-so-common tasks! It is through this, and its ties with the academic community, that R keeps up to date with all latest developments in data science and machine learning. Another of R’s strengths is the ease with which well-designed publication-quality plots can be produced, including mathematical symbols and formulae where needed.</p>
 <p>One of R’s downside as a result of its open-source and package system is that it has been plagued by issues such as memory management and security, and its syntax is not very straightforward or disciplined. <br></p>

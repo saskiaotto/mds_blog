@@ -10,7 +10,8 @@ id: "toc_software"
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, 
-  warning = FALSE, message = FALSE
+  warning = FALSE, message = FALSE,
+  fig.retina = 2
   )
 ```
 
@@ -69,7 +70,7 @@ programs_used <- cleanMCData %>%
 fig_cap_program <- "Wordcloud of most common languages and tools amongst all data scientist."
 ```
 
-```{r, fig.width=8, fig.height=3, fig.align="left", tidy = TRUE, fig.cap=fig_cap_program} 
+```{r, out.width="100%", fig.asp=0.5, fig.align="center", tidy = TRUE, fig.cap=fig_cap_program} 
 programs_used %>%
   with(wordcloud(selections, n, 
           scale = c(3,0.2), 
@@ -117,7 +118,7 @@ programs_stat <- cleanMCData %>%
 fig_cap_acad_stat <- "Barplot of most common languages and tools amongst academic data scientist (left) and statisticians (right)."
 ```
 
-```{r, fig.width=8, fig.height=4, fig.align="left", tidy = TRUE, fig.cap=fig_cap_acad_stat} 
+```{r, out.width="100%", fig.asp=0.5, fig.align="center", tidy = TRUE, fig.cap=fig_cap_acad_stat} 
 p_acad <- programs_acad %>%
   ggplot(aes(x = selections, y = percent, fill = selections)) +
     geom_col() + guides(fill = "none") +
@@ -139,7 +140,6 @@ p_stat <- programs_stat %>%
 
 gridExtra::grid.arrange(p_acad, p_stat, ncol = 2)
 ```
-<br>
 <!-- Obviously, the most common languages used are Python, R, and SQL and Jupyter Notebooks as tool. In academia, SQL is less important and instead Matlab often applied.  -->
 
 
@@ -167,7 +167,7 @@ recom_lang <- cleanMCData %>%
 fig_cap_lang <- "Barplot showing the programming languages data scientist recommend most for newbies (ranked by their percentage off recommendation)."
 ```
 
-```{r, fig.width=8, fig.height=4, fig.align="center", tidy = TRUE, fig.cap=fig_cap_lang}
+```{r, out.width="100%", fig.asp=0.5, ig.align="center", tidy = TRUE, fig.cap=fig_cap_lang}
 recom_lang %>%
   ggplot(aes(x = selections, y = percent, fill = selections)) +
   geom_col() + guides(fill = "none") +
@@ -176,7 +176,6 @@ recom_lang %>%
   ylab("Percent") + xlab("Recommended Language")
 ```
 
-<br>
 In marine sciences, the most common programming language is probably R, as it is most rich in packages and libraries related to methods applied in this field, closely followed by Matlab. However, if you plan to dive into the world of numerical modelling or you will work with big datasets such as genomics you are most likely better off with Python. I personally love R and have worked with it for many years, though at the time of my PhD it wasn't as easy to learn - without the many online tutorials and huge archives of questions and solutions at stack overflow that nowadays exist. For my own data storage I use relational databases, so SQL is my language of choice. And to communicate results and for teaching data science I also started to learn HTML and CSS. While the integration of RMarkdown into RStudio is great for producing output as PDF, presentation, HTML page or even entire website you need to learn a bit of HTML and CSS and potentially JavaScript, Bootstrap, etc. if you want to add your personal touch to it.
 <br>
 
@@ -192,7 +191,17 @@ Here is a short summary of different programming languages and data analysis sof
 
 ####[www.r-project.org](https://www.r-project.org)
 
-<iframe width="640" height="360" style="margin:10px;" src="https://www.youtube.com/embed/y-HOQnMsylA?feature=player_detailpage" frameborder="0" allowfullscreen></iframe> 
+<!-- iframe is recommended for youtube videos: 
+and the div class around to keep aspect ratio and width of 100%
+-->
+<br>
+
+<div class="embed-responsive embed-responsive-16by9">
+  <iframe class="embed-responsive-item"   
+    src="https://www.youtube.com/embed/y-HOQnMsylA?feature=player_detailpage" 
+    frameborder="0" allowfullscreen></iframe>
+</div>
+
 
 **R** is a free software environment for statistical computing and graphics. It compiles and runs on a wide variety of UNIX platforms, Windows and MacOS. R was released in 1995 as a direct descendant of the older S programming language and is currently supported by the R Foundation for Statistical Computing. It is, like S,  designed around a true computer language, and it allows users to add additional functionality by defining new functions. Much of the system is itself written in the R dialect of S, which makes it easy for users to follow the algorithmic choices made. For computationally-intensive tasks, C, C++ and Fortran code can be linked and called at run time. Advanced users can write C code to manipulate R objects directly.
 

@@ -9,7 +9,8 @@ tags: []
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, 
-  warning = FALSE, message = FALSE
+  warning = FALSE, message = FALSE,
+  fig.retina = 2
   )
 ```
 
@@ -28,18 +29,21 @@ With the vast amount of data that are nowadays produced (~90 percent of the data
 
 Data science is highly interdisciplinary and a blend of skills in three major areas:
 
-<video id="myVideo" width="640" height="480" autoplay loop>
-  <source src="/movies/elements_of_mds.mp4" type="video/mp4">
-  Your browser does not support HTML5 video.
-</video>
+<!-- <div class="embed-responsive embed-responsive-16by9 hide-xs"> -->
+  <video class="video-75 hide-xs" id="mds-video" autoplay loop>
+    <source src="/movies/elements_of_mds.mp4" type="video/mp4">
+    <p>Your browser does not support HTML5 video.</p>
+  </video>
+<!-- </div> -->
 
 <script>
-var vid = document.getElementById("myVideo");
+var vid = document.getElementById("mds-video");
 vid.playbackRate = 0.5;
-</script> 
+</script>
 
 
-Hence, new generation of marine scientists need to be well trained in
+
+Hence, new generations of marine scientists need to be well trained in
 
 - analytical and interdisciplinary thinking
 - computer programming → at least one language
@@ -96,14 +100,14 @@ methods_now_acad <- cleanMCData %>%
   mutate(selections = fct_inorder(factor(selections)))
 ```
 
-```{r, fig.width=12, fig.height=4, fig.align="left", tidy=TRUE}
+```{r, out.width="80%", fig.asp=0.5,  fig.align="center", tidy=TRUE, fig.cap="Barplot of most common methods amongst data scientists in all working environments (left) and in academia only (right)."}
 # comment
 p_all <- methods_now %>%
   ggplot(aes(x = selections, y = percent, fill = selections)) +
     geom_col() + 
     scale_fill_viridis_d(direction = -1) +
     guides(fill = "none") +
-    labs(x = "Methods used", y = "Percent", title = "All working environments") + 
+    labs(x = "Methods used", y = "Percent") + 
     coord_flip() + 
     theme_classic()
 p_acad <- methods_now_acad %>%
@@ -111,7 +115,7 @@ p_acad <- methods_now_acad %>%
     geom_col() + 
     scale_fill_viridis_d(direction = -1) +
     guides(fill = "none") +
-    labs(x = "Methods used", y = "Percent", title = "Academia") + 
+    labs(x = "Methods used", y = "Percent") + 
     coord_flip() + 
     theme_classic()
 gridExtra::grid.arrange(p_all, p_acad, ncol = 2)
@@ -119,7 +123,6 @@ gridExtra::grid.arrange(p_all, p_acad, ncol = 2)
 
 Beside data visualization, logistic regression and cross-validation are the most commonly used data science methods, also in academia.
 
-<br>
 
 #### Which machine learning or data science method are data scientists most excited about learning in the next year?
 ```{r, echo=FALSE}
@@ -176,7 +179,7 @@ next_yr %>% knitr::kable(format = "html",
     box_css = "border: transparent; padding: 5px; ", extra_css = "margin-left:15%; margin-right:15%;")
 ```
 
-<br>
+
 Independent of the working environment, deep learning and neural networks are by far the methods data scientists are most excited to learn.  
 
 

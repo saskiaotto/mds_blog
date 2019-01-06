@@ -3,4 +3,4 @@ name: "R, packages and other Software"
 icon: "fa fa-laptop"
 description: "The core programming environment in data science nowadays is R. A
 summary of useful packages tailored to address marine research questions is
-provided in 'Software' together with a short overview of alternative programming languages."
+provided in the **[Software](/software/index.html)** section together with a short overview of alternative programming languages."

@@ -20,10 +20,10 @@
 
   <meta name="generator" content="Hugo 0.49" />
 
-  <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,500,700,800' rel='stylesheet' type='text/css'>
+  
 
   
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
   
   
@@ -65,18 +65,18 @@
 
   
   
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
   
 
-  
-  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
-  <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
-  
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicons/favicon-16x16.png">
+  <link rel="manifest" href="/img/favicons/site.webmanifest">
+  <link rel="mask-icon" href="/img/favicons/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#0f1f25">
+  <meta name="theme-color" content="#ffffff">
 
+
+  
   <link href="/css/owl.carousel.css" rel="stylesheet">
   <link href="/css/owl.theme.css" rel="stylesheet">
 
@@ -107,7 +107,7 @@
             <div class="navbar-header">
                 <a class="navbar-brand home" href="/">
                     <img src="/img/mds_logo_notext@2x.png" alt="Testing indicator performance logo" class="hidden-xs hidden-sm" style="max-height:50px;">
-                    <img src="/img/mds_logo_notext@2x.png" alt="Testing indicator performance logo" class="visible-xs visible-sm" style="max-height:40px;">
+                    <img src="/img/mds_logo_notext_small.png" alt="Testing indicator performance logo" class="visible-xs visible-sm" style="max-height:40px;">
                     <span class="sr-only">Testing indicator performance - go to homepage</span>
                 </a>
                 <div class="navbar-buttons">
@@ -121,55 +121,38 @@
 
             <div class="navbar-collapse collapse" id="navigation">
                 <ul class="nav navbar-nav navbar-right">
+
                   
-                  <li class="dropdown">
-                    
-                    <a href="/">Home</a>
-                    
-                  </li>
+
                   
-                  <li class="dropdown">
-                    
-                    <a href="/mds/">MDS</a>
-                    
-                  </li>
+
                   
-                  <li class="dropdown">
-                    
-                    <a href="/blog/">Blog</a>
-                    
-                  </li>
+                  <li class="" title="Home">
+                        <a href="/">Home</a>
+                      </li>
+                  <li class="" title="MDS">
+                        <a href="/mds/">MDS</a>
+                      </li>
+                  <li class="active" title="Blog">
+                        <a href="/blog/">Blog</a>
+                      </li>
+                  <li class="" title="Courses">
+                        <a href="/courses/">Courses</a>
+                      </li>
+                  <li class="" title="Data">
+                        <a href="/data/">Data</a>
+                      </li>
+                  <li class="" title="Software">
+                        <a href="/software/">Software</a>
+                      </li>
+                  <li class="" title="About">
+                        <a href="/about/">About</a>
+                      </li>
+                  <li class="" title="Contact">
+                        <a href="/contact/">Contact</a>
+                      </li>
                   
-                  <li class="dropdown">
-                    
-                    <a href="/courses/">Courses</a>
-                    
-                  </li>
-                  
-                  <li class="dropdown">
-                    
-                    <a href="/data/">Data</a>
-                    
-                  </li>
-                  
-                  <li class="dropdown">
-                    
-                    <a href="/software/">Software</a>
-                    
-                  </li>
-                  
-                  <li class="dropdown">
-                    
-                    <a href="/about/">About</a>
-                    
-                  </li>
-                  
-                  <li class="dropdown">
-                    
-                    <a href="/contact/">Contact</a>
-                    
-                  </li>
-                  
+
                 </ul>
             </div>
             
@@ -205,7 +188,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1 class="title toc-ignore">Testing indicator performance</h1>
+                  <h1 class="title toc-ignore">Testing indicator performance</h1>
             </div>
         </div>
     </div>
@@ -228,6 +211,29 @@
 
                         </div>
                         
+                        
+                        <div id="comments">
+                            <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "saotto" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+                        </div>
                         
 
                     </div>
@@ -345,7 +351,7 @@
         
         
 
-        <div class="col-md-4 col-sm-6">
+        <div class="col-md-4 hidden-sm" id="footer-posts">
 
              
             <h4>Recent posts</h4>
@@ -435,10 +441,7 @@
             <p class="pull-left">This work is licensed under a <a rel='license' href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International License </a></p>
             
             <p class="pull-right">
-              Template by <a href="http://bootstrapious.com/free-templates">Bootstrapious</a>.
-              
-
-              Ported to Hugo by <a href="https://github.com/devcows/hugo-universal-theme">DevCows</a>
+              <a href="/about/index.html#about-website">Legal Disclosure</a>
             </p>
         </div>
     </div>
@@ -448,10 +451,24 @@
 
 
 
+
     </div>
     
 
     
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-127654937-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
 <script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
@@ -472,38 +489,44 @@
 
 
 <script>
-  var shiftWindow = function() { scrollBy(0, -200) };
+$(document).ready(function() {
+
+  $("#owl-home").owlCarousel({
+
+    autoPlay: false,
+    items: 2
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+
+  });
+
+});
+</script>
+
+
+
+
+
+<script>
+  var shiftWindow = function() { scrollBy(0, -175) };
   if (location.hash) shiftWindow();
   window.addEventListener("hashchange", shiftWindow);
 </script>
 
 
 
-<script>
 
-function make_sticky(id) {
-    var e = $(id);
-    var w = $(window);
-    $('<div/>').insertBefore(id);
-    $('<div/>').hide().css('height',e.outerHeight()).insertAfter(id);
-    var n = e.next();
-    var p = e.prev();
-    function sticky_relocate() {
-      var window_top = w.scrollTop();
-      var div_top = p.offset().top;
-      if (window_top > div_top) {
-        e.addClass('sticky');
-        n.show();
-      } else {
-        e.removeClass('sticky');
-        n.hide();
-      }
-    }
-    w.scroll(sticky_relocate);
-    sticky_relocate();
-}
-make_sticky('#toc');
-</script>
+
+
 
 
 
