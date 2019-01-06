@@ -4,8 +4,7 @@
       {{ .Content }}
       {{ if .Site.DisqusShortname }}
         <div class="disqus-comments">
-        <!-- {{ partial "disqus.html" . }} -->
-            {{ template "_internal/disqus.html" .}}
+          {{ partial "disqus.html" . }}
         </div>
       {{ end }}
     </div>
