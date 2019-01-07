@@ -63,7 +63,7 @@ library(tidyverse)
 library(rlang)
 library(wordcloud)
 
-cleanMCData <- read.csv('multipleChoiceResponses.csv', stringsAsFactors = TRUE, header = TRUE)
+cleanMCData <- read.csv('stats_data/multipleChoiceResponses.csv', stringsAsFactors = TRUE, header = TRUE)
 question <- "WorkMethodsSelect"
 methods_now <- cleanMCData %>% 
   filter(!UQ(sym(question)) == "") %>%

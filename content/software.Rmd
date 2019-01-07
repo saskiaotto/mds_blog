@@ -54,7 +54,7 @@ library(rlang)
 library(wordcloud)
 library(colormap)
 
-cleanMCData <- read.csv('multipleChoiceResponses.csv', stringsAsFactors = TRUE, header = TRUE)
+cleanMCData <- read.csv('stats_data/multipleChoiceResponses.csv', stringsAsFactors = TRUE, header = TRUE)
 
 question <- "WorkToolsSelect"
 programs_used <- cleanMCData %>% 

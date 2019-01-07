@@ -1511,6 +1511,7 @@ fieldset[disabled] .btn-template-primary.active {
 
 /* navbar container */
 .navbar {
+  border: none;
   position: relative;
   min-height: 62px;
   margin-bottom: 0;
