@@ -122,9 +122,9 @@ function sliders () {
     $('.homepage').owlCarousel({
       navigation: false, // Show next and prev buttons
       navigationText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
-      slideSpeed: 9000, //2000
-      paginationSpeed: 6000, //1000
-      autoPlay: 15000,
+      slideSpeed: 2000, //2000
+      paginationSpeed: 1000, //1000
+      autoPlay: 12000,
       stopOnHover: true,
       singleItem: true,
       lazyLoad: false,
