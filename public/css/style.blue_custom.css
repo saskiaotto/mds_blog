@@ -2765,7 +2765,7 @@ fieldset[disabled] .btn-template-primary.active {
 }
 /* nav */
 .nav > li > a {
-  padding: 10px 15px;
+  padding: 10px 10px;
 }
 .nav > li > a:hover,
 .nav > li > a:focus {
@@ -3861,12 +3861,12 @@ video.video-75 {
 }
 
 #ul-interests > li {
-  font-size: .9rem;
+  font-size: 1rem;
   margin-bottom: .25rem;
 }
 
 #ul-edu p.institution {
-  font-size: .8rem;
+  font-size: .9rem;
   padding: 0;
 }
 
