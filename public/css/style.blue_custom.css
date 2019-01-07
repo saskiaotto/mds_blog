@@ -234,13 +234,13 @@ ul.list-style-none {
   letter-spacing: 0.08em;
 }
 .pages-listing .item h3 a {
-  color: #555555;
+  color: #323232;
 }
 .pages-listing .item .text {
   margin-bottom: 20px;
 }
 .pages-listing .item .text p {
-  color: #999999;
+  color: #555555;
   font-size: 12px;
   margin-bottom: 20px;
 }
@@ -964,7 +964,7 @@ fieldset[disabled] .btn-template-primary.active {
   display: inline-block;
   width: 15px;
   height: 15px;
-  border: solid 1px #555555;
+  border: solid 1px #323232;
   vertical-align: top;
   margin-top: 2px;
   margin-left: 5px;
@@ -985,11 +985,11 @@ fieldset[disabled] .btn-template-primary.active {
   background: yellow;
 }
 .panel.sidebar-menu .panel-body label {
-  color: #999999;
+  color: #555555;
   font-size: 12px;
 }
 .panel.sidebar-menu .panel-body label:hover {
-  color: #555555;
+  color: #323232;
 }
 .panel.sidebar-menu ul.nav.category-menu {
   margin-bottom: 20px;
@@ -1016,7 +1016,7 @@ fieldset[disabled] .btn-template-primary.active {
   padding: 10px 15px;
   padding-left: 30px;
   font-size: 12px;
-  color: #999999;
+  color: #555555;
 }
 .panel.sidebar-menu ul.nav ul li a:hover,
 .panel.sidebar-menu ul.nav ul li a:focus {
@@ -1098,7 +1098,7 @@ fieldset[disabled] .btn-template-primary.active {
 .panel.sidebar-menu ul.recent li p.date {
   float: right;
   font-size: 12px;
-  color: #999999;
+  color: #555555;
 }
 .panel.sidebar-menu ul.popular li:last-child,
 .panel.sidebar-menu ul.recent li:last-child {
@@ -1375,7 +1375,7 @@ fieldset[disabled] .btn-template-primary.active {
   letter-spacing: 0.08em;
 }
 .testimonials .item .testimonial .name-picture p {
-  color: #999999;
+  color: #555555;
   margin: 0;
   font-size: 12px;
 }
@@ -1396,10 +1396,10 @@ fieldset[disabled] .btn-template-primary.active {
   letter-spacing: 0.08em;
 }
 .team-member h3 a {
-  color: #555555;
+  color: #323232;
 }
 .team-member p.role {
-  color: #999999;
+  color: #555555;
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -1442,7 +1442,7 @@ fieldset[disabled] .btn-template-primary.active {
   background-color: #4a7f45;
 }
 .team-member .text p {
-  color: #999999;
+  color: #555555;
   font-size: 12px;
 }
 .team-member .social,
@@ -1514,13 +1514,14 @@ fieldset[disabled] .btn-template-primary.active {
   color: #555555;
 }
 .box-simple p {
-  color: #999999;
+  color: #555555;
+  font-size: 1.25rem;
 }
 .box-simple:hover .icon {
-  -webkit-transform: scale(1.3, 1.3);
-  -ms-transform: scale(1.3, 1.3);
-  -o-transform: scale(1.3, 1.3);
-  transform: scale(1.3, 1.3);
+  -webkit-transform: scale(1.2, 1.2);
+  -ms-transform: scale(1.2, 1.2);
+  -o-transform: scale(1.2, 1.2);
+  transform: scale(1.2, 1.2);
 }
 .box-simple:hover .icon i {
   -webkit-transform: scale(1.1, 1.1);
@@ -1700,7 +1701,7 @@ fieldset[disabled] .btn-template-primary.active {
   letter-spacing: 0.08em;
 }
 .box-image-text .content p {
-  color: #999999;
+  color: #555555;
 }
 .box-image-text:hover .bg {
   opacity: 0.7;
@@ -1926,7 +1927,7 @@ fieldset[disabled] .btn-template-primary.active {
   letter-spacing: 0.08em;
 }
 .portfolio-project .project-more p {
-  color: #999999;
+  color: #555555;
   padding: 10px 0;
   margin-bottom: 20px;
   text-align: left;
@@ -1944,7 +1945,7 @@ fieldset[disabled] .btn-template-primary.active {
   margin-bottom: 20px;
 }
 .portfolio-showcase p {
-  color: #999999;
+  color: #555555;
 }
 .portfolio-showcase p.buttons {
   margin-top: 40px;
@@ -1966,13 +1967,13 @@ fieldset[disabled] .btn-template-primary.active {
   display: inline-block;
   width: 50px;
   height: 50px;
-  color: #555555;
+  color: #323232;
   line-height: 50px;
   border-radius: 25px;
-  border: solid 1px #555555;
+  border: solid 1px #323232;
 }
 .showcase .item h4 {
-  color: #555555;
+  color: #323232;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   line-height: 1.5;
@@ -2025,7 +2026,7 @@ fieldset[disabled] .btn-template-primary.active {
 }
 .packages .package .price .period {
   line-height: normal;
-  color: #999999;
+  color: #555555;
 }
 .packages .package ul {
   padding: 0;
@@ -2086,7 +2087,7 @@ fieldset[disabled] .btn-template-primary.active {
 #blog-homepage .post h2 a,
 #blog-listing-big .post h4 a,
 #blog-homepage .post h4 a {
-  color: #555555;
+  color: #323232;
 }
 #blog-listing-big .post h2 a:hover,
 #blog-homepage .post h2 a:hover,
@@ -2096,7 +2097,7 @@ fieldset[disabled] .btn-template-primary.active {
 }
 #blog-listing-big .post .author-category,
 #blog-homepage .post .author-category {
-  color: #999999;
+  color: #555555;
   text-transform: uppercase;
   font-weight: 300;
   letter-spacing: 0.08em;
@@ -2107,7 +2108,7 @@ fieldset[disabled] .btn-template-primary.active {
 }
 #blog-listing-big .post .date-comments a,
 #blog-homepage .post .date-comments a {
-  color: #999999;
+  color: #555555;
   margin-right: 20px;
 }
 #blog-listing-big .post .date-comments a:hover,
@@ -2159,14 +2160,14 @@ fieldset[disabled] .btn-template-primary.active {
   letter-spacing: 0.08em;
 }
 #blog-listing-medium .post h2 a {
-  color: #555555;
+  color: #323232;
 }
 #blog-listing-medium .post h2 a:hover {
   color: #438AA3;
 }
 #blog-listing-medium .post .author-category {
   float: left;
-  color: #999999;
+  color: #555555;
   text-transform: uppercase;
   font-weight: 300;
   font-size: 12px;
@@ -2180,7 +2181,7 @@ fieldset[disabled] .btn-template-primary.active {
   font-size: 12px;
 }
 #blog-listing-medium .post .date-comments a {
-  color: #999999;
+  color: #555555;
   margin-right: 20px;
 }
 #blog-listing-medium .post .date-comments a:hover {
@@ -2243,7 +2244,7 @@ fieldset[disabled] .btn-template-primary.active {
   text-align: right;
 }
 .box-image-text.blog .author-category {
-  color: #999999;
+  color: #555555;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-weight: 300;
@@ -2291,7 +2292,7 @@ fieldset[disabled] .btn-template-primary.active {
   clear: both;
 }
 #blog-post .comment .posted {
-  color: #999999;
+  color: #555555;
   font-size: 12px;
 }
 #blog-post .comment .reply {
@@ -2369,7 +2370,7 @@ fieldset[disabled] .btn-template-primary.active {
   letter-spacing: 0.08em;
 }
 .product .text h3 a {
-  color: #555555;
+  color: #323232;
 }
 .product .text h3 a:hover {
   text-decoration: none;
@@ -2378,7 +2379,7 @@ fieldset[disabled] .btn-template-primary.active {
   font-size: 18px;
 }
 .product .text p.price del {
-  color: #999999;
+  color: #555555;
 }
 .product .buttons {
   clear: both;
@@ -2422,7 +2423,7 @@ fieldset[disabled] .btn-template-primary.active {
   margin-bottom: 40px;
 }
 .goToDescription a {
-  color: #999999;
+  color: #555555;
   text-decoration: underline;
 }
 #productMain {
@@ -2444,7 +2445,7 @@ fieldset[disabled] .btn-template-primary.active {
   border-radius: 40px;
   background: #ccc;
   line-height: 40px;
-  color: #555555;
+  color: #323232;
   text-align: center;
   text-decoration: none;
   font-family: "Roboto", Helvetica, Arial, sans-serif;
@@ -2534,7 +2535,7 @@ fieldset[disabled] .btn-template-primary.active {
   margin-top: 20px;
 }
 #order-summary table td {
-  color: #999999;
+  color: #555555;
 }
 #order-summary table tr.total td,
 #order-summary table tr.total th {
@@ -3275,7 +3276,7 @@ body {
   /* font-family: -system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"; */
   font-size: 16px;
   line-height: 1.42857143;
-  color: #555555;
+  color: #323232;
 }
 a {
   color: #438AA3;
@@ -3407,7 +3408,7 @@ label {
 .pager .disabled > a:hover,
 .pager .disabled > a:focus,
 .pager .disabled > span {
-  color: #999999;
+  color: #555555;
   background-color: #ffffff;
   border-color: #ddd;
 }
@@ -3451,7 +3452,7 @@ label {
 .pagination > .disabled > a,
 .pagination > .disabled > a:hover,
 .pagination > .disabled > a:focus {
-  color: #999999;
+  color: #555555;
   background-color: #ffffff;
   border-color: #dddddd;
 }
@@ -4017,7 +4018,7 @@ table {
 
 /*  == R FIGURES == */
 p.caption {
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   margin-bottom: 1rem;
 }
 
