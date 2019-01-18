@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Data Visualization</title>
+  <meta name="author" content="" />
+
+  
+  <meta name="keywords" content="marine, data, R">
+  
+
+  
+  <meta name="description" content="Site template made by Saskia using hugo">
+  
+
+  <meta name="generator" content="Hugo 0.49" />
+
+  
+  
+
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+  
+  
+  <link rel="stylesheet" href="/css/academicons.min.css" >
+
+
+  
+  
+  
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicons/favicon-16x16.png">
+  <link rel="manifest" href="/img/favicons/site.webmanifest">
+  <link rel="mask-icon" href="/img/favicons/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#0f1f25">
+  <meta name="theme-color" content="#ffffff">
+
+
+  
+  <meta property="og:title" content="Data Visualization" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/categories/data-visualization//" />
+  <meta property="og:image" content="img/mds_logo_notext@2x.png" />
+
+  
+  <link href="/css/owl.carousel.css" rel="stylesheet">
+  <link href="/css/owl.theme.css" rel="stylesheet">
+
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Marine Data Science">
+
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/css/atom-one-dark_custom.css" rel="stylesheet" id="theme-stylesheet">
+
+
+  
+  <link href="/css/animate.css" rel="stylesheet">
+
+
+  
+  <link href="/css/style.blue_custom.css" rel="stylesheet" id="theme-stylesheet">
+
+
+</head>
+
+
+  <body>
+
+    <div id="all">
+
+        <header>
+
+          
+<div id="top">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-5">
+        
+      </div>
+      <div class="col-xs-7">
+        <div class="social">
+          
+          <a href="https://github.com/mareds" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-github'></i></a>
+          
+          <a href="https://github.com/saskiaotto" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-github'></i></a>
+          
+          <a href="https://www.researchgate.net/profile/Saskia_Otto" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-researchgate'></i></a>
+          
+          <a href="https://twitter.com" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-twitter'></i></a>
+          
+          <a href="https://orcid.org/0000-0001-7780-1322" target="_blank" style="opacity: 1;"><i class='ai ai-2x ai-orcid'></i></a>
+          
+          <a href="mailto:saskia.otto@uni-hamburg.de" target="_blank" style="opacity: 1;"><i class='fa fa-2x fa-envelope'></i></a>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+          <div class="navbar-affixed-top" data-spy="affix" data-offset-top="200">
+
+    <div class="navbar navbar-default yamm" role="navigation" id="navbar">
+
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand home" href="/">
+                    <img src="/img/mds_logo_notext@2x.png" alt="Data Visualization logo" class="hidden-xs hidden-sm" style="max-height:50px;">
+                    <img src="/img/mds_logo_notext_small.png" alt="Data Visualization logo" class="visible-xs visible-sm" style="max-height:40px;">
+                    <span class="sr-only">Data Visualization - go to homepage</span>
+                </a>
+                <div class="navbar-buttons">
+                    <button type="button" class="navbar-toggle btn-template-main" data-toggle="collapse" data-target="#navigation">
+                      <span class="sr-only">Toggle Navigation</span>
+                        <i class="fa fa-align-justify"></i>
+                    </button>
+                </div>
+            </div>
+            
+
+            <div class="navbar-collapse collapse" id="navigation">
+                <ul class="nav navbar-nav navbar-right">
+
+                  
+
+                  
+
+                  
+                  <li class="" title="Home">
+                        <a href="/">Home</a>
+                      </li>
+                  <li class="" title="MDS">
+                        <a href="/mds/">MDS</a>
+                      </li>
+                  <li class="" title="Blog">
+                        <a href="/blog/">Blog</a>
+                      </li>
+                  <li class="" title="Courses">
+                        <a href="/courses/">Courses</a>
+                      </li>
+                  <li class="" title="Data">
+                        <a href="/data/">Data</a>
+                      </li>
+                  <li class="" title="Software">
+                        <a href="/software/">Software</a>
+                      </li>
+                  <li class="" title="About">
+                        <a href="/about/">About</a>
+                      </li>
+                  <li class="" title="Contact">
+                        <a href="/contact/">Contact</a>
+                      </li>
+                  
+
+                </ul>
+            </div>
+            
+
+            <div class="collapse clearfix" id="search">
+
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                        <span class="input-group-btn">
+
+                    <button type="submit" class="btn btn-template-main"><i class="fa fa-search"></i></button>
+
+                </span>
+                    </div>
+                </form>
+
+            </div>
+            
+
+        </div>
+    </div>
+    
+
+</div>
+
+
+
+
+        </header>
+
+        <div id="heading-breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                  <h1 class="title toc-ignore">Data Visualization</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <div id="content">
+            <div class="container">
+                <div class="row">
+                    
+
+                    <div class="col-md-9" id="blog-listing-medium">
+
+                        
+                        
+                        <section class="post">
+                            <div class="row">
+                                <div class="col-md-4">
+                                  <div class="image">
+                                      <a href="/blog/2019/01/16/oce-package-for-oceanographical-data/">
+                                          
+                                          <img src="/img/banners/oce_package.png" class="img-responsive" alt="">
+                                          
+                                      </a>
+                                  </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <h2><a href="/blog/2019/01/16/oce-package-for-oceanographical-data/">oce package for oceanographical data</a></h2>
+                                    <div class="clearfix">
+                                        <p class="author-category">
+                                          
+                                          By <a href="#">Saskia</a>
+                                          
+                                          
+                                          
+                                          in <a href="/categories/data-visualization">data visualization</a>
+                                          
+                                          
+
+                                        </p>
+                                        <p class="date-comments">
+                                            <a href="/blog/2019/01/16/oce-package-for-oceanographical-data/"><i class="fa fa-calendar-o"></i> January 16, 2019</a>
+                                        </p>
+                                    </div>
+                                    <p class="intro">In this post I will present the oce package, which can be handy for marine data scientist working with oceanographical data. oce provides lots of functions to
+ read oceanographic data, process the data specific to the measuring instrument, and visualize results following oceanographic conventions (using the base graphics).  The key function for importing data into R is ?read.oce(), which automatically recognizes the file type. If the recognition does not work, try the individual functions (e.</p>
+                                    <p class="read-more"><a href="/blog/2019/01/16/oce-package-for-oceanographical-data/" class="btn btn-template-main">Continue reading</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+                        
+
+                        <ul class="pager">
+                            
+                            <li class="previous disabled"><a href="#">&larr; Newer</a></li>
+                            
+
+                            
+                            <li class="next disabled"><a href="#">Older &rarr;</a></li>
+                            
+                        </ul>
+                    </div>
+                    
+
+                    
+
+                    
+
+                    <div class="col-md-3">
+
+                        
+
+                        
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+      <h3 class="panel-title">Search</h3>
+    </div>
+
+    <div class="panel-body">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" role="search">
+            <div class="input-group">
+                <input type="search" name="q" class="form-control" placeholder="Search">
+                <input type="hidden" name="sitesearch" value="/">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-template-main"><i class="fa fa-search"></i></button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+      <h3 class="panel-title">Categories</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="nav nav-pills nav-stacked">
+            
+            <li><a href="/categories/data-visualization">data-visualization (1)</a>
+            </li>
+            
+            <li><a href="/categories/indicator">indicator (2)</a>
+            </li>
+            
+            <li><a href="/categories/programming">programming (1)</a>
+            </li>
+            
+            <li><a href="/categories/statistical-learning">statistical-learning (1)</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="panel sidebar-menu">
+    <div class="panel-heading">
+      <h3 class="panel-title">Tags</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="tag-cloud">
+            
+            <li><a href="/tags/food-web"><i class="fa fa-tags"></i> food-web</a>
+            </li>
+            
+            <li><a href="/tags/food-webs"><i class="fa fa-tags"></i> food-webs</a>
+            </li>
+            
+            <li><a href="/tags/gam"><i class="fa fa-tags"></i> gam</a>
+            </li>
+            
+            <li><a href="/tags/oceanography"><i class="fa fa-tags"></i> oceanography</a>
+            </li>
+            
+            <li><a href="/tags/r-package"><i class="fa fa-tags"></i> r-package</a>
+            </li>
+            
+            <li><a href="/tags/shiny"><i class="fa fa-tags"></i> shiny</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+
+
+                        
+
+                    </div>
+                    
+
+                    
+
+                </div>
+                
+            </div>
+            
+        </div>
+        
+
+        <footer id="footer">
+    <div class="container">
+
+        
+        <div class="col-md-4 col-sm-6">
+            <h4>About me</h4>
+            <img src="/img/profile_v1@2x.png" alt="profile" style="float:left;width:75px;height:75px;padding:5px;"/>
+
+            I am a quantitative marine ecologist who loves combining nerdy programming, statistics, ecology and any activity in and around the oceans.
+
+            <hr class="hidden-md hidden-lg hidden-sm">
+
+        </div>
+        
+        
+
+        <div class="col-md-4 hidden-sm" id="footer-posts">
+
+             
+            <h4>Recent posts</h4>
+
+            <div class="blog-entries">
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/01/16/helpful-shiny-apps/">
+                          
+                            <img src="/img/banners/shiny_apps.png" class="img-responsive" alt="Helpful Shiny apps">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/01/16/helpful-shiny-apps/">Helpful Shiny apps</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/01/16/oce-package-for-oceanographical-data/">
+                          
+                            <img src="/img/banners/oce_package.png" class="img-responsive" alt="oce package for oceanographical data">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/01/16/oce-package-for-oceanographical-data/">oce package for oceanographical data</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/01/07/normalizing-the-rmse/">
+                          
+                            <img src="/img/banners/nrmse.png" class="img-responsive" alt="How to normalize the RMSE">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/01/07/normalizing-the-rmse/">How to normalize the RMSE</a></h5>
+                    </div>
+                </div>
+                
+            </div>
+
+            <hr class="hidden-md hidden-lg">
+             
+
+        </div>
+        
+
+        
+        <div class="col-md-4 col-sm-6">
+
+          <h4>Contact</h4>
+
+            <strong><a href="https://www.biologie.uni-hamburg.de/en/einrichtungen/imf.html">Institute of Marine Ecosystem and Fishery Science</a></strong>
+        <br>Center for Earth System Research and Sustainability
+        <br>University of Hamburg
+        <br><strong>Germany</strong><br>
+      
+
+            <a href="/contact" class="btn btn-small btn-template-main">Go to contact page</a>
+
+            <hr class="hidden-md hidden-lg hidden-sm">
+
+        </div>
+        
+        
+
+    </div>
+    
+</footer>
+
+
+
+
+
+
+
+<div id="copyright">
+    <div class="container">
+        <div class="col-md-12">
+            
+            <p class="pull-left">&copy; 2018 - This work is licensed under a <a rel='license' href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International License </a></p>
+            
+            <p class="pull-right">
+              <a href="/about/index.html#about-website">Legal Disclosure</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    </div>
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-127654937-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+<script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0/jquery.counterup.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-parallax/1.1.3/jquery-parallax.js"></script>
+<script src="/js/hpneo.gmaps.js"></script>
+<script src="/js/gmaps.init.js"></script>
+<script src="/js/front.js"></script>
+
+
+<script src="/js/owl.carousel.min.js"></script>
+
+
+
+
+
+<script src="/js/highlight.pack.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+<script id="dsq-count-scr" src="//www-marinedatascience-co.disqus.com/count.js" async></script>
+
+
+
+<script>
+  var shiftWindow = function() { scrollBy(0, -175) };
+  if (location.hash) shiftWindow();
+  window.addEventListener("hashchange", shiftWindow);
+</script>
+
+
+  </body>
+</html>

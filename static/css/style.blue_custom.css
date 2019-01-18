@@ -246,11 +246,14 @@ h2,
 .h2,
 h3,
 .h3 {
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 30px;
+  margin-bottom: 15px;
 }
 p {
   margin: 0 0 10px;
+}
+.source {
+  font-size: .8rem;
 }
 .lead {
   margin-bottom: 20px;
@@ -408,8 +411,6 @@ a.list-group-item.active > .badge,
   clear: both;
 }
 
-
-
 a.btn-template-main {
   background-color: transparent;
   border-radius: 5px;
@@ -443,6 +444,29 @@ video.video-75 {
   }
 
 }
+
+
+div.shiny-container {
+  border: 2px solid rgba(0, 0, 0, 0.175);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.175);
+  border-radius: 10px;
+  margin-top: 1.5rem;
+  margin-bottom: .5rem;
+}
+
+div.shiny-container iframe {
+  border-radius: 10px;
+  /* transform: scale(0.9); */
+}
+
+
+img.img-external {
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+
+
 
 
 /* from template  */
@@ -984,7 +1008,7 @@ fieldset[disabled] .btn-template-primary.active {
 }
 .box-simple p {
   color: #555555;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
 }
 .box-simple:hover .icon {
   -webkit-transform: scale(1.2, 1.2);
@@ -2537,6 +2561,8 @@ fieldset[disabled] .navbar-default .btn-link:focus {
 
 /* == HOMEPAGE - RECENT POSTS == */
 
+
+/* the start of the post text shown in p#intro  */
 #intro {
   background: url('../img/home.jpg') no-repeat center top;
   background-size: cover;
@@ -2591,6 +2617,51 @@ fieldset[disabled] .navbar-default .btn-link:focus {
   height: 100%;
   position: relative;
 }
+
+
+/* place images in center an have height same value */
+
+/*
+  folgendes klappte nicht daher neue Klasse eingerichtet:
+  .box-text-image > .top > .image > .img-responsive {
+ */
+
+
+.home-blog-img {
+  margin-left: auto;
+  margin-right: auto;
+  height: 191px;
+  width: auto;
+}
+
+/* adjust responsive behaviour of height */
+
+@media (max-width: 1199px) {
+
+  .home-blog-img {
+    height: 153.75px;
+  }
+
+}
+
+@media (max-width: 991px) {
+
+  .home-blog-img {
+    height: 247.5px;
+  }
+
+}
+
+/*  hier widht set as smaller viepoert with stretch image*/
+@media (max-width: 768px) {
+
+  .home-blog-img {
+    max-width: 100%;
+    height: auto;
+  }
+
+}
+
 
 
 
@@ -3552,8 +3623,34 @@ table {
 p.caption {
   font-size: 0.85rem;
   margin-bottom: 1rem;
-  text-align: left;
+  /* text-align: left; */
 }
+
+/* for external images */
+span.fig-caption {
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+code, kbd, pre, samp {
+    font-family: Monaco, monospace, monospace;
+    font-size: .9em;
+    font-weight: normal;
+}
+
+/* code.hljs.shell {
+  background: #B9D3EE; color:#000000;
+  margin-top: -20px;
+  line-height: 120%;
+  font-family: 'Courier New', Courier, monospace;
+  color: black;
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: 10px 10px 8px 1px rgba(0, 0, 0, 0.2), 1px 3px 3px 2px rgba(0, 0, 0, 0.5);
+} */
+
+
+
 
 
 

@@ -28,6 +28,8 @@
   
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
   
+  
+  <link rel="stylesheet" href="/css/academicons.min.css" >
 
 
   
@@ -63,9 +65,7 @@
   
   
   
-  <link rel="stylesheet" href="/css/github_custom.css" rel="stylesheet" id="theme-stylesheet">
-  <script src="/js/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+  <link rel="stylesheet" href="/css/atom-one-dark_custom.css" rel="stylesheet" id="theme-stylesheet">
 
 
   
@@ -95,9 +95,15 @@
       <div class="col-xs-7">
         <div class="social">
           
+          <a href="https://github.com/mareds" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-github'></i></a>
+          
           <a href="https://github.com/saskiaotto" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-github'></i></a>
           
-          <a href="http://www.researchgate.net/profile/Saskia_Otto" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-researchgate'></i></a>
+          <a href="https://www.researchgate.net/profile/Saskia_Otto" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-researchgate'></i></a>
+          
+          <a href="https://twitter.com" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-twitter'></i></a>
+          
+          <a href="https://orcid.org/0000-0001-7780-1322" target="_blank" style="opacity: 1;"><i class='ai ai-2x ai-orcid'></i></a>
           
           <a href="mailto:saskia.otto@uni-hamburg.de" target="_blank" style="opacity: 1;"><i class='fa fa-2x fa-envelope'></i></a>
           
@@ -218,7 +224,7 @@
       <section>
           <div id="databases" class="section level1">
 <h1>Databases</h1>
-<p>In the following you find a list of databases and repositories that provide different type of marine data for specific regions free of charge. The list is not intended to be exhaustive but more to give you an easy start and many of these database can be webscraped directly from within R using specific packages that I also list here. If you feel there is any global or regional database missing where users can download marine data, don’t hesitate to contact me! <br> <br></p>
+<p>In the following you find a list of databases and repositories that provide different type of marine data for specific regions free of charge. The list is not intended to be exhaustive but more to give you an easy start and many of these database can be webscraped directly from within R using specific packages that I also list here. If you feel there is any global or regional database missing where users can download marine data, don’t hesitate to <a href="/contact/index.html">contact</a> me! <br> <br></p>
 <div id="general-databases" class="section level2">
 <h2>General databases</h2>
 <p><strong>PANGAEA</strong> - Data Publisher for Earth &amp; Environmental Science: <a href="https://www.pangaea.de">www.pangaea.de</a><br> PANGAEA is a digital library for data from earth system research. PANGAEA archieves published Earth &amp; Environmental Science data under the following subjects: agriculture, atmosphere, biological classification, biosphere, chemistry, cryosphere, ecology, fisheries, geophysics, human dimensions, lakes &amp; rives, land surface, lithosphere, oceans, and paleontology. Data sets include a metadata description with a bibliographic citation, persistently identified using a DOI. The system is open to any project or individual scientist for data archiving and publishing. The system is hosted by AWI and MARUM.<br> → The data can also be accessed from within <strong>R</strong> using the package <a href="https://github.com/ropensci/pangaear">pangaear</a>.</p>
@@ -234,7 +240,7 @@
 <li>Impulsive underwater noise collates data</li>
 <li>Vulnerable Marine Ecosystems hosts data on deep-water VMEs in the North Atlantic<br> → The DATRAS data can also be accessed from within <strong>R</strong> using the package DATRAS package that can be downloaded from <a href="https://www.rforge.net/DATRAS/Tutorial.html">here</a> or following <a href="http://www.ices.dk/marine-data/Documents/DATRAS/DATRAS_R.pdf">this code</a>.</li>
 </ul>
-<p><strong>AODN Portal</strong> - Australian Ocean Data Network (AODN): <a href="https://portal.aodn.org.au/" class="uri">https://portal.aodn.org.au/</a><br> The gateway to Australian marine (biological, checmical, physical) and climate science data. The AODN Portal provides access to all available Australian marine and climate science data and provides the primary access to IMOS data including access to the IMOS metadata (IMOS is a national collaborative research infrastructure, supported by Australian Government). <br> <br></p>
+<p><strong>AODN Portal</strong> - Australian Ocean Data Network (AODN): <a href="https://portal.aodn.org.au/" class="uri">https://portal.aodn.org.au/</a><br> The gateway to Australian marine (biological, checmical, physical) and climate science data. The AODN Portal provides access to all available Australian marine and climate science data and provides the primary access to IMOS data including access to the IMOS metadata (IMOS is a national collaborative research infrastructure, supported by Australian Government). <br></p>
 <p><strong>WHOI Data</strong> <a href="http://www.whoi.edu/data/">www.whoi.edu/data/</a><br> A great collection of regional to global data and repositories based at Woods Hole Oceanographic Instituions (WHOI) (e.g. float, mooring, seafloor, oceanic and climate data) <br> <br></p>
 <p><img src="../img/data/db_ctd.png" alt="CTD" style="float:left;clear:left;height:75px;border:2;padding-right:10px;"></p>
 <!-- this is needed, if first header has picture floating left (alignment setting not working) -->
@@ -247,7 +253,8 @@
 <p><strong>OceanSITES</strong> <a href="http://www.oceansites.org">www.oceansites.org</a><br> A worldwide system of deepwater reference stations. The mission of OceanSITES is to collect, deliver and promote the use of high-quality data from long-term, high-frequency observations at fixed locations in the open ocean.</p>
 <p><strong>NOAA Data Buoy Center (NDBC)</strong> <a href="https://www.ndbc.noaa.gov">www.ndbc.noaa.gov</a><br> The NDBC is a part of the National Oceanic and Atmospheric Administration’s (NOAA) National Weather Service (NWS). NDBC designs, develops, operates, and maintains a network of data collecting buoys and coastal stations. The data can be requested from their website.</p>
 <p><strong>EOSDIS Ocean Data</strong> <a href="https://earthdata.nasa.gov/discipline/ocean" class="uri">https://earthdata.nasa.gov/discipline/ocean</a><br> The ocean database of NASA’s Earth Observing System Data and Information System (EOSDIS) encompasses geophysical parameters that characterize the oceans (e.g., temperature, salinity, sea surface topography, chemistry/biology optics) as well as those physical processes operating within the Earth’s oceans and at its surface.</p>
-<p><strong>OceanColor</strong> <a href="https://oceancolor.gsfc.nasa.gov/data/overview/" class="uri">https://oceancolor.gsfc.nasa.gov/data/overview/</a><br> This website serves as the primary data access portal to the NASA satellite Ocean Biology (OB) data produced or collected under NASA’s Earth Observing System Data and Information System (EOSDIS). <br> <br></p>
+<p><strong>OceanColor</strong> <a href="https://oceancolor.gsfc.nasa.gov/data/overview/" class="uri">https://oceancolor.gsfc.nasa.gov/data/overview/</a><br> This website serves as the primary data access portal to the NASA satellite Ocean Biology (OB) data produced or collected under NASA’s Earth Observing System Data and Information System (EOSDIS).</p>
+<p><strong>USGS Earth Explorer</strong> <a href="https://earthexplorer.usgs.gov/" class="uri">https://earthexplorer.usgs.gov/</a><br> The USGS Earth Explorer is a similar tool to the USGS Global Visualization Viewer (GloVis) in that users can search catalogs of satellite and aerial imagery. <br> <br></p>
 <div id="north-atlantic-and-adjacent-seas" class="section level4">
 <h4>North Atlantic and adjacent seas</h4>
 <p><strong>ICES Data Centre - Ocean</strong> <a href="http://ices.dk/marine-data/data-portals/Pages/ocean.aspx" class="uri">http://ices.dk/marine-data/data-portals/Pages/ocean.aspx</a><br> Oceanographic data which includes temperature, salinity, oxygen, chlorophyll a, and nutrients measurements are made available through the OCEAN web applications.</p>
@@ -421,7 +428,7 @@
             <h4>About me</h4>
             <img src="/img/profile_v1@2x.png" alt="profile" style="float:left;width:75px;height:75px;padding:5px;"/>
 
-            I am a quantitative marine ecologist who loves combining nerdy programming, statistics, and any activity in and around the oceans.
+            I am a quantitative marine ecologist who loves combining nerdy programming, statistics, ecology and any activity in and around the oceans.
 
             <hr class="hidden-md hidden-lg hidden-sm">
 
@@ -438,40 +445,40 @@
                 
                 <div class="item same-height-row clearfix">
                     <div class="image same-height-always">
-                        <a href="/blog/2018/10/17/r-code-test/">
+                        <a href="/blog/2019/01/16/helpful-shiny-apps/">
                           
-                            <img src="/img/placeholder.png" class="img-responsive" alt="R code test">
+                            <img src="/img/banners/shiny_apps.png" class="img-responsive" alt="Helpful Shiny apps">
                           
                         </a>
                     </div>
                     <div class="name same-height-always">
-                        <h5><a href="/blog/2018/10/17/r-code-test/">R code test</a></h5>
+                        <h5><a href="/blog/2019/01/16/helpful-shiny-apps/">Helpful Shiny apps</a></h5>
                     </div>
                 </div>
                 
                 <div class="item same-height-row clearfix">
                     <div class="image same-height-always">
-                        <a href="/blog/2018/10/16/testing-indicator-performance/">
+                        <a href="/blog/2019/01/16/oce-package-for-oceanographical-data/">
                           
-                            <img src="/img/banners/indicators.jpg" class="img-responsive" alt="Testing indicator performance">
+                            <img src="/img/banners/oce_package.png" class="img-responsive" alt="oce package for oceanographical data">
                           
                         </a>
                     </div>
                     <div class="name same-height-always">
-                        <h5><a href="/blog/2018/10/16/testing-indicator-performance/">Testing indicator performance</a></h5>
+                        <h5><a href="/blog/2019/01/16/oce-package-for-oceanographical-data/">oce package for oceanographical data</a></h5>
                     </div>
                 </div>
                 
                 <div class="item same-height-row clearfix">
                     <div class="image same-height-always">
-                        <a href="/blog/">
+                        <a href="/blog/2019/01/07/normalizing-the-rmse/">
                           
-                            <img src="/img/placeholder.png" class="img-responsive" alt="Blogs">
+                            <img src="/img/banners/nrmse.png" class="img-responsive" alt="How to normalize the RMSE">
                           
                         </a>
                     </div>
                     <div class="name same-height-always">
-                        <h5><a href="/blog/">Blogs</a></h5>
+                        <h5><a href="/blog/2019/01/07/normalizing-the-rmse/">How to normalize the RMSE</a></h5>
                     </div>
                 </div>
                 
@@ -516,7 +523,7 @@
     <div class="container">
         <div class="col-md-12">
             
-            <p class="pull-left">This work is licensed under a <a rel='license' href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International License </a></p>
+            <p class="pull-left">&copy; 2018 - This work is licensed under a <a rel='license' href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International License </a></p>
             
             <p class="pull-right">
               <a href="/about/index.html#about-website">Legal Disclosure</a>
@@ -560,6 +567,15 @@ if (!doNotTrack) {
 
 
 <script src="/js/owl.carousel.min.js"></script>
+
+
+
+
+
+<script src="/js/highlight.pack.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 

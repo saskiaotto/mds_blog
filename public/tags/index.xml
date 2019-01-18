@@ -7,17 +7,62 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018 - present [Saskia Otto](https://github.com/saskiaotto)</copyright>
-    <lastBuildDate>Wed, 17 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 16 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Modelling</title>
-      <link>/tags/modelling/</link>
-      <pubDate>Wed, 17 Oct 2018 00:00:00 +0000</pubDate>
+      <title>Food Web</title>
+      <link>/tags/food-web/</link>
+      <pubDate>Tue, 16 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/tags/modelling/</guid>
+      <guid>/tags/food-web/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Food Webs</title>
+      <link>/tags/food-webs/</link>
+      <pubDate>Mon, 07 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/food-webs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Gam</title>
+      <link>/tags/gam/</link>
+      <pubDate>Mon, 07 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/gam/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Oceanography</title>
+      <link>/tags/oceanography/</link>
+      <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/oceanography/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>R Package</title>
+      <link>/tags/r-package/</link>
+      <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/r-package/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Shiny</title>
+      <link>/tags/shiny/</link>
+      <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/shiny/</guid>
       <description></description>
     </item>
     

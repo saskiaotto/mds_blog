@@ -7,20 +7,49 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018 - present [Saskia Otto](https://github.com/saskiaotto)</copyright>
-    <lastBuildDate>Wed, 17 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 16 Jan 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>R code test</title>
-      <link>/blog/2018/10/17/r-code-test/</link>
-      <pubDate>Wed, 17 Oct 2018 00:00:00 +0000</pubDate>
+      <title>Helpful Shiny apps</title>
+      <link>/blog/2019/01/16/helpful-shiny-apps/</link>
+      <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
       
-      <guid>/blog/2018/10/17/r-code-test/</guid>
-      <description>Test how R code looks like This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
-You can embed an R code chunk like this:
-summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.</description>
+      <guid>/blog/2019/01/16/helpful-shiny-apps/</guid>
+      <description>If you are an R user but don’t know yet what Shiny and Shiny apps are, you definitely should read up on it on http://shiny.rstudio.com.
+But in a nutshell, Shiny is an R package that builds interactive web apps straight from R. You just need to write an R script that follows a specific Shiny syntax and once you run the script, the package builds a HTML file as user interface (UI) with interactive input elements (based on Javascript) that trigger certain computations in R.</description>
+    </item>
+    
+    <item>
+      <title>oce package for oceanographical data</title>
+      <link>/blog/2019/01/16/oce-package-for-oceanographical-data/</link>
+      <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/01/16/oce-package-for-oceanographical-data/</guid>
+      <description>In this post I will present the oce package, which can be handy for marine data scientist working with oceanographical data. oce provides lots of functions to
+ read oceanographic data, process the data specific to the measuring instrument, and visualize results following oceanographic conventions (using the base graphics).  The key function for importing data into R is ?read.oce(), which automatically recognizes the file type. If the recognition does not work, try the individual functions (e.</description>
+    </item>
+    
+    <item>
+      <title>How to normalize the RMSE</title>
+      <link>/blog/2019/01/07/normalizing-the-rmse/</link>
+      <pubDate>Mon, 07 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/01/07/normalizing-the-rmse/</guid>
+      <description>This post has been stimulated by a discussion with a colleague who asked about the normalization method for the root mean square error (NRMSE) in the INDperform R package, which is based on the indicator testing framework outlined in my article (Otto et al. 2018)1. At the time of writing the article and package I simply used a common approach and didn’t test it much further. But sparked by this discussion I started to test it thoroughly (as you will see below), which will make me revise the package.</description>
+    </item>
+    
+    <item>
+      <title>Release indicator package INDperform</title>
+      <link>/blog/2019/01/07/release-indicator-package-indperform/</link>
+      <pubDate>Mon, 07 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/01/07/release-indicator-package-indperform/</guid>
+      <description>INDperform  Overview INDperform is an R package that implements a quantitative framework for selecting and validating the performance of state indicators tailored to meet regional conditions and specific management needs as described in Otto et al. (2018) 1 (see also my post on indicators).
+The package builds upon the tidy data principles and offers functions to
+ identify temporal indicator changes, model relationships to pressures while taking non-linear responses and temporal autocorrelation into account, and to quantify the robustness of these models.</description>
     </item>
     
     <item>
@@ -29,7 +58,7 @@ summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 2
       <pubDate>Tue, 16 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018/10/16/testing-indicator-performance/</guid>
-      <description>Indicators are useful and versatile tools applied in disciplines such as engineering, chemistry, medicine, economy or sociology. In ecosystem-based management a key role of an indicator is to inform on the current status of the system component as well as the effectiveness of specific management measures to move the component into a different state. In European Union (EU) marine policy, indicator development has recently progressed as part of the implementation of the Marine Strategy Framework Directive (MSFD) to aid the achievement of Good Environmental Status (GES) of the EU’s marine waters by 2020.</description>
+      <description>Indicators are useful and versatile tools applied in disciplines such as engineering, chemistry, medicine, economy or sociology. In ecosystem-based management a key role of an indicator is to inform on the current status of the system component as well as the effectiveness of specific management measures to move the component into a different state. In European Union (EU) marine policy, indicator development has recently progressed as part of the implementation of the Marine Strategy Framework Directive (MSFD)1 to aid the achievement of Good Environmental Status (GES) of the EU’s marine waters by 2020.</description>
     </item>
     
     <item>

@@ -12,20 +12,38 @@
     
     
     <item>
-      <title>Data Visualisation</title>
-      <link>/categories/data-visualisation/</link>
-      <pubDate>Wed, 17 Oct 2018 00:00:00 +0000</pubDate>
+      <title>Data Visualization</title>
+      <link>/categories/data-visualization/</link>
+      <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
       
-      <guid>/categories/data-visualisation/</guid>
+      <guid>/categories/data-visualization/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Indicator</title>
       <link>/categories/indicator/</link>
-      <pubDate>Tue, 16 Oct 2018 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 07 Jan 2019 00:00:00 +0000</pubDate>
       
       <guid>/categories/indicator/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Programming</title>
+      <link>/categories/programming/</link>
+      <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/programming/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Statistical Learning</title>
+      <link>/categories/statistical-learning/</link>
+      <pubDate>Mon, 07 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/statistical-learning/</guid>
       <description></description>
     </item>
     

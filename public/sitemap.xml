@@ -3,8 +3,23 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/blog/2018/10/17/r-code-test/</loc>
-    <lastmod>2018-10-17T00:00:00+00:00</lastmod>
+    <loc>/blog/2019/01/16/helpful-shiny-apps/</loc>
+    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/2019/01/16/oce-package-for-oceanographical-data/</loc>
+    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/2019/01/07/normalizing-the-rmse/</loc>
+    <lastmod>2019-01-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/2019/01/07/release-indicator-package-indperform/</loc>
+    <lastmod>2019-01-07T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -18,7 +33,7 @@
   
   <url>
     <loc>/blog/</loc>
-    <lastmod>2018-10-17T00:00:00+00:00</lastmod>
+    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -32,8 +47,8 @@
   </url>
   
   <url>
-    <loc>/categories/data-visualisation/</loc>
-    <lastmod>2018-10-17T00:00:00+00:00</lastmod>
+    <loc>/categories/data-visualization/</loc>
+    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -42,14 +57,32 @@
   </url>
   
   <url>
-    <loc>/categories/indicator/</loc>
+    <loc>/tags/food-web/</loc>
     <lastmod>2018-10-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
+    <loc>/tags/food-webs/</loc>
+    <lastmod>2019-01-07T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/gam/</loc>
+    <lastmod>2019-01-07T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/indicator/</loc>
+    <lastmod>2019-01-07T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/</loc>
-    <lastmod>2018-10-17T00:00:00+00:00</lastmod>
+    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -58,8 +91,8 @@
   </url>
   
   <url>
-    <loc>/tags/modelling/</loc>
-    <lastmod>2018-10-17T00:00:00+00:00</lastmod>
+    <loc>/tags/oceanography/</loc>
+    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -68,12 +101,36 @@
   </url>
   
   <url>
+    <loc>/categories/programming/</loc>
+    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/r-package/</loc>
+    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/shiny/</loc>
+    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/software/</loc>
   </url>
   
   <url>
+    <loc>/categories/statistical-learning/</loc>
+    <lastmod>2019-01-07T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/</loc>
-    <lastmod>2018-10-17T00:00:00+00:00</lastmod>
+    <lastmod>2018-10-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

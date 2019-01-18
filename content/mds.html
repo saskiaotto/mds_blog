@@ -38,8 +38,7 @@ tags: []
 <p><br></p>
 <div id="lets-see-which-methods-respondents-from-all-fields-or-academia-currently-use-most-at-work" class="section level4">
 <h4>Let’s see which methods respondents from all fields or academia currently use most at work:</h4>
-<pre class="r"><code># comment
-p_all &lt;- methods_now %&gt;% ggplot(aes(x = selections, y = percent, fill = selections)) + 
+<pre class="r"><code>p_all &lt;- methods_now %&gt;% ggplot(aes(x = selections, y = percent, fill = selections)) + 
     geom_col() + scale_fill_viridis_d(direction = -1) + guides(fill = &quot;none&quot;) + 
     labs(x = &quot;Methods used&quot;, y = &quot;Percent&quot;) + coord_flip() + theme_classic()
 p_acad &lt;- methods_now_acad %&gt;% ggplot(aes(x = selections, y = percent, fill = selections)) + 
@@ -362,6 +361,6 @@ MARS
 <hr />
 <ol>
 <li id="fn1"><p>Report at the <a href="https://www.ibm.com/blogs/insights-on-business/consumer-products/2-5-quintillion-bytes-of-data-created-every-day-how-does-cpg-retail-manage-it/">IBM Consumer Products Industry</a><a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>Davenport, Thomas H.; Patil, DJ (Oct 2012), <a href="https://hbr.org/2012/10/data-scientist-the-sexiest-job-of-the-21st-century">Data Scientist: The Sexiest Job of the 21st Century</a>, Harvard Business Review<a href="#fnref2">↩</a></p></li>
+<li id="fn2"><p>Davenport, T.H. &amp; Patil, D.J. (Oct 2012), <a href="https://hbr.org/2012/10/data-scientist-the-sexiest-job-of-the-21st-century">Data Scientist: The Sexiest Job of the 21st Century</a>, Harvard Business Review<a href="#fnref2">↩</a></p></li>
 </ol>
 </div>

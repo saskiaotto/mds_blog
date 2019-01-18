@@ -16,6 +16,18 @@
 
 <!-- ===== ADDED BY MYSELF ==== -->
 
+<!-- Add highlighting -->
+<script src="{{ "js/highlight.pack.js" | absURL }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<!-- Add Mathjax (taken from Hugo Lithium theme by Yihui) -->
+{{ if and (not .Params.disable_mathjax) (or (in (string .Content) "\\") (in (string .Content) "$")) }}
+<script src="{{ "/js/math-code.js" | relURL }}"></script>
+<script async src="{{ .Site.Params.MathJaxCDN | default "//cdnjs.cloudflare.com/ajax/libs" }}/mathjax/{{ .Site.Params.MathJaxVersion | default "2.7.5" }}/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+{{ end }}
+
 
 <!-- Add disqus info -->
 <script id="dsq-count-scr" src="//www-marinedatascience-co.disqus.com/count.js" async></script>

@@ -1,0 +1,93 @@
+---
+title: Helpful Shiny apps
+author: Saskia
+date: '2019-01-16'
+slug: helpful-shiny-apps
+categories: 
+  - programming
+tags: 
+  - Shiny
+banner: "img/banners/shiny_apps.png"
+---
+
+
+
+<p>If you are an R user but don’t know yet what Shiny and Shiny apps are, you definitely should read up on it on <a href="http://shiny.rstudio.com" class="uri">http://shiny.rstudio.com</a>.</p>
+<p>But in a nutshell, Shiny is an R package that <strong>builds interactive web apps</strong> straight from R. You just need to write an R script that follows a specific Shiny syntax and once you run the script, the package builds a HTML file as user interface (UI) with interactive input elements (based on Javascript) that trigger certain computations in R. The output of theses computations can be then shown as output in the UI. You can easily <strong>extend</strong> your Shiny apps with <strong>CSS themes, htmlwidgets</strong>, and <strong>JavaScript actions</strong>. Since you need to run R in the background you can either launch a Shiny app directly in your R Studio IDE or host it on a website that is connected to a Shiny server (e.g. R Studio hosts the cloud service <a href="http://www.shinyapps.io/">www.shinyapps.io</a>, where you can deploy your app).</p>
+<p>The Shiny website has a big gallery of apps you can explore. Here are some examples linked to marine science that are worth playing around with. I embedded the websites of the Shiny app so you can play around with them straight from here (simply move your cursor inside the app frame and scroll -vertically, but also horizontally- to see more of the app).</p>
+<div id="ggplot-catalogue-as-shiny-app" class="section level2">
+<h2>ggplot catalogue as Shiny app</h2>
+<p>This is a nice app that provides a catalog of different ggplots as a complement to the book <a href="http://www.amazon.com/Creating-Effective-Graphs-Naomi-Robbins/dp/0985911123">Creating More Effective Graphs</a> by Naomi Robbins and is maintained by Joanna Zhao and Jennifer Bryan.</p>
+<p>You can filter for plot types you are interested in, then select the one you like best and see the R code to reproduce this graph:</p>
+<div class="embed-responsive embed-responsive-4by3 shiny-container">
+<p><iframe class="embed-responsive-item  "   
+    src="http://shinyapps.stat.ubc.ca/r-graph-catalog/" 
+    frameborder="0" allowfullscreen></iframe></p>
+</div>
+<p>Source: <a href="http://shinyapps.stat.ubc.ca/r-graph-catalog/" class="uri">http://shinyapps.stat.ubc.ca/r-graph-catalog/</a>.</p>
+</div>
+<div id="d-network-mapper" class="section level2">
+<h2>3D Network Mapper</h2>
+<p>With this app you can visualize networks exported from NodeXL in a 3 dimensional view. <a href="https://www.smrfoundation.org/nodexl/">NodeXL</a> is a free Excel add-in that supports network and content analysis. You could, for instance, built a socio-ecological network with NodeXL and then load your .xlsx file into the app for 3D visualization. If you don’t have any data yet, try out the demo:</p>
+<div class="embed-responsive embed-responsive-4by3 shiny-container">
+<p><iframe class="embed-responsive-item  "   
+    src="https://gallery.shinyapps.io/3D_Mapping/" 
+    frameborder="0" allowfullscreen></iframe></p>
+</div>
+<p>Source: <a href="https://gallery.shinyapps.io/3D_Mapping/" class="uri">https://gallery.shinyapps.io/3D_Mapping/</a>.</p>
+</div>
+<div id="usgs-shiny-app-to-inform-stakeholder" class="section level2">
+<h2>USGS Shiny app to inform stakeholder</h2>
+<p>This Shiny app written by Taylor Stewart from USGS (U.S. Geological Survey) is a good example of how to communicate science to fisheries managers, the fishing industry and the public in a more interactive way. The app serves as tool to explore trawl survey data taken by the Lake Erie Biological Station. <strong>Scroll down</strong> to see the actual app:</p>
+<div class="embed-responsive embed-responsive-4by3 shiny-container">
+<p><iframe class="embed-responsive-item"   
+    src="https://gallery.shinyapps.io/lake_erie_fisheries_stock_assessment_app/" 
+    frameborder="0" allowfullscreen></iframe></p>
+</div>
+<p>Source: <a href="https://gallery.shinyapps.io/lake_erie_fisheries_stock_assessment_app/" class="uri">https://gallery.shinyapps.io/lake_erie_fisheries_stock_assessment_app/</a>. But NOTE: The current web location for this tool is temporary and it will be hosted on a USGS server at some point.</p>
+</div>
+<div id="modelling-apps-by-the-nioz-department-of-estuarine-delta-systems" class="section level2">
+<h2>Modelling apps by the NIOZ Department of Estuarine &amp; Delta Systems</h2>
+<p>The Department of Estuarine &amp; Delta Systems, which is part of the Royal Netherlands Institute for Sea Research (NIOZ), has developed various R packages for marine data (checkout their R website: <a href="http://www.rforscience.com" class="uri">http://www.rforscience.com</a>) and also a few interesting Shiny apps to demonstrate their modelling work. They are worth exploring if you work or study these fields but also to learn what one can do with R and Shiny apps (well, sometimes the code is written in Fortran to be faster…):</p>
+<div id="omexdia---a-biogeochemical-model-of-the-sediment" class="section level3">
+<h3>OMEXDIA - a biogeochemical model of the sediment</h3>
+<p>The first model example is a vertically resolved biogeochemical model (one of the first ones), which describes the cycle of oxygen, nitrogen, and carbon in marine sediments. The model comprises of 600 nonlinear equations, so bear in mind that each time you alter the value of a parameter, a quite substantial mathematical problem is solved.</p>
+<div class="embed-responsive embed-responsive-4by3 shiny-container">
+<p><iframe class="embed-responsive-item"   
+    src="http://www.rforscience.com/modelling/omexdia/" 
+    frameborder="0" allowfullscreen></iframe></p>
+</div>
+<p>Source: <a href="http://www.rforscience.com/modelling/omexdia/" class="uri">http://www.rforscience.com/modelling/omexdia/</a>.</p>
+</div>
+<div id="tracer-model" class="section level3">
+<h3>Tracer model</h3>
+<p>This app implements a simplified version of a bacterivory model that describes how a tracer, injected as labeled glucose, propagates through a food web. Such simple models are efficient tools to quantify how much a certain organism relies on a particular food source (here bacteria):</p>
+<div class="embed-responsive embed-responsive-4by3 shiny-container">
+<p><iframe class="embed-responsive-item"   
+    src="http://www.rforscience.com/modelling/tracer/" 
+    frameborder="0" allowfullscreen></iframe></p>
+</div>
+<p>Source: <a href="http://www.rforscience.com/modelling/tracer/" class="uri">http://www.rforscience.com/modelling/tracer/</a>.</p>
+</div>
+<div id="mussel-deb" class="section level3">
+<h3>Mussel DEB</h3>
+<p>The app implements the standard dynamic energy budget (DEB) model simulating the growth of the blue mussel. Specifically, it models how an organism allocates its resources in structural and reserve tissues:</p>
+<div class="embed-responsive embed-responsive-4by3 shiny-container">
+<p><iframe class="embed-responsive-item"   
+    src="http://www.rforscience.com/modelling/musseldeb/" 
+    frameborder="0" allowfullscreen></iframe></p>
+</div>
+<p>Source: <a href="http://www.rforscience.com/modelling/musseldeb/" class="uri">http://www.rforscience.com/modelling/musseldeb/</a>.</p>
+</div>
+<div id="network-topology-of-deep-sea-food-webs" class="section level3">
+<h3>Network topology of deep-sea food webs</h3>
+<p>Here, you can explore the structure and flow of six deep-sea food webs:</p>
+Quantified food web
+<div class="embed-responsive embed-responsive-4by3 shiny-container">
+<p><iframe class="embed-responsive-item"   
+    src="http://www.rforscience.com/modelling/deepseafoodwebs/" 
+    frameborder="0" allowfullscreen></iframe></p>
+</div>
+<p>Source: <a href="http://www.rforscience.com/modelling/deepseafoodwebs/" class="uri">http://www.rforscience.com/modelling/deepseafoodwebs/</a>.</p>
+</div>
+</div>

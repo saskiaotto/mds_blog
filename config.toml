@@ -78,18 +78,42 @@ paginate = 10
 
 [[menu.topbar]]
     weight = 1
-    name = "GitHub"
-    url = "https://github.com/saskiaotto"
+    name = "GitHub-mareds"
+    url = "https://github.com/mareds"
     pre = "<i class='fab fa-2x fa-github'></i>"  # changed from fa to fab with new stylesheet
-
+    
 [[menu.topbar]]
     weight = 2
-    name = "Researchgate"
-    url = "http://www.researchgate.net/profile/Saskia_Otto"
-    pre = "<i class='fab fa-2x fa-researchgate'></i>"
+    name = "GitHub-saskiaotto"
+    url = "https://github.com/saskiaotto"
+    pre = "<i class='fab fa-2x fa-github'></i>"  # changed from fa to fab with new stylesheet    
 
 [[menu.topbar]]
     weight = 3
+    name = "Researchgate"
+    url = "https://www.researchgate.net/profile/Saskia_Otto"
+    pre = "<i class='fab fa-2x fa-researchgate'></i>"
+
+[[menu.topbar]]
+    weight = 4
+    name = "Twitter"
+    url = "https://twitter.com"
+    pre = "<i class='fab fa-2x fa-twitter'></i>"  # changed from fa to fab with new stylesheet
+
+[[menu.topbar]]
+    weight = 5
+    name = "ORCID"
+    url = "https://orcid.org/0000-0001-7780-1322"
+    pre = "<i class='ai ai-2x ai-orcid'></i>" 
+
+#[[menu.topbar]]
+#    weight = 6
+#    name = "Youtube"
+#    url = "http://youtube.com"
+#    pre = "<i class='fab fa-2x fa-youtube'></i>"  # changed from fa to fab with new stylesheet
+    
+[[menu.topbar]]
+    weight = 6
     name = "Email"
     url = "mailto:saskia.otto@uni-hamburg.de"
     pre = "<i class='fa fa-2x fa-envelope'></i>"
@@ -103,7 +127,7 @@ paginate = 10
 
 [params]
     viewMorePostLink = "/blog/"
-    author = "Saskia O."
+    author = "Saskia"
     defaultKeywords = ["marine", "data", "R"]
     defaultDescription = "Site template made by Saskia using hugo"
     Description = "A website on data harvesting, data analysis, statistics, and reporting to increase our understanding of marine system dynamics and improve marine conservation."
@@ -130,8 +154,8 @@ paginate = 10
     # Enable the contact form by entering your Formspree.io email
     email = "saskia.otto@uni-hamburg.de"
 
-    about_me = "<p>I am a quantitative marine ecologist who loves combining nerdy programming, statistics, and any activity in and around the oceans.</p>"
-    copyright = "This work is licensed under a <a rel='license' href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International License </a>"
+    about_me = "<p>I am a quantitative marine ecologist who loves combining nerdy programming, statistics, ecology and any activity in and around the oceans.</p>"
+    copyright = "&copy; 2018 - This work is licensed under a <a rel='license' href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International License </a>"
 
     # Format dates with Go's time formatting
     date_format = "January 2, 2006"
@@ -147,6 +171,12 @@ paginate = 10
     #longitude = "-77.028333"
     
     sharing_image = "img/mds_logo_notext@2x.png"
+    
+    # To allow LaTex equations in html
+    MathJaxCDN = "//cdnjs.cloudflare.com/ajax/libs"
+    MathJaxVersion = "2.7.5"
+    
+    
 
 [Permalinks]
     blog = "/blog/:year/:month/:day/:slug/"
@@ -198,11 +228,32 @@ paginate = 10
     enable = false
     # All clients are defined in their own files. You can find example items
     # at 'exampleSite/data/clients'.
-    # For more informtion take a look at the README.
+    # For more information take a look at the README.
     title = "Our Clients"
     subtitle = ""
 
 [params.recent_posts]
     enable = true
     title = "Blog topics"
-    subtitle = ""
+    subtitle = "This website has just been created, so stay tuned for more posts on topics spinning around harvesting and visualization of marine data, spatio-temporal modelling, statistical and machine learning, tech-related information on communicating marine science, on programming, useful R packages and more."
+
+
+# BLOG CATEGORIES:
+# data harvesting
+# data wrangling
+# data visualization
+# spatio-temporal modeling
+# population dynamics
+# image analysis (zoo scan, otholith)
+# shift analysis
+# statistical learning
+# text analysis
+# network analysis
+# programming (summarising r, Python, HTML, hugo, shiny)
+# communication
+# indicators
+# iea (integrated ecosystem analysis)
+
+# TAGS:
+# r package; r markdown, fish, zooplankton, phytoplankton, oceanography, community
+# GAM; GLM; plotting; map; r, Python, HTML, hugo, shiny

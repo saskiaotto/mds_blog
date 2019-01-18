@@ -3,11 +3,67 @@ title: Testing indicator performance
 author: Saskia
 date: '2018-10-16'
 slug: testing-indicator-performance
-categories: [indicator]
-tags: [modelling]
+categories: 
+  - indicator
+tags: 
+  - GAM
+  - R package
+  - food web
 banner: "img/banners/indicators.jpg"
 ---
 
 
 
-<p>Indicators are useful and versatile tools applied in disciplines such as engineering, chemistry, medicine, economy or sociology. In ecosystem-based management a key role of an indicator is to inform on the current status of the system component as well as the effectiveness of specific management measures to move the component into a different state. In European Union (EU) marine policy, indicator development has recently progressed as part of the implementation of the Marine Strategy Framework Directive (<a href="http://ec.europa.eu/environment/marine/eu-coast-and-marine-policy/marine-strategy-framework-directive/index_en.htm">MSFD</a>) to aid the achievement of Good Environmental Status (GES) of the EU’s marine waters by 2020. GES is defined with respect to 11 qualitative descriptors (<a href="http://ec.europa.eu/environment/marine/good-environmental-status/index_en.htm">D1-D11</a>), which describe the environment when GES has been achieved, such as the maintenance of biodiversity (D1) or the stability of the food web (D4). To achieve GES requires ideally operational indicators that not only describe the state of the descriptor but also have defined target and threshold values for triggering management measures as well as clearly defined and well-understood relationships to pressures that can be managed such as fishing mortality. The latter is particularly important for quantifying and predicting the success of individual measures. But at the same time, establishing such relationships is challenging for highly stochastic and complex adaptive systems such as food webs. Consequently, greater focus has been given hitherto to criteria such as data availability, scientific basis, or measurability than pressure sensitivity or indicator robustness. Together with collaborators and PhD- and Master students I co-supervise, I develop quantitative frameworks and applications (e.g., the R package <a href="https://github.com/saskiaotto/INDperform">INDperform</a>) for the validation of indicator candidates and their underlying data basis or sampling scheme. These tools allow additionally for the assessment of the current state in comparison to a reference state based on robust indicator suites. These tools are then used to test the suitability of currently suggested MSFD indicators, explore management scenarios, and apply a cross-comparison of GES in European Seas. Within the Bonus project <a href="http://www.syke.fi/bonusbluewebs">BLUEWEBS</a> I additionally study the potential of trait-based indicators for the pelagic systems in the Baltic Sea. Including traits, i.e. species properties, in indicator assessments has the advantage of focusing also on the functioning of the ecosystem and not purely on its structure.</p>
+<p>Indicators are useful and versatile tools applied in disciplines such as engineering, chemistry, medicine, economy or sociology. In ecosystem-based management a key role of an indicator is to inform on the current status of the system component as well as the effectiveness of specific management measures to move the component into a different state. In European Union (EU) marine policy, indicator development has recently progressed as part of the implementation of the <strong>Marine Strategy Framework Directive</strong> (<a href="http://ec.europa.eu/environment/marine/eu-coast-and-marine-policy/marine-strategy-framework-directive/index_en.htm">MSFD</a>)<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> to aid the achievement of <strong>Good Environmental Status</strong> (GES) of the EU’s marine waters by 2020. GES is defined with respect to 11 qualitative descriptors (<a href="http://ec.europa.eu/environment/marine/good-environmental-status/index_en.htm">D1-D11</a>), which describe the environment when GES has been achieved, such as the maintenance of biodiversity (D1) or the stability of the food web (D4).</p>
+<p>To achieve GES requires ideally operational indicators that not only describe the state of the descriptor but also have defined target and threshold values for triggering management measures as well as clearly defined and well-understood relationships to pressures that can be managed such as fishing mortality. The latter is particularly important for quantifying and predicting the success of individual measures. But at the same time, establishing such relationships is challenging for highly stochastic and complex adaptive systems such as food webs. Consequently, greater focus has been given hitherto to criteria such as data availability, scientific basis, or measurability than pressure sensitivity or indicator robustness.</p>
+<p><br></p>
+<div id="one-approach-for-a-complete-indicator-testing-could-involve-the-following-3-steps" class="section level3">
+<h3>One approach for a complete indicator testing could involve the following 3 steps:</h3>
+<p><br> <img src="/blog/2018-10-16-testing-indicator-performance_files/indicator_testing.tif" align="left" width="100%" height="auto" style="padding-right: 0px;" /></p>
+<p><span class="fig-caption">Figure 1: Conceptual framework of indicator testing (modified from Samhouri et al. 2012).</span> <a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
+<p><br></p>
+<div id="step-a-direct-effect-of-single-pressure" class="section level4">
+<h4>Step A: Direct effect of single pressure</h4>
+<p>In the first step, functional relationships of individual indicators to single pressures need to be established. If an indicator is mainly directly affected by a single pressure, a target (represented by the point on the line) could be set depending on the functional relationship.</p>
+<p>To apply a more flexible modeling approach that allows also non-linear relationships, suitable candidates would be</p>
+<ul>
+<li><strong>Non-Least Squares</strong> (NLS) models (using e.g. the base <code>nls()</code> function or the R package <a href="https://CRAN.R-project.org/package=nlmrt">nlmrt</a>), which require you to specify the function beforehand</li>
+<li><strong>Smoothing Splines</strong> (using the R function <a href="https://CRAN.R-project.org/package=splines2">splines2</a>)</li>
+<li><strong>Generalized Additive Models</strong> (GAM) (using e.g. the <a href="https://CRAN.R-project.org/package=mgcv">mgcv</a> R package), which require no prior function setting</li>
+<li><strong>Tree-based methods</strong> (e.g. Bagging, Random Forest, Boosting using the packages <a href="https://cran.r-project.org/package=randomForest">randomForest</a>, <a href="https://cran.r-project.org/package=gbm">gbm</a>, or <a href="https://cran.r-project.org/package=caret">caret</a>)</li>
+</ul>
+</div>
+<div id="step-b-direct-effects-of-multiple-pressures-2" class="section level4">
+<h4>Step B: Direct effects of multiple pressures (≥2)</h4>
+<p>The analysis of thresholds is not only complicated by non-linear dynamics but also by multiple pressures that can interact. Because of these interactions a given GES target reference value might be achieved by two or more sets of different pressure conditions (e.g. indicated by the two points in each 3-dimensional plot).</p>
+<p>In this second step, indicator responses to multiple pressures including potential interactions need to be tested and GES targets in this two-dimensional context evaluated using the same modeling approaches as in step A. To test within the GAM framework for interactions that show threshold dynamics one could use an extension, the so-called <strong>threshold-GAM</strong> (TGAM) <a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> <a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>, which is partly implemented in <a href="https://github.com/saskiaotto/INDperform">INDperform</a>.</p>
+</div>
+<div id="step-c-direct-and-indirect-effects-within-the-food-web-context" class="section level4">
+<h4>Step C: Direct and indirect effects within the food web context</h4>
+<p>Most often food web dynamics are the result of direct and indirect effects through species interactions that act simultaneously, which can lead to congruence or conflicts between indicator targets. A thorough robustness testing requires, hence, also a food web model approach.</p>
+<p>There are numerous numerical modeling approaches such as <a href="https://ecopath.org">Ecopath with Ecosim</a>, OSMOSE, ATLANTIS, etc. that could be used - as long as indicators can be derived from the model output.</p>
+<p>Statistical modeling frameworks that allow the model setup based on the indicators itself could be</p>
+<ul>
+<li><strong>Multivariate AutoRegressive State-Space Models</strong> (MARSS) (using the <a href="https://cran.r-project.org/package=MARSS">marss</a> package)</li>
+<li><strong>Structural Equation Models</strong> (SEM) (using e.g. the <a href="https://cran.r-project.org/package=sem">sem</a> package)</li>
+<li><strong>Coupling of individual GAMs/TGAMs</strong></li>
+</ul>
+</div>
+</div>
+<div id="baltic-sea-case-study" class="section level3">
+<h3>Baltic Sea Case study</h3>
+<p>Colleagues and me adopted these 3 testing steps for food web indicators in the Baltic Sea within the <a href="https://www.havochvatten.se/artikel?artikel=271272">Swedish project</a> (“Ecosystem-based approach for developing and testing pelagic food web indicators”) I coordinated.</p>
+<p><strong>Step 1</strong> and <strong>partly 2</strong> (based on GAMS/TAMs) lead to the paper <em>Otto, S.A., Kadin, M., Casini, M., Torres, M.A. &amp; Blenckner, T. (2018). <a href="https://doi.org/10.1016/j.ecolind.2017.05.045">A quantitative framework for selecting and validating food web indicators</a>. Ecological Indicators, 84, 619-631</em> and the R package <a href="https://github.com/saskiaotto/INDperform">INDperform</a> I developed with PhD- and Master students.</p>
+<p><strong>Step 3</strong> was adopted in the paper <em>Torres, M.A., Casini, M., Huss , M., Otto, S.A., Kadin, M. &amp; Gårdmark, A. (2017). <a href="https://doi.org/10.1016/j.ecolind.2017.01.030">Food-web indicators accounting for species interactions respond to multiple pressures</a>. Ecological Indicators, 77, 67–79.</em> using the MARSS approach.</p>
+<p>Another paper based on coupled GAMs/TGAMs to model trade-offs and evaluate management strategies under climate change lead by Martina Kadin is in preparation.</p>
+<p><br><br> The <span style="color: #F8B500; font-weight: bold;">final project report</span> is available under: <a href="https://www.naturvardsverket.se/Om-Naturvardsverket/Publikationer/ISBN/6700/978-91-620-6788-5/" class="uri">https://www.naturvardsverket.se/Om-Naturvardsverket/Publikationer/ISBN/6700/978-91-620-6788-5/</a> (albeit in Swedish; there will be hopefully soon an English version)</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>EU Directive 2008/56/EC; download <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008L0056">here</a><a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Samhouri, J.F., Lester, S.E., Selig, E.R., Halpern, B.S., Fogarty, M.J., Longo, C. et al. (2012). Sea sick? Setting targets to assess ocean health and ecosystem services. Ecosphere, 3, 1-18<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Ciannelli, L., Chan, K.-S., Bailey, K.M. &amp; Stenseth, N.C. (2004). Nonadditive effects of the environment on the survival of a large marine fish population. Ecology, 85, 3418-3427<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>Otto, S.A., Kornilovs, G., Llope, M. &amp; Möllmann, C. (2014). Interactions among density, climate, and food web effects determine long-term life cycle dynamics of a key copepod. Marine Ecology Progress Series, 498, 73-84, doi: <a href="https://www.int-res.com/articles/meps_oa/m498p073.pdf">10.3354/meps10613</a><a href="#fnref4">↩</a></p></li>
+</ol>
+</div>

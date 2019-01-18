@@ -1,0 +1,1085 @@
+---
+title: How to normalize the RMSE
+author: Saskia
+date: '2019-01-07'
+slug: normalizing-the-rmse
+categories:
+  - statistical learning
+tags:
+  - GAM
+  - R package
+banner: "img/banners/nrmse.png"  
+---
+
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+
+<p>This post has been stimulated by a discussion with a colleague who asked about the normalization method for the root mean square error (NRMSE) in the <a href="https://github.com/saskiaotto/INDperform">INDperform</a> R package, which is based on the indicator testing framework outlined in my article (Otto et al. 2018)<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. At the time of writing the article and package I simply used a common approach and didn’t test it much further. But sparked by this discussion I started to test it thoroughly (as you will see below), which will make me revise the package.</p>
+<div id="the-root-mean-square-error-rmse" class="section level2">
+<h2>The Root Mean Square Error (RMSE)</h2>
+<p>In statistical modeling and particularly regression analyses, a common way of measuring the quality of the fit of the model is the RMSE (also called Root Mean Square Deviation), given by <code>$$RMSE = \sqrt\frac{\sum_{i=1}^{n}   \left(y_{i} - \hat{y}\right)^{2}}   {n}$$</code></p>
+<!-- $$RMSE = \frac{1}{n}{\sum_{i=1}^{n}\left(y_{i} - \hat{y}\right)^{2}} $$ -->
+<p>where <span class="math inline">\(y_{i}\)</span> is the ith observation of y and <em>ŷ</em> the predicted y value given the model. If the predicted responses are very close to the true responses the RMSE will be small. If the predicted and true responses differ substantially - at least for some observations - the RMSE will be large. A value of zero would indicate a perfect fit to the data. Since the RMSE is measured on the same scale, with the same units as <span class="math inline">\(y\)</span>, one can expect 68% of the y values to be within 1 RMSE - given the data is normally distributed.</p>
+<p>So calculating the MSE helps comparing different models that are based on the same y observations. But what if</p>
+<ol style="list-style-type: decimal">
+<li>one wants to compare model fits of different response variables?</li>
+<li>the response variable <em>y</em> is modified in some models, e.g. standardized or sqrt- or log-transformed?</li>
+<li>And does the slitting of data into a training and test dataset (after the modification) and the RMSE calculation based on the test data an effect on point 1. and 2.?</li>
+</ol>
+<p>The first two points are typical issues when comparing ecological indicator performances and the latter, so-called <em>validation set approach</em><a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>, is pretty common in statistical and machine learning. One solution to overcome these barriers - as done in <em>INDperform</em> - is to calculate the <strong>Normalized</strong> RMSE.</p>
+</div>
+<div id="normalized-root-mean-square-error-nrmse" class="section level2">
+<h2>Normalized Root Mean Square Error (NRMSE)</h2>
+<!-- ![apple vs orange](/blog/2019-01-07-normalizing-the-root-mean-square-error_files/apple_vs_orange.png){width=50% height=50% style="float:left;"} -->
+<p><img src="/blog/2019-01-07-normalizing-the-root-mean-square-error_files/apple_vs_orange.png" align="left" width="30%" height="auto" style="padding-right: 20px;" /></p>
+<p>There is a saying that apples shouldn’t be compared with oranges or in other words, don’t compare two items or group of items that are practically incomparable. But the lack of comparability can be overcome if the two items or groups are somehow standardized or brought on the same scale. For instance, when comparing the variances of two groups that are overall very different, such as the variance in size of bluefin tuna and blue whales, the coefficient of variation (CV) is the method of choice: the CV simply represents the variance of each group standardized by its group mean:</p>
+<pre class="r"><code>tuna &lt;- c(150, 200, 250, 210,180, 305)
+whale &lt;- c(2300, 2000, 2250, 1900, 2100)
+c( var(tuna), var(whale) )</code></pre>
+<pre><code>## [1]  3004.167 28000.000</code></pre>
+<pre class="r"><code>c( sd(tuna), sd(whale) )</code></pre>
+<pre><code>## [1]  54.81028 167.33201</code></pre>
+<pre class="r"><code>c( var(tuna)/mean(tuna), var(whale)/mean(whale) )</code></pre>
+<pre><code>## [1] 13.91892 13.27014</code></pre>
+<p>While in absolute values the individual whales differ from each other much more than the tuna fish, this variation is rather small relative to the overall size of the whales and then comparable to tuna.</p>
+<p>In the same way, normalizing the RMSE facilitates the comparison between datasets or models with different scales. You will find, however, various different methods of RMSE normalizations in the literature:</p>
+<p>You can normalize by</p>
+<ul>
+<li><p>the <strong>mean</strong>: <span class="math inline">\(NRMSE = \frac{RMSE}{\bar{y}}\)</span> (similar to the CV and applied in <em>INDperform</em>)</p></li>
+<li><p>the <strong>difference between maximum and minimum</strong>: <span class="math inline">\(NRMSE = \frac{RMSE}{y_{max} - y_{min}}\)</span>,</p></li>
+<li><p>the <strong>standard deviation</strong>: <span class="math inline">\(NRMSE = \frac{RMSE}{\sigma}\)</span>, or</p></li>
+<li><p>the <strong>interquartile range</strong>; <span class="math inline">\(NRMSE = \frac{RMSE}{Q1 - Q3}\)</span>, i.e. the difference between 25th and 75th percentile,</p></li>
+</ul>
+<p>of observations.</p>
+<p>If the response variables has few extreme values, choosing the interquartile range is a good option as it is less sensitive to outliers. But how do these methods compare in terms of data transformation and the validation set approach?</p>
+</div>
+<div id="comparison-of-different-rmse-normalizations-under-different-data-treatments" class="section level2">
+<h2>Comparison of different RMSE normalizations under different data treatments</h2>
+<p>In the following comparison I will compare the 4 methods using the original, standardized, sqrt- and log-transformed dataset. First I will use the full dataset to train and test the model (via RNMSE), then split the data into a training and test subset. In this case, I will assume the data is a time series and the validation is performed on the last years (so no random splitting) as done in many time series predictions.</p>
+<p>To be able to link the results of the comparison to the approach in <em>INDperform</em> I will also use here Generalized Additive Models (GAM)<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> based on the <a href="https://CRAN.R-project.org/package=mgcv">mgcv</a> package.</p>
+<div id="self-made-functions" class="section level3">
+<h3>Self-made functions</h3>
+<pre class="r"><code>library(mgcv)
+library(tidyverse)</code></pre>
+<p>Hand-made NRMSE function:</p>
+<pre class="r"><code>nrmse_func &lt;-  function(obs, pred, type = &quot;sd&quot;) {
+  
+    squared_sums &lt;- sum((obs - pred)^2)
+    mse &lt;- squared_sums/length(obs)
+    rmse &lt;- sqrt(mse)
+    if (type == &quot;sd&quot;) nrmse &lt;- rmse/sd(obs)
+    if (type == &quot;mean&quot;) nrmse &lt;- rmse/mean(obs)
+    if (type == &quot;maxmin&quot;) nrmse &lt;- rmse/ (max(obs) - min(obs))
+    if (type == &quot;iq&quot;) nrmse &lt;- rmse/ (quantile(obs, 0.75) - quantile(obs, 0.25))
+    if (!type %in% c(&quot;mean&quot;, &quot;sd&quot;, &quot;maxmin&quot;, &quot;iq&quot;)) message(&quot;Wrong type!&quot;)
+    nrmse &lt;- round(nrmse, 3)
+ return(nrmse)
+    
+}</code></pre>
+<p>The following <code>comp_func()</code> function does the actual modeling, prediction and NRMSE calculation for the different Y’s on the full or split data (<code>split = TRUE</code>, taking the last 5 observations for testing):</p>
+<pre class="r"><code># helper function for comp_func()
+lowest &lt;- function(x) {
+    x &lt;- paste0(names(which(x == min(x))), collapse = &quot;,&quot;)
+    return(x)
+}
+
+comp_func &lt;- function(y, x, split = TRUE, test_n = 5) {
+  
+  df &lt;- data.frame(x = x,   y = y)
+  
+  # Add y transformations
+  df$y_stand = as.vector(scale(df$y))
+  df$y_sqrt = sqrt(df$y)
+  df$y_log = log(df$y)
+  
+  # Split time series into training/test data (or not)
+  if (split == TRUE) {
+    df_train &lt;- df[1:(nrow(df) - test_n), ]
+    df_test &lt;- df[(nrow(df_train)+1):nrow(df), ]
+  } else {
+    df_train &lt;- df
+    df_test &lt;- df
+  }
+  
+  # Models
+  m1 &lt;- gam(y ~ s(x, k = 4), data = df_train)
+  m2 &lt;- gam(y_stand ~ s(x, k = 4), data = df_train)
+  m3 &lt;- gam(y_sqrt ~ s(x, k = 4), data = df_train)
+  m4 &lt;- gam(y_log ~ s(x, k = 4), data = df_train)
+  
+  # Predictions 
+  df_comp &lt;- df_test
+  df_comp$pred &lt;- as.vector(predict(m1, newdata = df_test))
+  df_comp$pred_stand &lt;- as.vector(predict(m2, newdata = df_test))
+  df_comp$pred_sqrt &lt;- as.vector(predict(m3, newdata = df_test))
+  df_comp$pred_log &lt;- as.vector(predict(m4, newdata = df_test))
+  
+  # Back-transform the predictions for y_sqrt and y_log for comparison
+  df_comp$pred_sqrt_b&lt;- df_comp$pred_sqrt ^2
+  df_comp$pred_log_b &lt;- exp(df_comp$pred_log)
+  
+  # Reorder variables for NRMSE loop (add y twice for back-transformed predictions)
+  df_loop &lt;- df_comp[ ,c(2,3,4,2,5,2,6:8,10,9,11)]
+  
+  # Calculate NRMSE for 4 different types of normalization
+  type_vec &lt;- c(&quot;mean&quot;, &quot;sd&quot;, &quot;maxmin&quot;, &quot;iq&quot;)
+  out &lt;- data.frame(
+    type = type_vec,
+    y = rep(NA, 4), y_stand = rep(NA, 4),
+    y_sqrt = rep(NA, 4), y_sqrt_b = rep(NA, 4),
+    y_log = rep(NA, 4), y_log_b = rep(NA, 4)
+  )
+  for (i in 1:4) {
+    for (k in 1:6) {
+      out[i, k+1] &lt;- nrmse_func(obs = df_loop[ ,k], pred = df_loop[ ,k+6], type = type_vec[i])
+    }
+  }
+  # Add column indicating whether y, y_sqr, y_sqr_b, y_log or y_log_b2 
+  # has the lowest NRMSE
+  out$lowest &lt;- unlist(apply(out[ ,c(2,4:7)], 1, FUN = lowest))
+  out
+  
+  return(out)
+}</code></pre>
+</div>
+<div id="simulated-datasets" class="section level3">
+<h3>Simulated datasets</h3>
+<!--  -->
+<pre class="r"><code>set.seed(1)
+simdat &lt;- data.frame(
+    x1 = 1:20,
+  # add polynomial of second order to produce a non-linear decline
+    y1 = 170 + 2.5*1:20 - 0.5* (1:20)^2  + rnorm(20, 0, 40),
+  x2 = sample(seq(15, 30, 0.01), 20)
+)
+# produce linear positive trend
+simdat$y2 &lt;- 50 + 1.5 * simdat$x2 + rnorm(20, 0, 8)
+# produce same trend but with increasing variance
+simdat$y3 &lt;- simdat$y2 
+for (i in 1:20) {
+  noise &lt;- rnorm(1, 0, sd = 2*i)
+  simdat$y3[i] &lt;- simdat$y3[i] + noise
+}
+
+par(mfrow = c(1,3))
+plot(simdat$y1 ~ simdat$x1)
+plot(simdat$y2 ~ simdat$x2)
+plot(simdat$y3 ~ simdat$x2)</code></pre>
+<p><img src="/blog/2019-01-07-normalizing-the-root-mean-square-error_files/figure-html/unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto auto auto 0;" /></p>
+</div>
+<div id="comparison" class="section level3">
+<h3>Comparison</h3>
+<div id="full-data" class="section level4">
+<h4>Full data</h4>
+<pre class="r"><code>fd1 &lt;- comp_func(x = simdat$x1, y = simdat$y1, split = FALSE) 
+fd1 %&gt;% 
+  knitr::kable(
+    format = &quot;html&quot;, align = &quot;c&quot;,
+    col.names = c(&quot;Type&quot;, &quot;Raw Y&quot;, &quot;Standardized&quot;, &quot;Sqrt-transf.&quot;, &quot;Sqrt-backtransf.&quot;,
+    &quot;Log-transf.&quot;, &quot;Log-backtransf.&quot;, &quot;Lowest NRMSE&quot;),
+    caption = &quot;Non-linear (full) dataset&quot;
+  ) %&gt;%
+  kableExtra::kable_styling(
+    bootstrap_options = c(&quot;striped&quot;, &quot;condensed&quot;, &quot;responsive&quot;)
+  )</code></pre>
+<table class="table table-striped table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-6">Table 1: </span>Non-linear (full) dataset
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;">
+Type
+</th>
+<th style="text-align:center;">
+Raw Y
+</th>
+<th style="text-align:center;">
+Standardized
+</th>
+<th style="text-align:center;">
+Sqrt-transf.
+</th>
+<th style="text-align:center;">
+Sqrt-backtransf.
+</th>
+<th style="text-align:center;">
+Log-transf.
+</th>
+<th style="text-align:center;">
+Log-backtransf.
+</th>
+<th style="text-align:center;">
+Lowest NRMSE
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+mean
+</td>
+<td style="text-align:center;">
+0.256
+</td>
+<td style="text-align:center;">
+2.90688e+15
+</td>
+<td style="text-align:center;">
+0.159
+</td>
+<td style="text-align:center;">
+0.264
+</td>
+<td style="text-align:center;">
+0.094
+</td>
+<td style="text-align:center;">
+0.310
+</td>
+<td style="text-align:center;">
+y_log
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+sd
+</td>
+<td style="text-align:center;">
+0.590
+</td>
+<td style="text-align:center;">
+5.90000e-01
+</td>
+<td style="text-align:center;">
+0.631
+</td>
+<td style="text-align:center;">
+0.608
+</td>
+<td style="text-align:center;">
+0.725
+</td>
+<td style="text-align:center;">
+0.713
+</td>
+<td style="text-align:center;">
+y
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+maxmin
+</td>
+<td style="text-align:center;">
+0.156
+</td>
+<td style="text-align:center;">
+1.56000e-01
+</td>
+<td style="text-align:center;">
+0.160
+</td>
+<td style="text-align:center;">
+0.161
+</td>
+<td style="text-align:center;">
+0.174
+</td>
+<td style="text-align:center;">
+0.188
+</td>
+<td style="text-align:center;">
+y
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+iq
+</td>
+<td style="text-align:center;">
+0.365
+</td>
+<td style="text-align:center;">
+3.65000e-01
+</td>
+<td style="text-align:center;">
+0.436
+</td>
+<td style="text-align:center;">
+0.376
+</td>
+<td style="text-align:center;">
+0.617
+</td>
+<td style="text-align:center;">
+0.441
+</td>
+<td style="text-align:center;">
+y
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>fd2 &lt;- comp_func(x = simdat$x2, y = simdat$y2, split = FALSE) </code></pre>
+<table class="table table-striped table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-8">Table 2: </span>Linear (full) dataset
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;">
+Type
+</th>
+<th style="text-align:center;">
+Raw Y
+</th>
+<th style="text-align:center;">
+Standardized
+</th>
+<th style="text-align:center;">
+Sqrt-transf.
+</th>
+<th style="text-align:center;">
+Sqrt-backtransf.
+</th>
+<th style="text-align:center;">
+Log-transf.
+</th>
+<th style="text-align:center;">
+Log-backtransf.
+</th>
+<th style="text-align:center;">
+Lowest NRMSE
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+mean
+</td>
+<td style="text-align:center;">
+0.060
+</td>
+<td style="text-align:center;">
+7.994036e+14
+</td>
+<td style="text-align:center;">
+0.030
+</td>
+<td style="text-align:center;">
+0.060
+</td>
+<td style="text-align:center;">
+0.014
+</td>
+<td style="text-align:center;">
+0.060
+</td>
+<td style="text-align:center;">
+y_log
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+sd
+</td>
+<td style="text-align:center;">
+0.554
+</td>
+<td style="text-align:center;">
+5.540000e-01
+</td>
+<td style="text-align:center;">
+0.543
+</td>
+<td style="text-align:center;">
+0.552
+</td>
+<td style="text-align:center;">
+0.533
+</td>
+<td style="text-align:center;">
+0.551
+</td>
+<td style="text-align:center;">
+y_log
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+maxmin
+</td>
+<td style="text-align:center;">
+0.155
+</td>
+<td style="text-align:center;">
+1.550000e-01
+</td>
+<td style="text-align:center;">
+0.154
+</td>
+<td style="text-align:center;">
+0.155
+</td>
+<td style="text-align:center;">
+0.152
+</td>
+<td style="text-align:center;">
+0.154
+</td>
+<td style="text-align:center;">
+y_log
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+iq
+</td>
+<td style="text-align:center;">
+0.608
+</td>
+<td style="text-align:center;">
+6.080000e-01
+</td>
+<td style="text-align:center;">
+0.610
+</td>
+<td style="text-align:center;">
+0.606
+</td>
+<td style="text-align:center;">
+0.615
+</td>
+<td style="text-align:center;">
+0.604
+</td>
+<td style="text-align:center;">
+y_log_b
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>fd3 &lt;- comp_func(x = simdat$x2, y = simdat$y3, split = FALSE) </code></pre>
+<table class="table table-striped table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-10">Table 3: </span>Linear (full) dataset (increasing variance)
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;">
+Type
+</th>
+<th style="text-align:center;">
+Raw Y
+</th>
+<th style="text-align:center;">
+Standardized
+</th>
+<th style="text-align:center;">
+Sqrt-transf.
+</th>
+<th style="text-align:center;">
+Sqrt-backtransf.
+</th>
+<th style="text-align:center;">
+Log-transf.
+</th>
+<th style="text-align:center;">
+Log-backtransf.
+</th>
+<th style="text-align:center;">
+Lowest NRMSE
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+mean
+</td>
+<td style="text-align:center;">
+0.321
+</td>
+<td style="text-align:center;">
+-5.439201e+15
+</td>
+<td style="text-align:center;">
+0.168
+</td>
+<td style="text-align:center;">
+0.323
+</td>
+<td style="text-align:center;">
+0.085
+</td>
+<td style="text-align:center;">
+0.328
+</td>
+<td style="text-align:center;">
+y_log
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+sd
+</td>
+<td style="text-align:center;">
+0.865
+</td>
+<td style="text-align:center;">
+8.650000e-01
+</td>
+<td style="text-align:center;">
+0.849
+</td>
+<td style="text-align:center;">
+0.870
+</td>
+<td style="text-align:center;">
+0.848
+</td>
+<td style="text-align:center;">
+0.885
+</td>
+<td style="text-align:center;">
+y_log
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+maxmin
+</td>
+<td style="text-align:center;">
+0.194
+</td>
+<td style="text-align:center;">
+1.940000e-01
+</td>
+<td style="text-align:center;">
+0.184
+</td>
+<td style="text-align:center;">
+0.195
+</td>
+<td style="text-align:center;">
+0.179
+</td>
+<td style="text-align:center;">
+0.198
+</td>
+<td style="text-align:center;">
+y_log
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+iq
+</td>
+<td style="text-align:center;">
+0.966
+</td>
+<td style="text-align:center;">
+9.660000e-01
+</td>
+<td style="text-align:center;">
+0.976
+</td>
+<td style="text-align:center;">
+0.971
+</td>
+<td style="text-align:center;">
+1.104
+</td>
+<td style="text-align:center;">
+0.987
+</td>
+<td style="text-align:center;">
+y
+</td>
+</tr>
+</tbody>
+</table>
+<div id="summary" class="section level5">
+<h5>SUMMARY:</h5>
+<ul>
+<li>NRMSE of the <em>standardized</em> Y is
+<ul>
+<li>close to zero when using type mean → this is not surprising given the nature of the standardization itself (the “standardization”, also called “normalization” or “z-transformation”, standardizes the data to a mean of zero and a standard deviation of 1).</li>
+<li><strong>exactly</strong> the same than the NRMSE for the original Y when using the other normalization methods</li>
+</ul></li>
+<li>NRMSE of the <em>transformed Ys</em> <strong>always</strong> deviates from the NRMSE of the original Y, no matter which method was used (except for the second dataset, when using the mean); however, back-transforming does bring the NRMSE closer to the original NRMSE! The degree of deviation depends also on the Y~X relationship and, hence, the model (smaller in the linear datasets)!</li>
+<li>Log-transforming Y deviates much greater and often leads to a lower NRMSE, although this also depends on the Y~X relationship.</li>
+<li>No clear pattern in the performance differences between the four normalization types (unless variables are standardized).</li>
+</ul>
+<p><br></p>
+</div>
+</div>
+<div id="test-data" class="section level4">
+<h4>Test data</h4>
+<pre class="r"><code>td1 &lt;- comp_func(x = simdat$x1, y = simdat$y1, split = TRUE, test_n = 5) </code></pre>
+<table class="table table-striped table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-12">Table 4: </span>Non-linear (test) dataset
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;">
+Type
+</th>
+<th style="text-align:center;">
+Raw Y
+</th>
+<th style="text-align:center;">
+Standardized
+</th>
+<th style="text-align:center;">
+Sqrt-transf.
+</th>
+<th style="text-align:center;">
+Sqrt-backtransf.
+</th>
+<th style="text-align:center;">
+Log-transf.
+</th>
+<th style="text-align:center;">
+Log-backtransf.
+</th>
+<th style="text-align:center;">
+Lowest NRMSE
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+mean
+</td>
+<td style="text-align:center;">
+0.268
+</td>
+<td style="text-align:center;">
+-0.306
+</td>
+<td style="text-align:center;">
+0.150
+</td>
+<td style="text-align:center;">
+0.288
+</td>
+<td style="text-align:center;">
+0.089
+</td>
+<td style="text-align:center;">
+0.340
+</td>
+<td style="text-align:center;">
+y_log
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+sd
+</td>
+<td style="text-align:center;">
+1.077
+</td>
+<td style="text-align:center;">
+1.077
+</td>
+<td style="text-align:center;">
+1.147
+</td>
+<td style="text-align:center;">
+1.157
+</td>
+<td style="text-align:center;">
+1.367
+</td>
+<td style="text-align:center;">
+1.365
+</td>
+<td style="text-align:center;">
+y
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+maxmin
+</td>
+<td style="text-align:center;">
+0.402
+</td>
+<td style="text-align:center;">
+0.402
+</td>
+<td style="text-align:center;">
+0.431
+</td>
+<td style="text-align:center;">
+0.431
+</td>
+<td style="text-align:center;">
+0.518
+</td>
+<td style="text-align:center;">
+0.509
+</td>
+<td style="text-align:center;">
+y
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+iq
+</td>
+<td style="text-align:center;">
+1.469
+</td>
+<td style="text-align:center;">
+1.469
+</td>
+<td style="text-align:center;">
+1.675
+</td>
+<td style="text-align:center;">
+1.578
+</td>
+<td style="text-align:center;">
+2.164
+</td>
+<td style="text-align:center;">
+1.863
+</td>
+<td style="text-align:center;">
+y
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>td2 &lt;- comp_func(x = simdat$x2, y = simdat$y2, split = TRUE, test_n = 5) </code></pre>
+<table class="table table-striped table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-14">Table 5: </span>Linear (test) dataset
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;">
+Type
+</th>
+<th style="text-align:center;">
+Raw Y
+</th>
+<th style="text-align:center;">
+Standardized
+</th>
+<th style="text-align:center;">
+Sqrt-transf.
+</th>
+<th style="text-align:center;">
+Sqrt-backtransf.
+</th>
+<th style="text-align:center;">
+Log-transf.
+</th>
+<th style="text-align:center;">
+Log-backtransf.
+</th>
+<th style="text-align:center;">
+Lowest NRMSE
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+mean
+</td>
+<td style="text-align:center;">
+0.058
+</td>
+<td style="text-align:center;">
+-2.271
+</td>
+<td style="text-align:center;">
+0.030
+</td>
+<td style="text-align:center;">
+0.060
+</td>
+<td style="text-align:center;">
+0.014
+</td>
+<td style="text-align:center;">
+0.063
+</td>
+<td style="text-align:center;">
+y_log
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+sd
+</td>
+<td style="text-align:center;">
+0.572
+</td>
+<td style="text-align:center;">
+0.572
+</td>
+<td style="text-align:center;">
+0.578
+</td>
+<td style="text-align:center;">
+0.593
+</td>
+<td style="text-align:center;">
+0.583
+</td>
+<td style="text-align:center;">
+0.615
+</td>
+<td style="text-align:center;">
+y
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+maxmin
+</td>
+<td style="text-align:center;">
+0.230
+</td>
+<td style="text-align:center;">
+0.230
+</td>
+<td style="text-align:center;">
+0.233
+</td>
+<td style="text-align:center;">
+0.238
+</td>
+<td style="text-align:center;">
+0.236
+</td>
+<td style="text-align:center;">
+0.247
+</td>
+<td style="text-align:center;">
+y
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+iq
+</td>
+<td style="text-align:center;">
+0.793
+</td>
+<td style="text-align:center;">
+0.793
+</td>
+<td style="text-align:center;">
+0.833
+</td>
+<td style="text-align:center;">
+0.822
+</td>
+<td style="text-align:center;">
+0.878
+</td>
+<td style="text-align:center;">
+0.852
+</td>
+<td style="text-align:center;">
+y
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>td3 &lt;- comp_func(x = simdat$x2, y = simdat$y3, split = TRUE, test_n = 5) </code></pre>
+<table class="table table-striped table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-16">Table 6: </span>Linear (test) dataset (increasing variance)
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;">
+Type
+</th>
+<th style="text-align:center;">
+Raw Y
+</th>
+<th style="text-align:center;">
+Standardized
+</th>
+<th style="text-align:center;">
+Sqrt-transf.
+</th>
+<th style="text-align:center;">
+Sqrt-backtransf.
+</th>
+<th style="text-align:center;">
+Log-transf.
+</th>
+<th style="text-align:center;">
+Log-backtransf.
+</th>
+<th style="text-align:center;">
+Lowest NRMSE
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+mean
+</td>
+<td style="text-align:center;">
+0.550
+</td>
+<td style="text-align:center;">
+6.792
+</td>
+<td style="text-align:center;">
+0.306
+</td>
+<td style="text-align:center;">
+0.554
+</td>
+<td style="text-align:center;">
+0.161
+</td>
+<td style="text-align:center;">
+0.559
+</td>
+<td style="text-align:center;">
+y_log
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+sd
+</td>
+<td style="text-align:center;">
+0.928
+</td>
+<td style="text-align:center;">
+0.928
+</td>
+<td style="text-align:center;">
+0.879
+</td>
+<td style="text-align:center;">
+0.934
+</td>
+<td style="text-align:center;">
+0.855
+</td>
+<td style="text-align:center;">
+0.944
+</td>
+<td style="text-align:center;">
+y_log
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+maxmin
+</td>
+<td style="text-align:center;">
+0.361
+</td>
+<td style="text-align:center;">
+0.361
+</td>
+<td style="text-align:center;">
+0.340
+</td>
+<td style="text-align:center;">
+0.363
+</td>
+<td style="text-align:center;">
+0.335
+</td>
+<td style="text-align:center;">
+0.367
+</td>
+<td style="text-align:center;">
+y_log
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+iq
+</td>
+<td style="text-align:center;">
+0.822
+</td>
+<td style="text-align:center;">
+0.822
+</td>
+<td style="text-align:center;">
+0.894
+</td>
+<td style="text-align:center;">
+0.827
+</td>
+<td style="text-align:center;">
+1.102
+</td>
+<td style="text-align:center;">
+0.836
+</td>
+<td style="text-align:center;">
+y
+</td>
+</tr>
+</tbody>
+</table>
+<div id="summary-1" class="section level5">
+<h5>SUMMARY:</h5>
+<ul>
+<li>Overall, deviations between different data treatments are much greater when training the model on a training subset and computing the NRMSE for a test subset.</li>
+<li>Similar to using the full data, NRMSEs of the original and <em>standardized Y</em> are the same, <strong>except</strong> when using the mean to normalize.</li>
+<li>But beside the standardization, performances of the four normalization are comparable, even when using only a test subset.</li>
+<li>Again, <em>transformed</em> Ys always differ in their NRMSE from the original Y and this difference is
+<ul>
+<li>greater in the log-transformed Ys</li>
+<li><strong>but</strong>: back-transforming does not always reduce the difference as shown in the second, linear dataset with constant variance.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>So what did we learn from this simulation?</p>
+<p>First and foremost, comparing model performances between different response variables is not that trivial and there is no normalization method (of the one tested here) that is obviously superior. But there are a few implications that data analysts should bear in mind when computing the NRMSE for performance comparison:</p>
+<ul>
+<li>NRMSE should be better computed on the untransformed scale. That means, if the response variable Y was transformed prior to the modeling, to e.g. linearize the relationship, reduce heterogeneity, etc., the predicted values should be back-transformed and compared with the observed raw data when computing the NRMSE.</li>
+<li>Using the mean to normalize the NRMSE is ok as long as you compare models that are based on the same response variable and data treatment.</li>
+<li>Otherwise, use any of the other 3 methods:
+<ul>
+<li>While <strong>maxmin</strong> is said to be more sensitive to the sample size, I did not find a big difference to the other methods, even when using a sample size of 5 (when splitting the data).</li>
+<li>The <strong>interquartile range</strong> is said to be less sensitive to extreme values → since I didn’t have extreme values in the simulated data I didn’t find a strong difference to the other methods</li>
+</ul></li>
+</ul>
+<p>But who actually cares about comparing model performances of different response variables? One good example (where the package was made for) is the development of ecological indicators. One major criterion is the robustness or predictability given certain environmental changes. This could be quantified from a statistical model, in which the indicator is modelled as a function of specific environmental variable or pressure, by using the RMSE on the test data. To compare the robustness of different indicators, that are often on different scales and differently treated prior to the modeling, normalizing the NRMSE would be needed.</p>
+<p>If the NRMSE is further categorized into let’s say low, medium or high performance, using the <strong>standard deviation</strong> to normalize could be a good option for the following reason: The sd-based NRMSE represent the ratio between the variation not explained by the regression vs the overall variation in Y. If the regression explains all of the variation in Y, nothing gets unexplained and the RMSE, and consequently NRMSE is zero. If the regression explains some part and leaves some other unexplained, which is at a similar scale than the overall variation, the ratio will be around 1. Anything beyond will indicate a much greater variation or noise than in the variable itself and consequently a low predictability.</p>
+<!-- <span style="font-size:1.5rem; color:#F8B500; font-weight:bold; background-color: #1E3D48;"> -->
+<!-- Stay tune for the next update of INDperform, where I will revise the NRMSE calculation (most likely using the sd method) and scoring cut-offs! -->
+<!-- </span> -->
+<p><br><br></p>
+<p><span style="font-size:1.5rem; color:#F8B500; font-weight:bold;"> Stay tuned for the next update of INDperform, where I will revise the NRMSE calculation (most likely using the sd method) and the cut-offs for scoring! </span></p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Otto, S.A., Kadin, M., Casini, M., Torres, M.A. &amp; Blenckner, T. (2018). A quantitative framework for selecting and validating food web indicators. Ecological Indicators, 84, 619-631, doi: <a href="https://doi.org/10.1016/j.ecolind.2017.05.045">10.1016/j.ecolind.2017.05.045</a><a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>James, G., Witten, D., Hastie, T. &amp; Tibshirani, R. (2013). An Introduction to Statistical Learning - with Applications in R. Springer, New York.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Hastie, T.J. &amp; Tibshirani, R.J. (1990). Generalized Additive Models. Chapman &amp; Hall / CRC, Boca Raton, 352 p.<a href="#fnref3">↩</a></p></li>
+</ol>
+</div>

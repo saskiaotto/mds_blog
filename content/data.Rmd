@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE,
 
 # Databases
 
-In the following you find a list of databases and repositories that provide different type of marine data for specific regions free of charge. The list is not intended to be exhaustive but more to give you an easy start and many of these database can be webscraped directly from within R using specific packages that I also list here. If you feel there is any global or regional database missing where users can download marine data, don't hesitate to contact me!
+In the following you find a list of databases and repositories that provide different type of marine data for specific regions free of charge. The list is not intended to be exhaustive but more to give you an easy start and many of these database can be webscraped directly from within R using specific packages that I also list here. If you feel there is any global or regional database missing where users can download marine data, don't hesitate to [contact](/contact/index.html) me!
 <br>
 <br>
 
@@ -43,7 +43,6 @@ ICES has a well established Data Centre , which manages a number of large datase
 
 **AODN Portal** - Australian Ocean Data Network (AODN): [https://portal.aodn.org.au/](https://portal.aodn.org.au/)<br>
 The gateway to Australian marine (biological, checmical, physical) and climate science data. The AODN Portal provides access to all available Australian marine and climate science data and provides the primary access to IMOS data including access to the IMOS metadata (IMOS is a national collaborative research infrastructure, supported by Australian Government). 
-<br>
 <br>
 
 **WHOI Data** [www.whoi.edu/data/](http://www.whoi.edu/data/)<br>
@@ -74,6 +73,9 @@ The ocean database of NASA's Earth Observing System Data and Information System 
 
 **OceanColor** [https://oceancolor.gsfc.nasa.gov/data/overview/](https://oceancolor.gsfc.nasa.gov/data/overview/)<br>
 This website serves as the primary data access portal to the NASA satellite Ocean Biology (OB) data produced or collected under NASA’s Earth Observing System Data and Information System (EOSDIS). 
+
+**USGS Earth Explorer** [https://earthexplorer.usgs.gov/](https://earthexplorer.usgs.gov/)<br>
+The USGS Earth Explorer is a similar tool to the USGS Global Visualization Viewer (GloVis) in that users can search catalogs of satellite and aerial imagery. 
 <br>
 <br>
 

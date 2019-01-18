@@ -22,7 +22,7 @@ knitr::opts_chunk$set(echo = TRUE,
 
 First of all, there is no easy answer and no consensus either. Choosing from the broad range of programming languages the right one to invest time and effort learning it the next month or years is not trivial. It all boils down to what you plan to do with it and whether you want an open source program or can afford a license.
 
-If you are a marine scientist that manages rather small datasets or queries data from existing databases with specific web interfaces or user-firendly programs and then run some statistics on this data for either a report or a peer-reviewed articles, a program specifically developed for data analysis might be the best option for you. On the other hand, if you are a data scientist in a marine research institute, you might also need to build relational databases for storage of institute-specific datasets or develop tools for specific method applications, communicate the work through different channels such as software or coding repositories as well as static and dynamic websites. In that case knowing several additional programming languages such as SQL, HTML, CSS. If you work with big datasets such as sequence and high-throughput screening data or digital image data from optical sensor systems you will need a programming languages which performs particularly fast. The key here is to understand your usage requirements in terms of generality vs specificity, as well as your personal preferred development style of performance vs productivity.
+If you are a marine scientist that manages rather small datasets or queries data from existing databases using specific web interfaces or user-friendly programs and then runs some statistics on this data for either a report or a peer-reviewed articles, a program specifically developed for data analysis might be the best option for you. On the other hand, if you are a data scientist in a marine research institute, you might also need to build relational databases for storage of institute-specific datasets or develop tools for specific method applications, communicate the work through different channels such as software or coding repositories as well as static and dynamic websites. In that case knowing several additional programming languages such as SQL, HTML, CSS would be necessary. If you work with big datasets such as sequence and high-throughput screening data or digital image data from optical sensor systems you will need a programming languages which performs particularly fast. The key here is to understand your usage requirements in terms of generality vs. specificity, as well as your personal preferred development style of performance vs. productivity.
 
 Some noteworthy aspects when choosing a language are:
 
@@ -239,7 +239,7 @@ In that sense, C++ is not the ideal programming language for data analysis per s
 
 To print the text "Hello world!" you would type in C++
 
-```{rcpp, eval = FALSE}
+```C++
 #Include stdout
 
 Int main()
@@ -257,7 +257,7 @@ print("Hello world!")
 ```
 
 And in Python
-```{python, eval = FALSE}
+```Python
 Print ("Hello world!")
 ```
 
@@ -412,6 +412,7 @@ An overview for ggplot2 extensions (40 in Nov. 2018) can be found here: [https:/
 - [ggthemes](https://github.com/jrnold/ggthemes): Some extra geoms, scales, and themes for ggplot    
 - [qqplotr](https://github.com/aloy/qqplotr): Provides functions to plot quantile-quantile (Q-Q) and probability-probability (P-P) points, lines, and confidence bands.
 - [ggvis](https://cran.r-project.org/web/packages/ggvis/index.html): An implementation of an interactive grammar of graphics, taking the best parts of 'ggplot2', combining them with the reactive framework of 'shiny' and drawing web graphics using 'vega' → for more info see also the [ggvis website](https://ggvis.rstudio.com/).
+- [plotly](https://cran.r-project.org/web/packages/plotly/index.html): This package represents a high-level interface to the open source JavaScript graphing library [plotly.js](https://github.com/plotly/plotly.js) (which powers [plot.ly](https://plot.ly)) and translates 'ggplot2' graphs to an interactive web-based version and creates custom web-based visualizations directly from R. Once uploaded to a 'plotly' account, 'plotly' graphs (and the data behind them) can be viewed and modified in a web browser. More infos and examples can be found on [https://plot.ly/r](https://plot.ly/r) and [https://plot.ly/ggplot2](https://plot.ly/ggplot2). A good and comprehensive documentation is also given by the package creator Carson Sievert on [https://plotly-book.cpsievert.me](https://plotly-book.cpsievert.me/index.html).
 
 #### Color schemes:
 

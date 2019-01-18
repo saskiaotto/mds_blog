@@ -99,7 +99,6 @@ methods_now_acad <- cleanMCData %>%
 ```
 
 ```{r, out.width="80%", fig.asp=0.5,  fig.align="center", tidy=TRUE, fig.cap="Barplot of most common methods amongst data scientists in all working environments (left) and in academia only (right)."}
-# comment
 p_all <- methods_now %>%
   ggplot(aes(x = selections, y = percent, fill = selections)) +
     geom_col() + 
@@ -186,6 +185,4 @@ Independent of the working environment, deep learning and neural networks are by
 <!-- Footnotes: -->
 [^1]: Report at the  [IBM Consumer Products Industry](https://www.ibm.com/blogs/insights-on-business/consumer-products/2-5-quintillion-bytes-of-data-created-every-day-how-does-cpg-retail-manage-it/)
 
-[^2]: Davenport, Thomas H.; Patil, DJ (Oct 2012), [Data Scientist: The Sexiest Job of the 21st Century](https://hbr.org/2012/10/data-scientist-the-sexiest-job-of-the-21st-century), Harvard Business Review
-
-
+[^2]: Davenport, T.H. & Patil, D.J. (Oct 2012), [Data Scientist: The Sexiest Job of the 21st Century](https://hbr.org/2012/10/data-scientist-the-sexiest-job-of-the-21st-century), Harvard Business Review

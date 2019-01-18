@@ -28,6 +28,8 @@
   
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
   
+  
+  <link rel="stylesheet" href="/css/academicons.min.css" >
 
 
   
@@ -63,9 +65,7 @@
   
   
   
-  <link rel="stylesheet" href="/css/github_custom.css" rel="stylesheet" id="theme-stylesheet">
-  <script src="/js/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
+  <link rel="stylesheet" href="/css/atom-one-dark_custom.css" rel="stylesheet" id="theme-stylesheet">
 
 
   
@@ -95,9 +95,15 @@
       <div class="col-xs-7">
         <div class="social">
           
+          <a href="https://github.com/mareds" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-github'></i></a>
+          
           <a href="https://github.com/saskiaotto" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-github'></i></a>
           
-          <a href="http://www.researchgate.net/profile/Saskia_Otto" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-researchgate'></i></a>
+          <a href="https://www.researchgate.net/profile/Saskia_Otto" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-researchgate'></i></a>
+          
+          <a href="https://twitter.com" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-twitter'></i></a>
+          
+          <a href="https://orcid.org/0000-0001-7780-1322" target="_blank" style="opacity: 1;"><i class='ai ai-2x ai-orcid'></i></a>
           
           <a href="mailto:saskia.otto@uni-hamburg.de" target="_blank" style="opacity: 1;"><i class='fa fa-2x fa-envelope'></i></a>
           
@@ -218,19 +224,19 @@
                             <div class="row">
                                 <div class="col-md-4">
                                   <div class="image">
-                                      <a href="/blog/2018/10/17/r-code-test/">
+                                      <a href="/blog/2019/01/16/oce-package-for-oceanographical-data/">
                                           
-                                          <img src="/img/placeholder.png" class="img-responsive" alt="">
+                                          <img src="/img/banners/oce_package.png" class="img-responsive" alt="">
                                           
                                       </a>
                                   </div>
                                 </div>
                                 <div class="col-md-8">
-                                    <h2><a href="/blog/2018/10/17/r-code-test/">R code test</a></h2>
+                                    <h2><a href="/blog/2019/01/16/oce-package-for-oceanographical-data/">oce package for oceanographical data</a></h2>
                                     <div class="clearfix">
                                         <p class="author-category">
                                           
-                                          By <a href="#">Saskia O.</a>
+                                          By <a href="#">Saskia</a>
                                           
                                           
                                           
@@ -240,13 +246,12 @@
 
                                         </p>
                                         <p class="date-comments">
-                                            <a href="/blog/2018/10/17/r-code-test/"><i class="fa fa-calendar-o"></i> October 17, 2018</a>
+                                            <a href="/blog/2019/01/16/oce-package-for-oceanographical-data/"><i class="fa fa-calendar-o"></i> January 16, 2019</a>
                                         </p>
                                     </div>
-                                    <p class="intro">Test how R code looks like This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
-You can embed an R code chunk like this:
-summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.</p>
-                                    <p class="read-more"><a href="/blog/2018/10/17/r-code-test/" class="btn btn-template-main">Continue reading</a>
+                                    <p class="intro">In this post I will present the oce package, which can be handy for marine data scientist working with oceanographical data. oce provides lots of functions to
+ read oceanographic data, process the data specific to the measuring instrument, and visualize results following oceanographic conventions (using the base graphics).  The key function for importing data into R is ?read.oce(), which automatically recognizes the file type. If the recognition does not work, try the individual functions (e.</p>
+                                    <p class="read-more"><a href="/blog/2019/01/16/oce-package-for-oceanographical-data/" class="btn btn-template-main">Continue reading</a>
                                     </p>
                                 </div>
                             </div>
@@ -312,7 +317,10 @@ summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 2
             <li><a href="/categories/data-visualisation">data-visualisation (1)</a>
             </li>
             
-            <li><a href="/categories/indicator">indicator (1)</a>
+            <li><a href="/categories/indicator">indicator (2)</a>
+            </li>
+            
+            <li><a href="/categories/statistical-learning">statistical-learning (1)</a>
             </li>
             
         </ul>
@@ -335,6 +343,9 @@ summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 2
         <ul class="tag-cloud">
             
             <li><a href="/tags/modelling"><i class="fa fa-tags"></i> modelling</a>
+            </li>
+            
+            <li><a href="/tags/r-package"><i class="fa fa-tags"></i> r-package</a>
             </li>
             
         </ul>
@@ -368,7 +379,7 @@ summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 2
             <h4>About me</h4>
             <img src="/img/profile_v1@2x.png" alt="profile" style="float:left;width:75px;height:75px;padding:5px;"/>
 
-            I am a quantitative marine ecologist who loves combining nerdy programming, statistics, and any activity in and around the oceans.
+            I am a quantitative marine ecologist who loves combining nerdy programming, statistics, ecology and any activity in and around the oceans.
 
             <hr class="hidden-md hidden-lg hidden-sm">
 
@@ -385,40 +396,40 @@ summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 2
                 
                 <div class="item same-height-row clearfix">
                     <div class="image same-height-always">
-                        <a href="/blog/2018/10/17/r-code-test/">
+                        <a href="/blog/2019/01/16/helpful-shiny-apps/">
                           
-                            <img src="/img/placeholder.png" class="img-responsive" alt="R code test">
+                            <img src="/img/banners/shiny_apps.png" class="img-responsive" alt="Helpful Shiny apps">
                           
                         </a>
                     </div>
                     <div class="name same-height-always">
-                        <h5><a href="/blog/2018/10/17/r-code-test/">R code test</a></h5>
+                        <h5><a href="/blog/2019/01/16/helpful-shiny-apps/">Helpful Shiny apps</a></h5>
                     </div>
                 </div>
                 
                 <div class="item same-height-row clearfix">
                     <div class="image same-height-always">
-                        <a href="/blog/2018/10/16/testing-indicator-performance/">
+                        <a href="/blog/2019/01/16/oce-package-for-oceanographical-data/">
                           
-                            <img src="/img/banners/indicators.jpg" class="img-responsive" alt="Testing indicator performance">
+                            <img src="/img/banners/oce_package.png" class="img-responsive" alt="oce package for oceanographical data">
                           
                         </a>
                     </div>
                     <div class="name same-height-always">
-                        <h5><a href="/blog/2018/10/16/testing-indicator-performance/">Testing indicator performance</a></h5>
+                        <h5><a href="/blog/2019/01/16/oce-package-for-oceanographical-data/">oce package for oceanographical data</a></h5>
                     </div>
                 </div>
                 
                 <div class="item same-height-row clearfix">
                     <div class="image same-height-always">
-                        <a href="/blog/">
+                        <a href="/blog/2019/01/07/normalizing-the-rmse/">
                           
-                            <img src="/img/placeholder.png" class="img-responsive" alt="Blogs">
+                            <img src="/img/banners/nrmse.png" class="img-responsive" alt="How to normalize the RMSE">
                           
                         </a>
                     </div>
                     <div class="name same-height-always">
-                        <h5><a href="/blog/">Blogs</a></h5>
+                        <h5><a href="/blog/2019/01/07/normalizing-the-rmse/">How to normalize the RMSE</a></h5>
                     </div>
                 </div>
                 
@@ -463,7 +474,7 @@ summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 2
     <div class="container">
         <div class="col-md-12">
             
-            <p class="pull-left">This work is licensed under a <a rel='license' href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International License </a></p>
+            <p class="pull-left">&copy; 2018 - This work is licensed under a <a rel='license' href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International License </a></p>
             
             <p class="pull-right">
               <a href="/about/index.html#about-website">Legal Disclosure</a>
@@ -507,6 +518,15 @@ if (!doNotTrack) {
 
 
 <script src="/js/owl.carousel.min.js"></script>
+
+
+
+
+
+<script src="/js/highlight.pack.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 
 
 

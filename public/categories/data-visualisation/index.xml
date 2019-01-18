@@ -7,20 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018 - present [Saskia Otto](https://github.com/saskiaotto)</copyright>
-    <lastBuildDate>Wed, 17 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 16 Jan 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/data-visualisation/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>R code test</title>
-      <link>/blog/2018/10/17/r-code-test/</link>
-      <pubDate>Wed, 17 Oct 2018 00:00:00 +0000</pubDate>
+      <title>oce package for oceanographical data</title>
+      <link>/blog/2019/01/16/oce-package-for-oceanographical-data/</link>
+      <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
       
-      <guid>/blog/2018/10/17/r-code-test/</guid>
-      <description>Test how R code looks like This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
-You can embed an R code chunk like this:
-summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.</description>
+      <guid>/blog/2019/01/16/oce-package-for-oceanographical-data/</guid>
+      <description>In this post I will present the oce package, which can be handy for marine data scientist working with oceanographical data. oce provides lots of functions to
+ read oceanographic data, process the data specific to the measuring instrument, and visualize results following oceanographic conventions (using the base graphics).  The key function for importing data into R is ?read.oce(), which automatically recognizes the file type. If the recognition does not work, try the individual functions (e.</description>
     </item>
     
   </channel>

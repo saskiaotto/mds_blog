@@ -7,21 +7,10 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018 - present [Saskia Otto](https://github.com/saskiaotto)</copyright>
-    <lastBuildDate>Wed, 17 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 16 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/modelling/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>R code test</title>
-      <link>/blog/2018/10/17/r-code-test/</link>
-      <pubDate>Wed, 17 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/2018/10/17/r-code-test/</guid>
-      <description>Test how R code looks like This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
-You can embed an R code chunk like this:
-summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.</description>
-    </item>
     
     <item>
       <title>Testing indicator performance</title>
@@ -29,7 +18,7 @@ summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 2
       <pubDate>Tue, 16 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/2018/10/16/testing-indicator-performance/</guid>
-      <description>Indicators are useful and versatile tools applied in disciplines such as engineering, chemistry, medicine, economy or sociology. In ecosystem-based management a key role of an indicator is to inform on the current status of the system component as well as the effectiveness of specific management measures to move the component into a different state. In European Union (EU) marine policy, indicator development has recently progressed as part of the implementation of the Marine Strategy Framework Directive (MSFD) to aid the achievement of Good Environmental Status (GES) of the EU’s marine waters by 2020.</description>
+      <description>Indicators are useful and versatile tools applied in disciplines such as engineering, chemistry, medicine, economy or sociology. In ecosystem-based management a key role of an indicator is to inform on the current status of the system component as well as the effectiveness of specific management measures to move the component into a different state. In European Union (EU) marine policy, indicator development has recently progressed as part of the implementation of the Marine Strategy Framework Directive (MSFD)1 to aid the achievement of Good Environmental Status (GES) of the EU’s marine waters by 2020.</description>
     </item>
     
   </channel>

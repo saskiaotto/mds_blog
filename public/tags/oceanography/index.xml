@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Oceanography on Marine Data Science</title>
+    <link>/tags/oceanography/</link>
+    <description>Recent content in Oceanography on Marine Data Science</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2018 - present [Saskia Otto](https://github.com/saskiaotto)</copyright>
+    <lastBuildDate>Wed, 16 Jan 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/oceanography/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>oce package for oceanographical data</title>
+      <link>/blog/2019/01/16/oce-package-for-oceanographical-data/</link>
+      <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/01/16/oce-package-for-oceanographical-data/</guid>
+      <description>In this post I will present the oce package, which can be handy for marine data scientist working with oceanographical data. oce provides lots of functions to
+ read oceanographic data, process the data specific to the measuring instrument, and visualize results following oceanographic conventions (using the base graphics).  The key function for importing data into R is ?read.oce(), which automatically recognizes the file type. If the recognition does not work, try the individual functions (e.</description>
+    </item>
+    
+  </channel>
+</rss>
