@@ -85,7 +85,7 @@ The package builds upon the tidy data principles and offers functions to
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/data/</guid>
-      <description>Databases In the following you find a list of databases and repositories that provide different type of marine data for specific regions free of charge. The list is not intended to be exhaustive but more to give you an easy start and many of these database can be webscraped directly from within R using specific packages that I also list here. If you feel there is any global or regional database missing where users can download marine data, don’t hesitate to contact me!</description>
+      <description>Last update: 2019, Jan. 7 Databases In the following you find a list of databases and repositories that provide different type of marine data for specific regions free of charge. The list is not intended to be exhaustive but more to give you an easy start and many of these database can be webscraped directly from within R using specific packages that I also list here. If you feel there is any global or regional database missing where users can download marine data, don’t hesitate to contact me!</description>
     </item>
     
     <item>
@@ -94,7 +94,7 @@ The package builds upon the tidy data principles and offers functions to
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/mds/</guid>
-      <description>What is Marine Data Science (MDS)? MDS is all about uncovering findings from marine data such as oceanographical data collected using both in situ methods and remote sensing. Typical parameters measured on-board relate to near-surface meteorological conditions (air temperature, wind speed, wind direction, cloudiness, etc.), sea surface conditions (e.g. sea surface temperature (SST), salinity, wave height, and wave direction) as well as subsurface water characteristics (vertical profiles of temperature, salinity, dissolved nutrients, ocean currents, or ocean bottom depth).</description>
+      <description>Last update: 2019, Jan. 7 What is Marine Data Science (MDS)? MDS is all about uncovering findings from marine data such as oceanographical data collected using both in situ methods and remote sensing. Typical parameters measured on-board relate to near-surface meteorological conditions (air temperature, wind speed, wind direction, cloudiness, etc.), sea surface conditions (e.g. sea surface temperature (SST), salinity, wave height, and wave direction) as well as subsurface water characteristics (vertical profiles of temperature, salinity, dissolved nutrients, ocean currents, or ocean bottom depth).</description>
     </item>
     
     <item>
@@ -103,7 +103,8 @@ The package builds upon the tidy data principles and offers functions to
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/courses/</guid>
-      <description>In addition to the blog tutorials you here find a list of external courses and tutorials on marine data science taught by me (on https://github.com/mareds) or colleagues.
+      <description>Last update: 2019, Jan. 7 
+In addition to the blog tutorials you here find a list of external courses and tutorials on marine data science taught by me (on https://github.com/mareds) or colleagues.
 General Courses Data Analysis With R: This is a course taught by me as part of the curriculum of the Master program MARSYS at the Institute of Marine Ecosystem and Fishery Science, University of Hamburg, Germany. The course can be used as a short-term (e.</description>
     </item>
     
@@ -113,7 +114,7 @@ General Courses Data Analysis With R: This is a course taught by me as part of t
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/software/</guid>
-      <description>Which programming languages should you learn for marine data science? First of all, there is no easy answer and no consensus either. Choosing from the broad range of programming languages the right one to invest time and effort learning it the next month or years is not trivial. It all boils down to what you plan to do with it and whether you want an open source program or can afford a license.</description>
+      <description>Last update: 2019, Jan. 7 Which programming languages should you learn for marine data science? First of all, there is no easy answer and no consensus either. Choosing from the broad range of programming languages the right one to invest time and effort learning it the next month or years is not trivial. It all boils down to what you plan to do with it and whether you want an open source program or can afford a license.</description>
     </item>
     
   </channel>

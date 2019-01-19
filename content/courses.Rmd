@@ -12,6 +12,8 @@ keywords:
   - data analysis
 ---
 
+<p class="date-update">Last update: 2019, Jan. 7</p> <br>
+
 In addition to the blog tutorials you here find a list of external courses and tutorials on marine data science taught by me (on [https://github.com/mareds](https://github.com/mareds)) or colleagues.
 
 ## General Courses

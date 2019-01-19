@@ -465,6 +465,15 @@ img.img-external {
   margin-bottom: 1.5rem;
 }
 
+/* add update date on main pages  */
+
+p.date-update {
+  font-size: 1rem;
+  float: right;
+  color: #6f6f6f;
+  font-style: italic;
+}
+
 
 
 
@@ -3547,6 +3556,33 @@ a {
 #disclaimer a:active {
   color: #952226;
   text-decoration: none;
+}
+
+
+/* reference style */
+
+.citation-style {
+margin: .5rem .25rem .25rem .25rem;
+color: #555555;
+padding: .1rem .25rem;
+font-size: 0.8em;
+font-family: "Source Code Pro", Consolas, Monaco, Menlo, Consolas, monospace;
+background-color: #f8f8f8;
+-webkit-border-radius: 2px;
+border-radius: 2px;
+display: block;
+}
+
+.citation-style a {
+  color: inherit;
+  pointer-events: none; /* to deactivate the weblink */
+}
+
+
+#about-website .citation-style {
+  width: 50%;
+  height: auto;
+  color: #e96900;
 }
 
 

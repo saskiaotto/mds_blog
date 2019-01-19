@@ -14,6 +14,8 @@ knitr::opts_chunk$set(echo = TRUE,
   )
 ```
 
+<p class="date-update">Last update: 2019, Jan. 7</p> 
+
 ## What is Marine Data Science (MDS)?
 
 MDS is all about **uncovering findings from marine data** such as **oceanographical** data collected using both *in situ* methods and remote sensing. Typical parameters measured on-board relate to near-surface meteorological conditions (air temperature, wind speed, wind direction, cloudiness, etc.), sea surface conditions (e.g. sea surface temperature (SST), salinity, wave height, and wave direction) as well as subsurface water characteristics (vertical profiles of temperature, salinity, dissolved nutrients, ocean currents, or ocean bottom depth). Marine biological data  comprises of spatial and temporal species **occurrence** and **abundance** data (e.g., trawl data of fish, net sampling of plankton, benthic grab samples or visual counts of mammals or sea birds), **taxonomic** information, **trait** data, **sequence** and high-throughput screening (HTS) data, as well as **digital image** data from optical sensor systems or **hydroacoustic** data from echo sounders. 

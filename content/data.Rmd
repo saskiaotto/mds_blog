@@ -8,12 +8,13 @@ tags: []
 id: "toc_data"
 ---
 
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, 
   warning = FALSE, message = FALSE
   )
 ```
+
+<p class="date-update">Last update: 2019, Jan. 7</p> 
 
 # Databases
 

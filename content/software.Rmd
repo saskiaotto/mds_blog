@@ -15,8 +15,12 @@ knitr::opts_chunk$set(echo = TRUE,
   )
 ```
 
+<p class="date-update">Last update: 2019, Jan. 7</p>
+
 <img src="../img/software/programming_languages.png"  class="w3-round" alt="Programming languages" style="max-width: 100%; height: auto; with: auto\9;">
 <br>
+
+
 
 ## Which programming languages should you learn for marine data science?
 
