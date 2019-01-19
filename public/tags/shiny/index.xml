@@ -18,7 +18,7 @@
       <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
       
       <guid>/blog/2019/01/16/helpful-shiny-apps/</guid>
-      <description>If you are an R user but don’t know yet what Shiny and Shiny apps are, you definitely should read up on it on http://shiny.rstudio.com.
+      <description>If you are an R user but don’t know yet what Shiny and Shiny apps are, you definitely should read up on it on https://shiny.rstudio.com.
 But in a nutshell, Shiny is an R package that builds interactive web apps straight from R. You just need to write an R script that follows a specific Shiny syntax and once you run the script, the package builds a HTML file as user interface (UI) with interactive input elements (based on Javascript) that trigger certain computations in R.</description>
     </item>
     
