@@ -78,27 +78,33 @@ paginate = 10
 
 [[menu.topbar]]
     weight = 1
-    name = "GitHub-mareds"
-    url = "https://github.com/mareds"
-    pre = "<i class='fab fa-2x fa-github'></i>"  # changed from fa to fab with new stylesheet
+    name = "PersonalSite"
+    url = "https://saskiaotto.de"
+    pre = "<i class='fas fa-2x fa-globe'></i>"  # changed from fa to fab with new stylesheet
 
 [[menu.topbar]]
     weight = 2
+    name = "GitHub-mareds"
+    url = "https://github.com/mareds"
+    pre = "<i class='fab fa-2x fa-github'></i>"  # changed from fa to fab with new stylesheet
+    
+[[menu.topbar]]
+    weight = 3
     name = "GitHub-saskiaotto"
     url = "https://github.com/saskiaotto"
     pre = "<i class='fab fa-2x fa-github'></i>"  # changed from fa to fab with new stylesheet
 
 [[menu.topbar]]
-    weight = 3
+    weight = 4
     name = "Researchgate"
     url = "https://www.researchgate.net/profile/Saskia_Otto"
     pre = "<i class='fab fa-2x fa-researchgate'></i>"
 
-[[menu.topbar]]
-    weight = 4
-    name = "Twitter"
-    url = "https://twitter.com"
-    pre = "<i class='fab fa-2x fa-twitter'></i>"  # changed from fa to fab with new stylesheet
+#[[menu.topbar]]
+#    weight = 5
+#    name = "Twitter"
+#    url = "https://twitter.com"
+#    pre = "<i class='fab fa-2x fa-twitter'></i>"  # changed from fa to fab with new stylesheet
 
 [[menu.topbar]]
     weight = 5
