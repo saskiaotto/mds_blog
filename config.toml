@@ -81,12 +81,12 @@ paginate = 10
     name = "GitHub-mareds"
     url = "https://github.com/mareds"
     pre = "<i class='fab fa-2x fa-github'></i>"  # changed from fa to fab with new stylesheet
-    
+
 [[menu.topbar]]
     weight = 2
     name = "GitHub-saskiaotto"
     url = "https://github.com/saskiaotto"
-    pre = "<i class='fab fa-2x fa-github'></i>"  # changed from fa to fab with new stylesheet    
+    pre = "<i class='fab fa-2x fa-github'></i>"  # changed from fa to fab with new stylesheet
 
 [[menu.topbar]]
     weight = 3
@@ -104,26 +104,26 @@ paginate = 10
     weight = 5
     name = "ORCID"
     url = "https://orcid.org/0000-0001-7780-1322"
-    pre = "<i class='ai ai-2x ai-orcid'></i>" 
+    pre = "<i class='ai ai-2x ai-orcid'></i>"
 
 #[[menu.topbar]]
 #    weight = 6
 #    name = "Youtube"
 #    url = "http://youtube.com"
 #    pre = "<i class='fab fa-2x fa-youtube'></i>"  # changed from fa to fab with new stylesheet
-    
+
 [[menu.topbar]]
     weight = 6
     name = "Email"
     url = "mailto:saskia.otto@uni-hamburg.de"
     pre = "<i class='fa fa-2x fa-envelope'></i>"
-    
+
 
 # Configure BlackFriday Markdown rendering.
 #   See: https://gohugo.io/readfiles/bfconfig/
 [blackfriday]
-  hrefTargetBlank = true  # `true` opens external links in a new tab. 
-  
+  hrefTargetBlank = true  # `true` opens external links in a new tab.
+
 
 [params]
     viewMorePostLink = "/blog/"
@@ -169,14 +169,14 @@ paginate = 10
       </p>"""
     #latitude = "-12.043333"
     #longitude = "-77.028333"
-    
+
     sharing_image = "img/mds_logo_notext@2x.png"
-    
+
     # To allow LaTex equations in html
     MathJaxCDN = "//cdnjs.cloudflare.com/ajax/libs"
     MathJaxVersion = "2.7.5"
-    
-    
+
+
 
 [Permalinks]
     blog = "/blog/:year/:month/:day/:slug/"
@@ -256,4 +256,4 @@ paginate = 10
 
 # TAGS:
 # r package; r markdown, fish, zooplankton, phytoplankton, oceanography, community
-# GAM; GLM; plotting; map; r, Python, HTML, hugo, shiny
+# GAM; GLM; plotting; map; r, Python, HTML, hugo, shiny, github

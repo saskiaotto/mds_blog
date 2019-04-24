@@ -1,0 +1,191 @@
+---
+title: Linking 2 computers to 2 GitHub accounts
+author: Saskia
+date: '2019-04-24'
+slug: linking-2-github
+categories:
+  - programming
+tags:
+  - github
+banner: "img/banners/linking2github.png"  
+---
+
+
+
+<p>If you have only one GitHub account and work with a single computer you will find plenty of information in the internet on how to link your machine to your account. Also, if you want to set up a secure SSH protocol to connect your computer to GitHub so that you don’t have to supply your username or password at each visit, a good starting point is the <a href="https://help.github.com/articles/connecting-to-github-with-ssh/">Connecting to GitHub with SSH</a> documentation on the GitHub help pages or take a look at some of the many blogs, e.g. on <a href="https://jdblischak.github.io/2014-09-18-chicago/novice/git/05-sshkeys.html">software carpentry</a>.</p>
+<p>Now the questions I ran into were:</p>
+<ul>
+<li>How to set up the SSH keys when using 2 different GitHub accounts, in my case <a href="https://github.com/saskiaotto">saskiaotto</a> and <a href="https://github.com/mareds">mareds</a>?</li>
+<li>And how to connect my work Mac AND my home Mac to these 2 accounts?</li>
+</ul>
+<p>These two cases are much less documented in the web, and I haven’t found a website that describes them together. Since I might not be the only one that runs into these issues (but also for my future me) I decided to write this step-by-step guide that helped me set up my workflow. Please note, that the following instructions are for unix users. On windows, some of the commands might differ.</p>
+<div id="setting-up-the-ssh-keys" class="section level2">
+<h2>1. Setting up the SSH keys</h2>
+<p>Let’s assume you have 2 GitHub accounts named <strong>gitWork</strong> (in my case <em>mareds</em>) and <strong>gitPersonal</strong> (in my case <em>saskiaotto</em>) and you want to connect both your work machine and home machine to these accounts.</p>
+<div id="creating-keys" class="section level3">
+<h3>1.1 Creating keys</h3>
+<p>Start first on one of your machine (e.g. work) and create a SSH key for your <strong>gitWork</strong> account. Open your terminal and type</p>
+<pre class="shell"><code>$ ssh-keygen -t RSA -b 4096 -C &quot;work machine email@linked2your.gitWorkaccount&quot;</code></pre>
+<p>What does this all mean exactly?</p>
+<ul>
+<li>The <code>ssh-keygen</code> command will create a private and public key.</li>
+<li>With the <code>-t</code> flag you specify that the key type should be RSA (there are different types such as RSA1, DS, etc. but RSA (actually it is RSA2) is supposed to be one of the safer ones.</li>
+<li>With the <code>-b</code> flag you specify the bit size (4096bits) of the key. The default is 2048bit but it is recommended to increase the size.</li>
+<li>The <code>-C</code> flag allows you to set comments in the key, which will help you later identify to which account, user or machine this key belongs. You can put whatever you want in this one string, but I find it useful to say which machine has the private key and the email address that links to that GitHub account.</li>
+</ul>
+<p>Next you will be asked for the <em>directory</em> and <em>filename</em>. If you want to use the same key for all your accounts then go ahead and use the suggested <em>id_rsa</em> name by just pressing ENTER. But if you want to use different keys for your different accounts (as I did) then use a different name that will be easy to link to the specific account, e.g. <em>gitWork-rsa</em>. Save this file as suggested in the (hidden) .ssh folder of your home directory (on a Mac the home directory is /Users/UsernameOfComputer, on a Linux it would be /home/UsernameOfComputer).</p>
+<p>You will be then asked for a <strong>passphrase</strong>, which adds more security in case your work machine gets stolen. So for my work machine I added a passphrase, but on my home machine later I left it blank and just pressed ENTER.</p>
+<p>If you go now into your .ssh folder you will see two new files named <em>gitWork-rsa</em> and <em>gitWork-rsa.pub</em>:</p>
+<pre class="shell"><code>$ cd ~/.ssh
+$ ls
+config          id_rsa
+gitWork-rsa     id_rsa.pub
+gitWork-rsa.pub known_hosts</code></pre>
+<p>The first is your private key, meant to stay on your computer and never be shared! The second is the public key, which will be passed to your GitHub account and can be looked at by others.</p>
+<p>Let’s create the second key for your other account right after:</p>
+<pre class="shell"><code>$ ssh-keygen -t RSA -b 4096 -C &quot;work machine email@linked2your.gitPersonalaccount&quot;</code></pre>
+<p>Save it as e.g. <code>~/.ssh/gitPersonal-rsa</code> and add a passphrase if this is your work machine.</p>
+<p>If you used a passphrase it is advisable to add the keys to your SSH agent so you don’t need to remember your passphrases and type them frequently.</p>
+<p>Start the SSH agent</p>
+<pre class="shell"><code>$ eval &quot;$(ssh-agent -s)&quot;</code></pre>
+<p>and add both keys</p>
+<pre class="shell"><code>$ ssh-add -K ~/.ssh/gitWork-rsa
+$ ssh-add -K ~/.ssh/gitPersonal-rsa</code></pre>
+<p><span style="font-size: 1rem;">NOTE: The -K option is Apple’s standard version of ssh-add, which stores the passphrase in your keychain for you when you add an SSH key to the ssh-agent.</span></p>
+<!-- You can see the list of saved keys by typing  -->
+<!-- ```Shell -->
+<!-- $ ssh-add -L -->
+<!-- ``` -->
+</div>
+<div id="adding-the-keys-to-your-github-accounts" class="section level3">
+<h3>1.2 Adding the keys to your GitHub accounts</h3>
+<p>To add the public keys to your accounts, log first into your gitWork account.</p>
+<ul>
+<li>Go to <em>Settings</em></li>
+<li>Click the tab that says <em>SSH and GPG keys</em></li>
+<li>Click on <em>Add new SSH</em> and type in the ‘Name’ field something like “work machine” so that you can identify to which private key this public key belongs to.</li>
+<li>In the field ‘Key’ you should paste the content of the <em>gitWork-rsa.pub</em>. So how do you do that? Either open the file with your prefered editor (I like to use Atom), mark all the text and press <code>cmd+C</code> or in the terminal use the <strong>pbcopy</strong> command, which copies the content of a file into the clipboard:</li>
+</ul>
+<pre class="shell"><code>$ pbcopy &lt; ~/.ssh/gitWork-rsa.pub</code></pre>
+<ul>
+<li>Now go back to your GitHub account and insert the copied text into the ‘Key’ field (with <code>cmd+V</code>). The public key starts always with ssh, followed by random letters and numbers. At the last line you should see the comment you added when creating the key.</li>
+<li>Click <em>Add key</em>, then enter your GitHub password to confirm.</li>
+</ul>
+</div>
+<div id="add-accounts-to-your-ssh-config-file" class="section level3">
+<h3>1.3 Add accounts to your SSH config file</h3>
+<p>To be able to automatically log into your accounts you need to add the login details to the SSH configuration file, which is located in the .ssh folder.</p>
+<p>If you don’t have any config file there yet, create one by typing</p>
+<pre class="shell"><code>$ cd ~/.ssh
+$ touch config</code></pre>
+<p>Open the <em>config</em> file with your preferred editor or in the terminal using e.g. the nano editor</p>
+<pre class="shell"><code>$ nano config</code></pre>
+<p>Add the following details (it doesn’t matter where exactly you place it) :</p>
+<pre class="shell"><code># work account
+Host gitWork
+    Hostname github.com
+    User git
+    IdentityFile ~/.ssh/gitWork-rsa
+    
+# personal account
+Host gitPersonal
+  Hostname github.com
+  User git
+  IdentityFile ~/.ssh/gitPersonal-rsa</code></pre>
+<p>The <code>#</code> indicates a comment so you can type there whatever you need that helps you later. The host alias can have any name but should have a clear link to the account (here, I simply used the account names as the host alias).</p>
+<p>You can test if GitHub recognizes your keys by typing <code>ssh -T</code> and your host alias:</p>
+<pre class="shell"><code>$ ssh -T gitWork</code></pre>
+<p>If all went fine you should see something like</p>
+<pre class="shell"><code>Hi gitWork! You&#39;ve successfully authenticated, but GitHub does not provide shell access.</code></pre>
+<p>Test also your other account:</p>
+<pre class="shell"><code>$ ssh -T gitPersonal</code></pre>
+</div>
+</div>
+<div id="setting-up-repositories-and-linking-them-to-one-computer" class="section level2">
+<h2>2. Setting up repositories and linking them to one computer</h2>
+<p>To test your new account set up (but also in the future when you start new repos) do the following:</p>
+<p>Create a new repo in your work account <em>gitWork</em> which I will call here <strong>test-work</strong>. Don’t create a README.md file yet. Back on your local machine, create a folder for the repo with <code>makdir</code> and change the directory to that folder:</p>
+<pre class="shell"><code>$ cd ~/documents
+$ mkdir test-work
+$ cd test-work</code></pre>
+<p>Add a blank README.md file and <strong>PUSH</strong> to Github:</p>
+<pre class="shell"><code>$ touch readme.md
+$ git init
+$ git add .
+$ git commit -am &quot;first commit&quot;
+$ git remote add origin git@work:gitWork/test-work.git
+$ git push origin master</code></pre>
+<p>NOTE: I’m using the custom account <a href="mailto:git@gitWork">git@gitWork</a> (the latter is the host alias defined in the config file earlier), instead of <a href="mailto:git@github.com">git@github.com</a>. This is then followed by the GitHub user name (which is here the same than the alias), a slash, and the new_reponame.git. So the principle is: <strong><a href="mailto:git@hostalias">git@hostalias</a>:username/reponame.git</strong></p>
+<p>Run a first test <strong>PULL</strong> by adding some test to the README.md file directly in your gitWork account in GitHub and then type in the terminal (where the directory should be set to your repo <em>test-work</em>)</p>
+<pre class="shell"><code>$ git pull origin master</code></pre>
+<p>If you don’t get any error message go on and repeat this process for your gitPersonal account.</p>
+<div id="pushing-and-pulling-directly-from-rstudio" class="section level3">
+<h3>Pushing and pulling directly from RStudio</h3>
+<p>If the new repository represents an RStudio project you will notice that under <em>Project options &gt; ‘Git/SVN’ &gt; Origin</em> there will be the correct repo name (i.e., <a href="mailto:git@work">git@work</a>:gitWork/test-work.git), but the ‘Push’ and ‘Pull’ buttons in the <em>Git</em> Panel are greyed out. If you want to push and pull directly from within RStudio you need to tweak some of the git settings before you can do so.</p>
+<p>Close RStudio and open the terminal. Change the directory to the repo folder and push again but this time using the <code>-u</code> flag:</p>
+<pre class="shell"><code>$ cd ~/documents/test-work
+$ git push -u origin master</code></pre>
+<p>When you open RStudio again you should see the ‘Push’ and ‘Pull’ buttons being activated! From now on you can push and pull from the terminal or from RStudio directly (at least for this repo).</p>
+</div>
+</div>
+<div id="connecting-your-second-computer-to-github-via-ssh" class="section level2">
+<h2>3. Connecting your second computer to GitHub via SSH</h2>
+<p>Once you have all connection established on your work machine its time to connect also your home machine.</p>
+<p>Repeat step <strong>1.1 - 1.3</strong> except that you add as comment in the SSH key your home machine:</p>
+<pre class="shell"><code>$ ssh-keygen -t RSA -b 4096 -C &quot;home machine email@linked2your.gitWorkaccount&quot;
+$ ssh-keygen -t RSA -b 4096 -C &quot;home machine email@linked2your.gitPersonalaccount&quot;</code></pre>
+<p>You can name the keys exactly the same as on your work machine since these names never appear in your github account (this is why the comment is so helpful for identification later).</p>
+<p>Once you did all steps in 1.1 - 1.3 and the SSH test passed when typing</p>
+<pre class="shell"><code>$ ssh -T gitWork
+$ ssh -T gitPersonal</code></pre>
+<p>you’re ready to connect your home machine to the existing repos.</p>
+</div>
+<div id="connecting-your-second-computer-to-a-specific-repos" class="section level2">
+<h2>4. Connecting your second computer to a specific repos</h2>
+<p><span style="font-size:1.2rem;">NOTE: Here it is important that you DON’T follow the recommendations on the GitHub help or any other blog that assumes you have only 1 account and do some tweaks instead!!<span></p>
+<p>Go first to the directory where you want the repo to be copied to:</p>
+<pre class="shell"><code>$ cd ~/path/to/repo/location</code></pre>
+<p>To clone your own repository (e.g. test_work) you would normally type</p>
+<pre class="shell"><code>$ git clone https://github.com/gitWork/test_work.git</code></pre>
+<p>as described in <a href="https://help.github.com/en/articles/cloning-a-repository">this</a> GitHub article.</p>
+<p>If you do this, you will be constantly asked for your username and password since your computer doesn’t know which key to use. INSTEAD, use your <strong>new connection details</strong> (<a href="mailto:git@gitWork">git@gitWork</a>).</p>
+<pre class="shell"><code>$ git clone git@gitWork:gitWork/test_work.git</code></pre>
+<p>You can always check for the URL git uses to connect the local with the remote repo by looking at the git config file, which is located in the .git folder in the local repository:</p>
+<pre class="shell"><code>$ nano ~/documents/test_work/.git/config</code></pre>
+<p>You should see the following lines in the file</p>
+<pre class="shell"><code>[remote &quot;origin&quot;]
+        url = git@gitWork:gitWork/test_work.git</code></pre>
+<p>Since the repository belongs to you, you can start committing changes on the home computer and then pushing them to the master branch. When pushing the local version the first time make sure that it goes to the right account:</p>
+<pre class="shell"><code>$ cd test-work
+$ git config --local credential.helper &quot;&quot;
+$ git push -u origin master</code></pre>
+<p>Now you will be asked for the username (gitWork) and the GitHub login password for this account, also in RStudio, but only once.</p>
+</div>
+<div id="setting-your-username-in-git" class="section level2">
+<h2>5. Setting your username in Git</h2>
+<p>You should know that Git uses a username to associate commits with an identity and this is not the same than your GitHub username.</p>
+<p>You can change this username to any name you want using the git config command. The new name you set will be visible in any future commits you push to GitHub from the command line. <br><br></p>
+<div id="setting-your-git-username-for-every-repository-on-your-computer" class="section level4">
+<h4>Setting your Git username for EVERY repository on your computer</h4>
+<p>If you want to set a global Git username type this in the terminal</p>
+<pre class="shell"><code>$ git config --global user.name &quot;your name&quot;</code></pre>
+<p>and check if your name was saved correctly</p>
+<pre class="shell"><code>$ git config --global user.name
+&gt; your name</code></pre>
+</div>
+<div id="setting-your-git-username-for-single-repositories" class="section level4">
+<h4>Setting your Git username for SINGLE repositories</h4>
+<p>If you want to set the username for a single repository, type instead - this time from within the respective repository:</p>
+<pre class="shell"><code>$ cd ~/path/to/your/repo
+$ git config user.name &quot;your name&quot;</code></pre>
+<p>Note that we exclude here the <code>--global</code> flag.</p>
+<p>Check again with</p>
+<pre class="shell"><code>$ git config user.name
+&gt; your name</code></pre>
+<p>If you are unsure what username has been set, and want to check, simply supply the above without final argument</p>
+<pre class="shell"><code>$ git config user.name</code></pre>
+<hr />
+<p>ONE LAST NOTE HERE:</p>
+<p>It is essential that if you clone a repository so that it is on two different computers, always use the pull command before you start working. Otherwise, you will put one of your repositories out of sync with the ‘master’ branch and you will need to use the ‘merge’ command, which can be tedious.</p>
+</div>
+</div>
