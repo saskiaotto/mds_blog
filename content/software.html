@@ -14,8 +14,8 @@ id: "toc_software"
 Last update: 2019, Jan. 7
 </p>
 <p><img src="../img/software/programming_languages.png"  class="w3-round" alt="Programming languages" style="max-width: 100%; height: auto; with: auto\9;"> <br></p>
-<div id="which-programming-languages-should-you-learn-for-marine-data-science" class="section level2">
-<h2>Which programming languages should you learn for marine data science?</h2>
+<div id="which-programming-languages-should-you-learn-for-marine-data-science" class="section level1">
+<h1>Which programming languages should you learn for marine data science?</h1>
 <p>First of all, there is no easy answer and no consensus either. Choosing from the broad range of programming languages the right one to invest time and effort learning it the next month or years is not trivial. It all boils down to what you plan to do with it and whether you want an open source program or can afford a license.</p>
 <p>If you are a marine scientist that manages rather small datasets or queries data from existing databases using specific web interfaces or user-friendly programs and then runs some statistics on this data for either a report or a peer-reviewed articles, a program specifically developed for data analysis might be the best option for you. On the other hand, if you are a data scientist in a marine research institute, you might also need to build relational databases for storage of institute-specific datasets or develop tools for specific method applications, communicate the work through different channels such as software or coding repositories as well as static and dynamic websites. In that case knowing several additional programming languages such as SQL, HTML, CSS would be necessary. If you work with big datasets such as sequence and high-throughput screening data or digital image data from optical sensor systems you will need a programming languages which performs particularly fast. The key here is to understand your usage requirements in terms of generality vs. specificity, as well as your personal preferred development style of performance vs. productivity.</p>
 <p>Some noteworthy aspects when choosing a language are:</p>
@@ -42,8 +42,8 @@ Last update: 2019, Jan. 7
 <li><strong>Standardization</strong>: Some languages follow a formal standard (e.g. ISO or ANSI), which can be relevant if different programs need to work together.</li>
 </ul>
 <p>So let’s see what other data scientiests and statisticians think, but bare in mind that some of these languages and tools do not serve the same purpose and are better used complementary.</p>
-<div id="common-technologies-and-languages-in-data-science" class="section level4">
-<h4>Common technologies and languages in data science</h4>
+<div id="common-technologies-and-languages-in-data-science" class="section level2">
+<h2>Common technologies and languages in data science</h2>
 <p>Amongst the ~16,000 data scientists that participated in the 2017 <a href="https://www.kaggle.com/amberthomas/kaggle-2017-survey-results" id="kaggle_anchor">kaggle survey</a> (see also under <a href="../mds/index.html">MDS</a>) the following data science/analytics tools, technologies, and languages were used most often:</p>
 <pre class="r"><code>programs_used %&gt;% with(wordcloud(selections, n, scale = c(3, 0.2), max.words = 150, 
     random.order = FALSE, rot.per = 0.35, use.r.layout = TRUE, colors = brewer.pal(6, 
@@ -74,8 +74,8 @@ Figure 2: Barplot of most common languages and tools amongst academic data scien
 <!-- Obviously, the most common languages used are Python, R, and SQL and Jupyter Notebooks as tool. In academia, SQL is less important and instead Matlab often applied.  -->
 <!-- Python was the most commonly used data analysis tool across employed data scientists overall, but more Statisticians are still loyal to R. -->
 </div>
-<div id="recommended-programming-language" class="section level4">
-<h4>Recommended programming language</h4>
+<div id="recommended-programming-language" class="section level2">
+<h2>Recommended programming language</h2>
 <p>Respondents were also asked what programming language they would recommend a new data scientist to learn first:</p>
 <pre class="r"><code>recom_lang %&gt;% ggplot(aes(x = selections, y = percent, fill = selections)) + 
     geom_col() + guides(fill = &quot;none&quot;) + scale_fill_viridis_d(direction = 1, 
@@ -88,8 +88,8 @@ Figure 3: Barplot showing the programming languages data scientist recommend mos
 </div>
 <p>In marine sciences, the most common programming language is probably R, as it is most rich in packages and libraries related to methods applied in this field, closely followed by Matlab. However, if you plan to dive into the world of numerical modelling or you will work with big datasets such as genomics you are most likely better off with Python. I personally love R and have worked with it for many years, though at the time of my PhD it wasn’t as easy to learn - without the many online tutorials and huge archives of questions and solutions at stack overflow that nowadays exist. For my own data storage I use relational databases, so SQL is my language of choice. And to communicate results and for teaching data science I also started to learn HTML and CSS. While the integration of RMarkdown into RStudio is great for producing output as PDF, presentation, HTML page or even entire website you need to learn a bit of HTML and CSS and potentially JavaScript, Bootstrap, etc. if you want to add your personal touch to it. <br></p>
 </div>
-<div id="overview-of-programming-languages-and-applications" class="section level3">
-<h3>Overview of programming languages and applications</h3>
+<div id="overview-of-programming-languages-and-applications" class="section level2">
+<h2>Overview of programming languages and applications</h2>
 <p>Here is a short summary of different programming languages and data analysis software that are more or less common in marine data science, their pros and cons and links where you can learn more about it. Since I’m fully into R I also provide you later with a detailed - but not complete- list of R packages that are useful for general or marine- specific tasks. <br> <br></p>
 <p><img src="../img/software/logo_r.png" alt="logo r" style="float:left;clear:left;height:50px;border:0;padding-right:10px;"></p>
 <!-- <h4 style="padding-top:20px;"><a href="https://www.r-project.org">www.r-project.org</a></h4>  -->

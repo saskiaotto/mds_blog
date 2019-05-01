@@ -18,7 +18,7 @@ To achieve GES requires ideally operational indicators that not only describe th
 
 <br>
 
-### One approach for a complete indicator testing could involve the following 3 steps:
+## One approach for a complete indicator testing could involve the following 3 steps:
 
 <br>
 <img src="/blog/2018-10-16-testing-indicator-performance_files/indicator_testing.tif" align="left" width="100%" height="auto" style="padding-right: 0px;" />
@@ -27,7 +27,7 @@ To achieve GES requires ideally operational indicators that not only describe th
 
 <br>
 
-#### Step A: Direct effect of single pressure
+### Step A: Direct effect of single pressure
 
 In the first step, functional relationships of individual indicators to single pressures need to be established. If an indicator is mainly directly affected by a single pressure, a target (represented by the point on the line) could be set depending on the functional relationship.
 
@@ -39,13 +39,13 @@ To apply a more flexible modeling approach that allows also non-linear relations
 - **Tree-based methods** (e.g. Bagging, Random Forest, Boosting using the packages [randomForest](https://cran.r-project.org/package=randomForest), [gbm](https://cran.r-project.org/package=gbm), or [caret](https://cran.r-project.org/package=caret))
 
 
-#### Step B: Direct effects of multiple pressures (≥2)
+### Step B: Direct effects of multiple pressures (≥2)
 
 The analysis of thresholds is not only complicated by non-linear dynamics but also by multiple pressures that can interact. Because of these interactions a given GES target reference value might be achieved by two or more sets of different pressure conditions (e.g. indicated by the two points in each 3-dimensional plot). 
 
 In this second step, indicator responses to multiple pressures including potential interactions need to be tested and GES targets in this two-dimensional context evaluated using the same modeling approaches as in step A. To test within the GAM framework for interactions that show threshold dynamics one could use an extension, the so-called **threshold-GAM** (TGAM) ^[Ciannelli, L., Chan, K.-S., Bailey, K.M. & Stenseth, N.C. (2004). Nonadditive effects of the environment on the survival of a large marine fish population. Ecology, 85, 3418-3427] ^[Otto, S.A., Kornilovs, G., Llope, M. & Möllmann, C. (2014). Interactions among density, climate, and food web effects determine long-term life cycle dynamics of a key copepod. Marine Ecology Progress Series, 498, 73-84, doi: [10.3354/meps10613](https://www.int-res.com/articles/meps_oa/m498p073.pdf)], which is partly implemented in [INDperform](https://github.com/saskiaotto/INDperform).
 
-#### Step C: Direct and indirect effects within the food web context 
+### Step C: Direct and indirect effects within the food web context 
 
 Most often food web dynamics are the result of direct and indirect effects through species interactions that act simultaneously, which can lead to congruence or conflicts between indicator targets. A thorough robustness testing requires, hence, also a food web model approach.
 
@@ -58,7 +58,7 @@ Statistical modeling frameworks that allow the model setup based on the indicato
 - **Coupling of individual GAMs/TGAMs**
 
 
-### Baltic Sea Case study
+## Baltic Sea Case study
 
 Colleagues and me adopted these 3 testing steps for food web indicators in the Baltic Sea within the [Swedish project](https://www.havochvatten.se/artikel?artikel=271272) ("Ecosystem-based approach for developing and testing pelagic food web indicators") I coordinated.
 

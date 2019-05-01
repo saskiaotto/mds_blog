@@ -223,6 +223,23 @@ hr {
 
 
 /* type */
+
+h1, .h1 {
+  font-size: 1.875rem; /* =30ox */
+}
+h2, .h2 {
+  font-size: 1.5rem; /* =24ox */
+}
+h3, .h3 {
+  font-size: 1.25rem; /* =20ox */
+}
+h4, .h4 {
+  font-size: 1.125rem; /* =18ox */
+}
+h5, .h5 {
+  font-size: 1rem; /* =16ox */
+}
+
 h1,
 h2,
 h3,

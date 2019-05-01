@@ -230,12 +230,34 @@
 <li>How to set up the SSH keys when using 2 different GitHub accounts, in my case <a href="https://github.com/saskiaotto">saskiaotto</a> and <a href="https://github.com/mareds">mareds</a>?</li>
 <li>And how to connect my work Mac AND my home Mac to these 2 accounts?</li>
 </ul>
-<p>These two cases are much less documented in the web, and I haven’t found a website that describes them together. Since I might not be the only one that runs into these issues (but also for my future me) I decided to write this step-by-step guide that helped me set up my workflow. Please note, that the following instructions are for unix users. On windows, some of the commands might differ.</p>
-<div id="setting-up-the-ssh-keys" class="section level2">
-<h2>1. Setting up the SSH keys</h2>
+<p>These two cases are much less documented in the web, and I haven’t found a website that describes them together. Since I might not be the only one that runs into these issues (but also for my future me) I decided to write this step-by-step guide that helped me set up my workflow. Please note, that the following instructions are for Unix users. On windows, some of the commands might differ.</p>
+<div id="table-of-contents" class="section level2">
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#setting-up-the-ssh-keys">1. Setting up the SSH keys</a>
+<ul>
+<li><a href="#creating-keys">1.1 Creating keys</a></li>
+<li><a href="#adding-the-keys-to-your-github-accounts">1.2 Adding the keys to your GitHub accounts</a></li>
+<li><a href="#add-accounts-to-your-ssh-config-file">1.3 Add accounts to your SSH config file</a></li>
+</ul></li>
+<li><a href="#setting-up-repositories-and-linking-them-to-one-computer">2. Setting up repositories and linking them to one computer</a>
+<ul>
+<li><a href="#pushing-and-pulling-directly-from-rstudio">Pushing and pulling directly from RStudio</a></li>
+</ul></li>
+<li><a href="#connecting-your-second-computer-to-github-via-ssh">3. Connecting your second computer to GitHub via SSH</a></li>
+<li><a href="#connecting-your-second-computer-to-a-specific-repos">4. Connecting your second computer to a specific repos</a></li>
+<li><a href="#setting-your-username-in-git">5. Setting your username in Git</a>
+<ul>
+<li><a href="#setting-your-git-username-for-every-repository-on-your-computer">Setting your Git username for EVERY repository on your computer</a></li>
+<li><a href="#setting-your-git-username-for-single-repositories">Setting your Git username for SINGLE repositories</a></li>
+</ul></li>
+</ul>
+</div>
+<div id="setting-up-the-ssh-keys" class="section level1">
+<h1>1. Setting up the SSH keys</h1>
 <p>Let’s assume you have 2 GitHub accounts named <strong>gitWork</strong> (in my case <em>mareds</em>) and <strong>gitPersonal</strong> (in my case <em>saskiaotto</em>) and you want to connect both your work machine and home machine to these accounts.</p>
-<div id="creating-keys" class="section level3">
-<h3>1.1 Creating keys</h3>
+<div id="creating-keys" class="section level2">
+<h2>1.1 Creating keys</h2>
 <p>Start first on one of your machine (e.g. work) and create a SSH key for your <strong>gitWork</strong> account. Open your terminal and type</p>
 <pre class="shell"><code>$ ssh-keygen -t RSA -b 4096 -C &quot;work machine email@linked2your.gitWorkaccount&quot;</code></pre>
 <p>What does this all mean exactly?</p>
@@ -269,14 +291,14 @@ $ ssh-add -K ~/.ssh/gitPersonal-rsa</code></pre>
 <!-- $ ssh-add -L -->
 <!-- ``` -->
 </div>
-<div id="adding-the-keys-to-your-github-accounts" class="section level3">
-<h3>1.2 Adding the keys to your GitHub accounts</h3>
+<div id="adding-the-keys-to-your-github-accounts" class="section level2">
+<h2>1.2 Adding the keys to your GitHub accounts</h2>
 <p>To add the public keys to your accounts, log first into your gitWork account.</p>
 <ul>
 <li>Go to <em>Settings</em></li>
 <li>Click the tab that says <em>SSH and GPG keys</em></li>
 <li>Click on <em>Add new SSH</em> and type in the ‘Name’ field something like “work machine” so that you can identify to which private key this public key belongs to.</li>
-<li>In the field ‘Key’ you should paste the content of the <em>gitWork-rsa.pub</em>. So how do you do that? Either open the file with your prefered editor (I like to use Atom), mark all the text and press <code>cmd+C</code> or in the terminal use the <strong>pbcopy</strong> command, which copies the content of a file into the clipboard:</li>
+<li>In the field ‘Key’ you should paste the content of the <em>gitWork-rsa.pub</em>. So how do you do that? Either open the file with your preferred editor (I like to use Atom), mark all the text and press <code>cmd+C</code> or in the terminal use the <strong>pbcopy</strong> command, which copies the content of a file into the clipboard:</li>
 </ul>
 <pre class="shell"><code>$ pbcopy &lt; ~/.ssh/gitWork-rsa.pub</code></pre>
 <ul>
@@ -284,8 +306,8 @@ $ ssh-add -K ~/.ssh/gitPersonal-rsa</code></pre>
 <li>Click <em>Add key</em>, then enter your GitHub password to confirm.</li>
 </ul>
 </div>
-<div id="add-accounts-to-your-ssh-config-file" class="section level3">
-<h3>1.3 Add accounts to your SSH config file</h3>
+<div id="add-accounts-to-your-ssh-config-file" class="section level2">
+<h2>1.3 Add accounts to your SSH config file</h2>
 <p>To be able to automatically log into your accounts you need to add the login details to the SSH configuration file, which is located in the .ssh folder.</p>
 <p>If you don’t have any config file there yet, create one by typing</p>
 <pre class="shell"><code>$ cd ~/.ssh
@@ -313,8 +335,8 @@ Host gitPersonal
 <pre class="shell"><code>$ ssh -T gitPersonal</code></pre>
 </div>
 </div>
-<div id="setting-up-repositories-and-linking-them-to-one-computer" class="section level2">
-<h2>2. Setting up repositories and linking them to one computer</h2>
+<div id="setting-up-repositories-and-linking-them-to-one-computer" class="section level1">
+<h1>2. Setting up repositories and linking them to one computer</h1>
 <p>To test your new account set up (but also in the future when you start new repos) do the following:</p>
 <p>Create a new repo in your work account <em>gitWork</em> which I will call here <strong>test-work</strong>. Don’t create a README.md file yet. Back on your local machine, create a folder for the repo with <code>makdir</code> and change the directory to that folder:</p>
 <pre class="shell"><code>$ cd ~/documents
@@ -331,8 +353,8 @@ $ git push origin master</code></pre>
 <p>Run a first test <strong>PULL</strong> by adding some test to the README.md file directly in your gitWork account in GitHub and then type in the terminal (where the directory should be set to your repo <em>test-work</em>)</p>
 <pre class="shell"><code>$ git pull origin master</code></pre>
 <p>If you don’t get any error message go on and repeat this process for your gitPersonal account.</p>
-<div id="pushing-and-pulling-directly-from-rstudio" class="section level3">
-<h3>Pushing and pulling directly from RStudio</h3>
+<div id="pushing-and-pulling-directly-from-rstudio" class="section level2">
+<h2>Pushing and pulling directly from RStudio</h2>
 <p>If the new repository represents an RStudio project you will notice that under <em>Project options &gt; ‘Git/SVN’ &gt; Origin</em> there will be the correct repo name (i.e., <a href="mailto:git@work">git@work</a>:gitWork/test-work.git), but the ‘Push’ and ‘Pull’ buttons in the <em>Git</em> Panel are greyed out. If you want to push and pull directly from within RStudio you need to tweak some of the git settings before you can do so.</p>
 <p>Close RStudio and open the terminal. Change the directory to the repo folder and push again but this time using the <code>-u</code> flag:</p>
 <pre class="shell"><code>$ cd ~/documents/test-work
@@ -340,20 +362,20 @@ $ git push -u origin master</code></pre>
 <p>When you open RStudio again you should see the ‘Push’ and ‘Pull’ buttons being activated! From now on you can push and pull from the terminal or from RStudio directly (at least for this repo).</p>
 </div>
 </div>
-<div id="connecting-your-second-computer-to-github-via-ssh" class="section level2">
-<h2>3. Connecting your second computer to GitHub via SSH</h2>
+<div id="connecting-your-second-computer-to-github-via-ssh" class="section level1">
+<h1>3. Connecting your second computer to GitHub via SSH</h1>
 <p>Once you have all connection established on your work machine its time to connect also your home machine.</p>
 <p>Repeat step <strong>1.1 - 1.3</strong> except that you add as comment in the SSH key your home machine:</p>
 <pre class="shell"><code>$ ssh-keygen -t RSA -b 4096 -C &quot;home machine email@linked2your.gitWorkaccount&quot;
 $ ssh-keygen -t RSA -b 4096 -C &quot;home machine email@linked2your.gitPersonalaccount&quot;</code></pre>
-<p>You can name the keys exactly the same as on your work machine since these names never appear in your github account (this is why the comment is so helpful for identification later).</p>
+<p>You can name the keys exactly the same as on your work machine since these names never appear in your GitHub account (this is why the comment is so helpful for identification later).</p>
 <p>Once you did all steps in 1.1 - 1.3 and the SSH test passed when typing</p>
 <pre class="shell"><code>$ ssh -T gitWork
 $ ssh -T gitPersonal</code></pre>
 <p>you’re ready to connect your home machine to the existing repos.</p>
 </div>
-<div id="connecting-your-second-computer-to-a-specific-repos" class="section level2">
-<h2>4. Connecting your second computer to a specific repos</h2>
+<div id="connecting-your-second-computer-to-a-specific-repos" class="section level1">
+<h1>4. Connecting your second computer to a specific repos</h1>
 <p><span style="font-size:1.2rem;">NOTE: Here it is important that you DON’T follow the recommendations on the GitHub help or any other blog that assumes you have only 1 account and do some tweaks instead!!<span></p>
 <p>Go first to the directory where you want the repo to be copied to:</p>
 <pre class="shell"><code>$ cd ~/path/to/repo/location</code></pre>
@@ -373,20 +395,20 @@ $ git config --local credential.helper &quot;&quot;
 $ git push -u origin master</code></pre>
 <p>Now you will be asked for the username (gitWork) and the GitHub login password for this account, also in RStudio, but only once.</p>
 </div>
-<div id="setting-your-username-in-git" class="section level2">
-<h2>5. Setting your username in Git</h2>
+<div id="setting-your-username-in-git" class="section level1">
+<h1>5. Setting your username in Git</h1>
 <p>You should know that Git uses a username to associate commits with an identity and this is not the same than your GitHub username.</p>
-<p>You can change this username to any name you want using the git config command. The new name you set will be visible in any future commits you push to GitHub from the command line. <br><br></p>
-<div id="setting-your-git-username-for-every-repository-on-your-computer" class="section level4">
-<h4>Setting your Git username for EVERY repository on your computer</h4>
+<p>You can change this username to any name you want using the git config command. The new name you set will be visible in any future commits you push to GitHub from the command line. <br></p>
+<div id="setting-your-git-username-for-every-repository-on-your-computer" class="section level2">
+<h2>Setting your Git username for EVERY repository on your computer</h2>
 <p>If you want to set a global Git username type this in the terminal</p>
 <pre class="shell"><code>$ git config --global user.name &quot;your name&quot;</code></pre>
 <p>and check if your name was saved correctly</p>
 <pre class="shell"><code>$ git config --global user.name
 &gt; your name</code></pre>
 </div>
-<div id="setting-your-git-username-for-single-repositories" class="section level4">
-<h4>Setting your Git username for SINGLE repositories</h4>
+<div id="setting-your-git-username-for-single-repositories" class="section level2">
+<h2>Setting your Git username for SINGLE repositories</h2>
 <p>If you want to set the username for a single repository, type instead - this time from within the respective repository:</p>
 <pre class="shell"><code>$ cd ~/path/to/your/repo
 $ git config user.name &quot;your name&quot;</code></pre>
@@ -396,6 +418,7 @@ $ git config user.name &quot;your name&quot;</code></pre>
 &gt; your name</code></pre>
 <p>If you are unsure what username has been set, and want to check, simply supply the above without final argument</p>
 <pre class="shell"><code>$ git config user.name</code></pre>
+<p><br></p>
 <hr />
 <p>ONE LAST NOTE HERE:</p>
 <p>It is essential that if you clone a repository so that it is on two different computers, always use the pull command before you start working. Otherwise, you will put one of your repositories out of sync with the ‘master’ branch and you will need to use the ‘merge’ command, which can be tedious.</p>
@@ -482,7 +505,7 @@ $ git config user.name &quot;your name&quot;</code></pre>
             <li><a href="/categories/indicator">indicator (2)</a>
             </li>
             
-            <li><a href="/categories/programming">programming (2)</a>
+            <li><a href="/categories/programming">programming (4)</a>
             </li>
             
             <li><a href="/categories/statistical-learning">statistical-learning (1)</a>
@@ -574,6 +597,32 @@ $ git config user.name &quot;your name&quot;</code></pre>
                 
                 <div class="item same-height-row clearfix">
                     <div class="image same-height-always">
+                        <a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-1/">
+                          
+                            <img src="/img/banners/shiny_droplet.png" class="img-responsive" alt="Run Shiny Server on your own DigitalOcean droplet - Part 1">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-1/">Run Shiny Server on your own DigitalOcean droplet - Part 1</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-2/">
+                          
+                            <img src="/img/banners/shiny_droplet.png" class="img-responsive" alt="Run Shiny Server on your own DigitalOcean droplet - Part 2">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-2/">Run Shiny Server on your own DigitalOcean droplet - Part 2</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
                         <a href="/blog/2019/04/24/linking-2-github/">
                           
                             <img src="/img/banners/linking2github.png" class="img-responsive" alt="Linking 2 computers to 2 GitHub accounts">
@@ -582,32 +631,6 @@ $ git config user.name &quot;your name&quot;</code></pre>
                     </div>
                     <div class="name same-height-always">
                         <h5><a href="/blog/2019/04/24/linking-2-github/">Linking 2 computers to 2 GitHub accounts</a></h5>
-                    </div>
-                </div>
-                
-                <div class="item same-height-row clearfix">
-                    <div class="image same-height-always">
-                        <a href="/blog/2019/01/16/helpful-shiny-apps/">
-                          
-                            <img src="/img/banners/shiny_apps.png" class="img-responsive" alt="Helpful Shiny apps">
-                          
-                        </a>
-                    </div>
-                    <div class="name same-height-always">
-                        <h5><a href="/blog/2019/01/16/helpful-shiny-apps/">Helpful Shiny apps</a></h5>
-                    </div>
-                </div>
-                
-                <div class="item same-height-row clearfix">
-                    <div class="image same-height-always">
-                        <a href="/blog/2019/01/16/oce-package-for-oceanographical-data/">
-                          
-                            <img src="/img/banners/oce_package.png" class="img-responsive" alt="oce package for oceanographical data">
-                          
-                        </a>
-                    </div>
-                    <div class="name same-height-always">
-                        <h5><a href="/blog/2019/01/16/oce-package-for-oceanographical-data/">oce package for oceanographical data</a></h5>
                     </div>
                 </div>
                 

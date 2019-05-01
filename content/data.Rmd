@@ -22,7 +22,7 @@ In the following you find a list of databases and repositories that provide diff
 <br>
 <br>
 
-## General databases
+# General databases
 
 **PANGAEA** - Data Publisher for Earth & Environmental Science: [www.pangaea.de](https://www.pangaea.de)<br>
 PANGAEA is a digital library for data from earth system research. PANGAEA archieves published Earth & Environmental Science data under the following subjects: agriculture, atmosphere, biological classification, biosphere, chemistry, cryosphere, ecology, fisheries, geophysics, human dimensions, lakes & rives, land surface, lithosphere, oceans, and paleontology. Data sets include a metadata description with a bibliographic citation, persistently identified using a DOI. The system is open to any project or individual scientist for data archiving and publishing. The system is hosted by AWI and MARUM.<br>
@@ -55,7 +55,7 @@ A great collection of regional to global data and repositories based at Woods Ho
 
 <!-- this is needed, if first header has picture floating left (alignment setting not working) -->
 <!-- <h2 style="padding-top:20px;">Oceanographical data</h2> -->
-## Oceanographical data
+# Oceanographical data
 
 **World Ocean Database (WOD)** [www.nodc.noaa.gov/OC5/WOD/pr_wod.html](https://www.nodc.noaa.gov/OC5/WOD/pr_wod.html)<br>
 The WOD is an NCEI product and an IODE (International Oceanographic Data and Information Exchange) project. The data stored covers oceanographical and recently also plankton data from regional seas around the world. The data can be queried using the [WODselect](https://www.nodc.noaa.gov/OC5/SELECT/dbsearch/dbsearch.html) tool.
@@ -78,14 +78,13 @@ This website serves as the primary data access portal to the NASA satellite Ocea
 **USGS Earth Explorer** [https://earthexplorer.usgs.gov/](https://earthexplorer.usgs.gov/)<br>
 The USGS Earth Explorer is a similar tool to the USGS Global Visualization Viewer (GloVis) in that users can search catalogs of satellite and aerial imagery. 
 <br>
-<br>
 
-#### North Atlantic and adjacent seas
+### North Atlantic and adjacent seas
 
 **ICES Data Centre - Ocean** [http://ices.dk/marine-data/data-portals/Pages/ocean.aspx](http://ices.dk/marine-data/data-portals/Pages/ocean.aspx)<br>
 Oceanographic data which includes temperature, salinity, oxygen, chlorophyll a, and nutrients measurements are made available through the OCEAN web applications.
 
-#### Baltic Sea
+### Baltic Sea
 
 **IOWDB** - Oceanographic database of the IOW: [https://odin2.io-warnemuende.de](https://odin2.io-warnemuende.de)<br>
 The database of the German IOW (Institut fuer Ostseeforschung Warnemuende) provides >73 mio. oceanographic readings and metadata of mainly the Baltic Sea as well as phyto- and zooplankton time series. It can be accessed through the interactive navigation tool **ODIN2**.
@@ -99,7 +98,7 @@ a data portal query written in the address bar of the internet browser to access
 
 <img src="../img/data/db_climate.png" alt="CTD" style="float:left;clear:left;height:75px;border:0;padding-right:10px;">
 
-## Climatological data
+# Climatological data
 
 **CCAFS-Climate** [http://ccafs-climate.org](http://ccafs-climate.org)<br>
 The CCAFS-Climate data portal provides global and regional future high-resolution climate datasets that serve as a basis for assessing the climate change impacts and adaptation. The data distributed here are in ARC GRID, and ARC ASCII format, in decimal degrees and datum WGS84.<br>
@@ -121,7 +120,7 @@ Regional and global time series covering the Atmosphere, Ocean, Land can be down
 
 <img src="../img/data/db_gis.png" alt="Geospatial data" style="float:left;clear:left;height:75px;border:0;padding-right:10px;">
 
-## Geospatial data
+# Geospatial data
 
 **Marine Regions** [www.marineregions.org](http://www.marineregions.org)<br>
 Marine Regions is a standard list of marine georeferenced place names and areas. It integrates and serves geographic information from the VLIMAR Gazetteer and the MARBOUND database and proposes a standard of marine georeferenced locations, boundaries and regions. You can find under 'Downloads' various global and regional shapefiles (e.g. on ICES, OSPAR, FAO, NAFO regions).<br>
@@ -131,16 +130,15 @@ Marine Regions is a standard list of marine georeferenced place names and areas.
 Natural Earth is a public domain map dataset available at 1:10m, 1:50m, and 1:110 million scales. Featuring tightly integrated vector and raster data.<br>
 → The data can also be accessed from within **R** using the package [rnaturalearth](https://github.com/ropensci/rnaturalearth).
 <br>
-<br>
 
 
-#### North East Atlantic
+### North East Atlantic
 
 **ODIMS** - OSPAR Data & Information Management System: [https://odims.ospar.org](https://odims.ospar.org)<br>
 ODIMS is an online tool providing a single point of access to all the data and information gathered through OSPAR’s Joint Assessment and Monitoring Programme across the different thematic work areas of the Convention. You can access here OSPAR's geospatial maps, data and metadata.
 
 
-#### Baltic Sea
+### Baltic Sea
 
 **HELCOM Map and Data Service**<br>
 All spatial datasets used and produced by HELCOM in its assessments can be accessed and downloaded from [HELCOM Metadata catalogue](http://metadata.helcom.fi/geonetwork/srv/eng/catalog.search#/home) and viewed in [HELCOM Map and Data Service](http://maps.helcom.fi/website/mapservice/index.html). 
@@ -149,9 +147,9 @@ All spatial datasets used and produced by HELCOM in its assessments can be acces
 
 <img src="../img/data/db_taxonomy.png" alt="Taxonomic data" style="float:left;clear:left;height:75px;border:0;padding-right:10px;">
 
-## Taxonomy, Traits & Biogeography
+# Taxonomy, Traits & Biogeography
 
-#### General
+### General
 
 **WoRMS** - World Register of Marine Species: [www.marinespecies.org](http://www.marinespecies.org)<br>
 An authoritative classification and catalogue of marine names in the world oceans. Contains mostly taxonomic data, but also trait data.<br>
@@ -196,14 +194,14 @@ The IUCN Red List [API](http://apiv3.iucnredlist.org) is a global database of th
 → The data can also be accessed from within **R** using the package [rredlist](https://github.com/ropensci/rredlist).
 
 
-#### Fish
+### Fish
 
 **FishBase** [www.fishbase.org](https://www.fishbase.org)<br>
 FishBase is a global biodiversity information system on finfishes. Its initial goal to provide key facts on population dynamics for 200 major commercial species has now grown to having a wide range of information on all species currently known in the world: taxonomy, biology, trophic ecology, life history, and uses, as well as historical data reaching back to 250 years. At present, FishBase covers >33,000 fish species compiled from >52,000 references in partnership with >2,000 collaborators: >300,000 common names and >55,000 pictures.<br>
 → The data can also be accessed from within **R** using the package [rfishbase](https://github.com/ropensci/rfishbase).
 
 
-#### Plankton
+### Plankton
 
 **AlgaeBase** [www.algaebase.org](http://www.algaebase.org)<br>
 AlgaeBase is a global algal database of taxonomic, nomenclatural and distributional information.
@@ -232,14 +230,14 @@ Database of ichthyoplankton collected by the Alaska Fisheries Science Center (AF
 World wide database of fish eggs and larvae, descriptions and pictures.
 
 
-#### Corals
+### Corals
 
 **Coral Trait Database** [https://coraltraits.org](https://coraltraits.org)<br>
 The Coral Trait Database is a growing compilation of scleractinian coral life history trait, phylogenetic and biogeographic data. The database contains >60,000 coral observations with >10,000 trait entries of >150 traits for >1500 coral species. Most of these entries are for shallow-water, reef-building species.<br>
 → The data can also be accessed from within **R** using the package [traits](https://github.com/ropensci/traits).
 
 
-#### Invasive Species
+### Invasive Species
 
 **GISD** - Global Invasive Species Database: [www.iucngisd.org/gisd/](http://www.iucngisd.org/gisd/)<br>
 A free, online searchable source of information about alien and invasive species that negatively impact biodiversity managed by IUCN.<br>
@@ -258,7 +256,7 @@ The database provide a qualified reference system on alien species for the Balti
 
 <img src="../img/data/db_dna.png" alt="Genetic Data" style="float:left;clear:left;height:75px;border:0;padding-right:10px;">
 
-## Genetic databases
+# Genetic databases
 
 **BOLD** - Barcode Of Life Data System: [http://boldsystems.org](http://boldsystems.org)<br>
 Advancing biodiversity science through DNA-based species identification.
@@ -272,7 +270,7 @@ Tara Expeditions are global scientific voyages that probe morphological and mole
 
 <img src="../img/data/db_fsa.png" alt="Fish stock assessments" style="float:left;clear:left;height:75px;border:0;padding-right:10px;">
 
-## Fish stock assessments & Fishery data
+# Fish stock assessments & Fishery data
 
 **stockassessment.org** - Stock assessments of ICES fish stocks: [www.stockassessment.org/login.php](https://www.stockassessment.org/login.php)<br>
 stockassessment.org provides an interface for state-space assessment models (SAM) used for several assessments within ICES. This online user interface allows easy access to all aspects of the assessment model (figures, data, R code).
@@ -305,7 +303,7 @@ present fisheries and fisheries-related data at spatial scales that have ecologi
 
 <img src="../img/data/db_ind.png" alt="Indicators" style="float:left;clear:left;height:60px;width:112.5px;border:0;padding-right:10px;">
 
-## Ecological indicators
+# Ecological indicators
 
 **HELCOM indicators** [www.helcom.fi/baltic-sea-trends/indicators/](http://www.helcom.fi/baltic-sea-trends/indicators/)<br>
 Time series of Baltic Sea core indicators developed by HELCOM for the EU Marine Strategy Framework Directive (MSFD) and the Baltic Sea Action Plan can be accessed through the HELCOM indicator website.
@@ -324,7 +322,7 @@ A Catalogue listing available indicators suitable for addressing the EU Marine F
 
 <img src="../img/data/db_shift.png" alt="Shifts" style="float:left;clear:left;height:75px;border:0;padding-right:10px;">
 
-## Regime shifts
+# Regime shifts
 
 **Marine Regime Shifts Dataset** [www.regimeshifts.org](http://www.regimeshifts.org/datasets-resources/details/15/25?return=L2NvbXBvbmVudC9mYWJyaWsvbGlzdC8xMC8wP3Jlc2V0ZmlsdGVycz0wJmFtcDtJdGVtaWQ9OQ==)<br>
 Database of marine, global regime shifts described up to 2013, provided by the Stockholm Resilience Centre. The data contains three adjacency matrices for i) regime shifts and drivers, ii) regime shifts and ecosystem services, and iii) drivers and categories of analysis.
@@ -334,7 +332,7 @@ Database of marine, global regime shifts described up to 2013, provided by the S
 
 <img src="../img/data/db_repo.png" alt="Repos" style="float:left;clear:left;height:75px;border:0;padding-right:10px;">
 
-## Other Repositories
+# Other Repositories
 **KNB** - Knowledge Network for Biocomplexity [https://knb.ecoinformatics.org](https://knb.ecoinformatics.org)<br>
 KNB is an international repository intended to facilitate ecological and environmental research (terrestrial, freshwater, and marine). The foundation of the KNB is the rich, detailed metadata provided by researchers that collect data, which promotes both automated and manual integration of data into new projects. KNB is a DataOne member node.
 
@@ -342,6 +340,7 @@ KNB is an international repository intended to facilitate ecological and environ
 DataONE is a community driven project providing access to data across multiple member repositories, supporting enhanced search and discovery of earth and environmental data. The default software for search and discovery of data and metadata within DataONE is [DataONE Search](https://search.dataone.org/data).
 
 
+---
 
 # Data packages in R
 

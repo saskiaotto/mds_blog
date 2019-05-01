@@ -22,7 +22,7 @@ knitr::opts_chunk$set(echo = TRUE,
 
 
 
-## Which programming languages should you learn for marine data science?
+# Which programming languages should you learn for marine data science?
 
 First of all, there is no easy answer and no consensus either. Choosing from the broad range of programming languages the right one to invest time and effort learning it the next month or years is not trivial. It all boils down to what you plan to do with it and whether you want an open source program or can afford a license.
 
@@ -48,7 +48,7 @@ Some noteworthy aspects when choosing a language are:
 So let's see what other data scientiests and statisticians think, but bare in mind that some of these languages and tools do not serve the same purpose and are better used complementary.
 
 
-#### Common technologies and languages in data science
+## Common technologies and languages in data science
 Amongst the ~16,000 data scientists that participated in the 2017 [kaggle survey](https://www.kaggle.com/amberthomas/kaggle-2017-survey-results){#kaggle_anchor} (see also under <a href="../mds/index.html">MDS</a>) the following data science/analytics tools, technologies, and languages were used most often:
 
 
@@ -150,7 +150,7 @@ gridExtra::grid.arrange(p_acad, p_stat, ncol = 2)
 <!-- Python was the most commonly used data analysis tool across employed data scientists overall, but more Statisticians are still loyal to R. -->
 
 
-#### Recommended programming language
+## Recommended programming language
 Respondents were also asked what programming language they would recommend a new data scientist to learn first:
 
 ```{r, echo=FALSE}
@@ -183,7 +183,7 @@ recom_lang %>%
 In marine sciences, the most common programming language is probably R, as it is most rich in packages and libraries related to methods applied in this field, closely followed by Matlab. However, if you plan to dive into the world of numerical modelling or you will work with big datasets such as genomics you are most likely better off with Python. I personally love R and have worked with it for many years, though at the time of my PhD it wasn't as easy to learn - without the many online tutorials and huge archives of questions and solutions at stack overflow that nowadays exist. For my own data storage I use relational databases, so SQL is my language of choice. And to communicate results and for teaching data science I also started to learn HTML and CSS. While the integration of RMarkdown into RStudio is great for producing output as PDF, presentation, HTML page or even entire website you need to learn a bit of HTML and CSS and potentially JavaScript, Bootstrap, etc. if you want to add your personal touch to it.
 <br>
 
-### Overview of programming languages and applications
+## Overview of programming languages and applications
 
 Here is a short summary of different programming languages and data analysis software that are more or less common in marine data science, their pros and cons and links where you can learn more about it. Since I’m fully into R I also provide you later with a detailed - but not complete- list of R packages that are useful for general or marine- specific tasks.
 <br>

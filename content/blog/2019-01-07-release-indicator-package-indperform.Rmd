@@ -150,7 +150,7 @@ spie$TZA # shows the spiechart of the indicator TZA
 ```
 
 ***
-##### NOTE FOR SPATIAL DATA:
+#### NOTE FOR SPATIAL DATA:
 
 All functions are tailored to indicator time series. **Spatial data** and spatial autocorrelation testing is currently not included. However, if you have spatial data you could still use all functions except for `model_gamm()` as it incorporates only temporal autocorrelation structures (AR and ARMA). Simply do the following and use as `time` vector in `ind_init()` an integer variable with **consecutive** numbers (with no gaps!) representing your different stations.
 
@@ -163,9 +163,9 @@ dat_init <- ind_init(ind_tbl = your_indicator_dfr,
 
 ***
 
-#### Validation of IND performances
+### Validation of IND performances
 
-##### Modeling IND trends and responses to single pressures
+#### Modeling IND trends and responses to single pressures
 
 Each IND is modeled as a function of time or a single pressure variable using Generalized Additive Models (GAMs) (based on the mgcv package).
 
@@ -198,7 +198,7 @@ To show the model diagnostics or complete model results
 
 
 
-##### Scoring IND performance based on model output
+#### Scoring IND performance based on model output
 
 Among the 16 common indicator selection criteria, five criteria relate to the indicator's performances and require time series for their evaluation, i.e.
 
@@ -236,7 +236,7 @@ This table contains the scores and weights for each (sub-)criterion. It includes
 * `plot_clust_sc()` creates a dendrogram (ggplot2 object) from the cluster analysis.
 
 
-#### Assessment of current state status
+### Assessment of current state status
 Two approaches based on trajectories in state space to determine the current state of the system in comparison to an earlier period as reference using the selected IND suite (state space = n-dimensional space of possible locations of IND variables)
 
 

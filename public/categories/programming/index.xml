@@ -7,10 +7,31 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018 - present [Saskia Otto](https://github.com/saskiaotto)</copyright>
-    <lastBuildDate>Wed, 24 Apr 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 28 Apr 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/programming/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Run Shiny Server on your own DigitalOcean droplet - Part 1</title>
+      <link>/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-1/</link>
+      <pubDate>Sun, 28 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-1/</guid>
+      <description>Do you also like shiny apps and would like to host more than 5 apps as currently permitted at shinyapps.io? Than the solution might be to run your own shiny server using any (virtual) server. In the following I will describe step-by-step how I set up my own Shiny as well as Rstudio Server using Digital Ocean.
+At the university I already use Rstudio Server extensively in my stats courses, which runs on a physical server at my research institute.</description>
+    </item>
+    
+    <item>
+      <title>Run Shiny Server on your own DigitalOcean droplet - Part 2</title>
+      <link>/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-2/</link>
+      <pubDate>Sun, 28 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-2/</guid>
+      <description>This 2nd part will cover the installation of R, RStudio and the Shiny Server and is based on R’s Ubuntu packages for R tutorial, the DigitalOcean manual, RStudio’s RStudio Server and Shiny Server guides, and Dean Attali’s great blog post.
+
+Table of Contents - Part 2  Step 8: Some preparations Step 9: Install R and packages  9.1 R 9.2 R Packages  Step 10: Install RStudio Server Step 11: Install and configure Shiny Server  11.</description>
+    </item>
     
     <item>
       <title>Linking 2 computers to 2 GitHub accounts</title>
@@ -27,7 +48,7 @@
       <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
       
       <guid>/blog/2019/01/16/helpful-shiny-apps/</guid>
-      <description>If you are an R user but don’t know yet what Shiny and Shiny apps are, you definitely should read up on it on https://shiny.rstudio.com.
+      <description>Last updated: May 01, 2019 If you are an R user but don’t know yet what Shiny and Shiny apps are, you definitely should read up on it on https://shiny.rstudio.com.
 But in a nutshell, Shiny is an R package that builds interactive web apps straight from R. You just need to write an R script that follows a specific Shiny syntax and once you run the script, the package builds a HTML file as user interface (UI) with interactive input elements (based on Javascript) that trigger certain computations in R.</description>
     </item>
     

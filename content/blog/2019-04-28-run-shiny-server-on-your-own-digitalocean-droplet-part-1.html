@@ -1,0 +1,478 @@
+---
+title: Run Shiny Server on your own DigitalOcean droplet - Part 1
+author: Saskia
+date: '2019-04-28'
+slug: run-shiny-server-on-your-own-digitalocean-droplet-part-1
+categories:
+  - programming
+tags:
+  - Shiny
+banner: "img/banners/shiny_droplet.png"    
+---
+
+
+
+<p><img src="/blog/2019-04-28-run-shiny-server-on-your-own-digitalocean-droplet-part-1_files/shiny_droplet.png" align="right" width="50%" height="auto" style="padding-right: 20px; float: right;" /></p>
+<p>Do you also like shiny apps and would like to host more than 5 apps as currently permitted at shinyapps.io? Than the solution might be to run your own shiny server using any (virtual) server. In the following I will describe step-by-step how I set up my own Shiny as well as Rstudio Server using <strong>Digital Ocean</strong>.</p>
+<p>At the university I already use Rstudio Server extensively in my stats courses, which runs on a physical server at my research institute. Since I like to use shiny apps for demonstrating various statistical concepts, I wanted to host my own Shiny Server but using a virtual server to be more independent: <a href="https://saskiaotto.de/shiny/" class="uri">https://saskiaotto.de/shiny/</a>.</p>
+<p>To help you saving yourself a headchache and time collecting all the required information but also for my future self I decided to write this beginner guide. The first part will cover how to <strong>set up a DigitalOcean server</strong> or droplet including adding SSH connection, SSL certificates, firewalls, a web browser and custom domain. In the <a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-2">2nd part</a> I will describe how to <strong>install R, RStudio and the Shiny Server</strong>.</p>
+<p><br></p>
+<div id="table-of-contents---part-1" class="section level2">
+<h2>Table of Contents - Part 1</h2>
+<ul>
+<li><a href="#step-1-setting-up-a-virtual-server-using-digital-ocean">Step 1: Setting up a virtual server using Digital Ocean</a>
+<ul>
+<li><a href="#sign-up">1.1 Sign up</a></li>
+<li><a href="#create-a-droplet">1.2 Create a droplet</a></li>
+<li><a href="#connect-to-your-droplet-as-root">1.3 Connect to your droplet as root</a></li>
+<li><a href="#create-a-non-root-user-with-sudo-rights">1.4 Create a non-root user with sudo rights</a></li>
+</ul></li>
+<li><a href="#step-2-add-ssh-keys-optional">Step 2: Add SSH keys (optional)</a>
+<ul>
+<li><a href="#creating-individual-keys-for-each-of-your-computers">2.1 Creating individual keys for each of your computers</a></li>
+<li><a href="#copy-the-public-keys-to-the-droplets-root-account">2.2 Copy the public keys to the droplet’s root account</a></li>
+<li><a href="#add-a-copy-of-your-local-public-key-to-the-new-users-account">2.3 Add a copy of your local public key to the new user’s account</a></li>
+<li><a href="#modify-the-ssh-server-configuration">2.4 Modify the SSH server configuration</a></li>
+<li><a href="#edit-the-local-ssh-config-file">2.5 Edit the local SSH config file</a></li>
+</ul></li>
+<li><a href="#step-3-set-up-a-basic-firewall-optional">Step 3: Set up a basic firewall (optional)</a>
+<ul>
+<li><a href="#enable-and-disable-the-firewall">3.1 Enable and disable the firewall</a></li>
+<li><a href="#add-ssh-service">3.2 Add SSH service</a></li>
+</ul></li>
+<li><a href="#step-4-add-more-security-by-changing-the-default-port-optional">Step 4: Add more security by changing the default port (optional)</a></li>
+<li><a href="#step-5-make-your-droplet-visible">Step 5: Make your droplet visible</a>
+<ul>
+<li><a href="#install-nginx">5.1 Install nginx</a></li>
+<li><a href="#adjust-the-firewall">5.2 Adjust the firewall</a></li>
+<li><a href="#modify-the-welcome-page">5.3 Modify the welcome page</a></li>
+</ul></li>
+<li><a href="#step-6-add-a-custom-domain-name-optional">Step 6: Add a custom domain name (optional)</a></li>
+<li><a href="#step-7-add-a-ssl-certificate-to-your-http-to-get-https-optional">Step 7: Add a SSL certificate to your HTTP to get HTTPS (optional)</a>
+<ul>
+<li><a href="#install-certbot">7.1 Install Certbot</a></li>
+<li><a href="#modify-nginx-config-file">7.2 Modify nginx config file</a></li>
+<li><a href="#allow-https-through-your-firewall">7.3 Allow HTTPS through your firewall</a></li>
+<li><a href="#obtain-an-ssl-certificate">7.4 Obtain an SSL Certificate</a></li>
+<li><a href="#verify-certbots-auto-renewal">7.5 Verify certbot’s auto-renewal</a></li>
+</ul></li>
+</ul>
+</div>
+<div id="step-1-setting-up-a-virtual-server-using-digital-ocean" class="section level1">
+<h1>Step 1: Setting up a virtual server using Digital Ocean</h1>
+<p>For Shiny and RStudio Server you could either use a physical or virtual server with Linux as the typical operating system. However, the virtual server can be a more cost-effective solution with easier maintenance and better scalability and portability. With the rise of cloud hosting services like Amazon Web Services (AWS), Google Cloud, Microsoft Azure and Linod, setting up your own virtual machine has also become easier than ever before.</p>
+<p><a href="https://www.digitalocean.com/">DigitalOcean</a> (DO) is such a cloud service platforms that offers database and object storage, scalable compute services and networking and developing tools. DigitalOcean has quite a good pricing and provides an easy and quick way to set up affordable Linux instances (called droplets), which is why I went for that platform.</p>
+<div id="sign-up" class="section level2">
+<h2>1.1 Sign up</h2>
+<p>Before you can start setting up your own droplet, you need to sign up for an account by visiting this <a href="https://cloud.digitalocean.com/registrations/new">sign up page</a> where you can choose between entering your email address, which you need to verify in a second step, and a password or using Google Single Sign-On.</p>
+<p>After that you are asked to manually charge your credit card by using the <em>Pay now</em> button on your billing page. It’s pretty simple and only takes a few minutes to create a single droplet and its Linux distribution. Once the droplet is created you will be charged for it by the hour. That means if you decide to delete it right after its creation you won’t be charged anything.</p>
+</div>
+<div id="create-a-droplet" class="section level2">
+<h2>1.2 Create a droplet</h2>
+<ol style="list-style-type: decimal">
+<li>From the <em>Create</em> menu in the top right of the control panel, click <em>Droplets</em>.</li>
+<li>Under <em>Choose an image</em> select the Linux distribution (Ubuntu, Fedora, Debian, and CentOS are supported) you like to have, in my case I chose the default <strong>Ubuntu 16.04.6 x64</strong>.</li>
+<li>DigitalOcean offers three kinds of Droplet plans, a <strong>standard plan</strong> and two performance plans, but the former should be sufficient for our Shiny Server.</li>
+<li>Choose a size for your Droplet, which determines its RAM, disk space, and vCPUs as well as its price. For the moment the <strong>smallest machine</strong> (5$ per month / 0.007$ per hour) should be sufficient.</li>
+<li>Leave the <em>Add backups</em> and <em>Add block storage</em> options out.</li>
+<li>Now <strong>choose</strong> the <strong>location</strong> of the datacenter. This should be preferably close to your own location for fast connection.</li>
+<li>If you want to connect using an <strong>SSH key</strong> - which I highly recommend - you can already add the public SSH key at this stage (simply click on <em>New SSH Key</em>) or do this later as I will show you.</li>
+<li>Finally <strong>choose a hostname</strong> for your droplet and click the <em>Create</em> button.</li>
+</ol>
+<p>You’re all set now and should soon receive an email from DO containing your Droplet’s</p>
+<ul>
+<li>hostname,</li>
+<li>IP address, which will be something like 123.45.678.910,</li>
+<li>the username <code>root</code>, which is the default username on most operating systems,</li>
+<li>a password to login if you haven’t provided an SSH key in step 1.2.7.</li>
+</ul>
+</div>
+<div id="connect-to-your-droplet-as-root" class="section level2">
+<h2>1.3 Connect to your droplet as root</h2>
+<p>Typically, servers do not have any graphical user interface (GUI) and you need to log into it through the terminal.</p>
+<p>One way is to do this from the DigitalOcean GUI when logged into your account, but this option will be pretty slow. If you wanna give it a try, click on your droplet and open the tab <em>Access</em>. Here click the <em>Launch Console</em> button.</p>
+<p>Alternatively, connect to your droplet straight from your computer through a SSH client. <strong>OpenSSH</strong> is such a client that is already included on OS X and Linux. But if you are a Windows user you should download the SSH tool <a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html">PuTTY</a> and follow these DigitalOcean <a href="https://www.digitalocean.com/docs/droplets/how-to/connect-with-ssh/putty/">instructions</a>.</p>
+<p>So if you have a Mac or use Linux just open the <strong>Terminal</strong> program and type into the console the following <code>ssh</code> command:</p>
+<pre class="shell"><code>$ ssh 123.45.678.910 -l root</code></pre>
+<p><code>123.45.678.910</code> is just a dummy IP address here (which I will use more often in this tutorial). Replace it with your own droplet’s IP address given in the email. The <code>-l</code> flag stands for the login name, which is for now <code>root</code>. You need to provide the username with which to log in, otherwise your computer will try to log in under the user you are currently on your machine. And that name does not exist in your droplet.</p>
+<p>An alternative command which works the same is:</p>
+<pre class="shell"><code>$ ssh root@123.45.678.910</code></pre>
+<p>(You will find this notation in the DigitalOcean <a href="https://www.digitalocean.com/docs/droplets/how-to/connect-with-ssh/openssh/">instructions</a>)</p>
+<p>Since your server is not yet identified in your local computer you will be asked the first time you connect if you’re sure you want to continue connecting. Once you type <code>yes</code> and press ENTER you’ll receive a confirmation that a host key fingerprint was saved to your local machine.</p>
+<p>Now you’re asked for the password send by email → simply copy and paste it from your email and press ENTER. Next, you should follow the steps to change the password to something you can remember.</p>
+<p>If nothing went wrong you should see in the terminal</p>
+<pre class="shell"><code>root@hostname: ~$</code></pre>
+<p>which indicates that you successfully logged into your new droplet!</p>
+</div>
+<div id="create-a-non-root-user-with-sudo-rights" class="section level2">
+<h2>1.4 Create a non-root user with sudo rights</h2>
+<p>DigitalOcean recommends that the droplets are run by a non-root user that have admin access to avoid any accidents as root user. So right after logging into my droplet I immediately created the user <em>saskia</em> and gave <em>saskia</em> sudo rights. I followed hereby <a href="https://www.digitalocean.com/community/tutorials/how-to-create-a-sudo-user-on-ubuntu-quickstart">this tutorial</a> at DigitalOcean</p>
+<pre class="shell"><code>$ adduser username</code></pre>
+<p>Replace <code>username</code> with any name you want.</p>
+<p>Set a new password and confirm:</p>
+<pre class="shell"><code>Enter new UNIX password:
+Retype new UNIX password:
+passwd: password updated successfully</code></pre>
+<p>If you want to you can add some user info, otherwise press ENTER and then <code>yes</code>:</p>
+<pre class="shell"><code>Changing the user information for username
+Enter the new value, or press ENTER for the default
+    Full Name []:
+    Room Number []:
+    Work Phone []:
+    Home Phone []:
+    Other []:
+Is the information correct? [Y/n]</code></pre>
+<p>Next, we give the new user sudo rights by adding the user to the sudo group</p>
+<pre class="shell"><code>$ usermod -a -G sudo username</code></pre>
+<p>The <code>usermod</code> command modifies the system account files to reflect the changes that are specified on the command line.</p>
+<p>Here, it is critical that you add the <code>-a</code>. If the -a option is omitted in the usermod command above, the user is removed from all groups not listed (i.e. the user will be a member only of the sudo group). The <code>-G</code> flag should be always followed by the group name and indicates that the ‘sudo’ group will be the users secondary group.</p>
+<p>Alternatively, <code>gpasswd</code> may be used:</p>
+<pre class="shell"><code>$ gpasswd -a saskia sudo</code></pre>
+<p>The <code>gpasswd</code> command is used to administer the files /etc/group (contains group information), and /etc/gshadow (contains secure group information). Using it with the flag <code>-a</code> means that the user becomes a member of the group ‘sudo’ but also the group administrator.</p>
+<p>You can get a list of all groups the user is a member of and a list of all groups in the system with these 2 commands:</p>
+<pre class="shell"><code>$ id username
+$ groupmod &lt;HIT TAB 3 TIMES&gt;</code></pre>
+<p>Test the sudo access on your new user account by switching the user with the <code>su</code> command</p>
+<pre class="shell"><code>$ su - username</code></pre>
+<p>Since the new user has sudo privileges now, the following command should allow you to see the contents of the <code>/root</code> directory:</p>
+<pre class="shell"><code>$ sudo ls -la /root</code></pre>
+<p>(The first time you use sudo in a session, you will be prompted for the user’s password).</p>
+<p>To leave the new sudo user and get back to using the root profile, type <code>exit</code> or</p>
+<pre class="shell"><code>$ su - root</code></pre>
+<p>From now on you will be able to log in directly as the new user instead of root. Try it out: type <code>exit</code> to exit the server and log in as new user:</p>
+<pre class="shell"><code>$ exit
+$ ssh username@your_droplet_IP</code></pre>
+<p>Avoid using the root user once you have set up a sudo user!</p>
+</div>
+</div>
+<div id="step-2-add-ssh-keys-optional" class="section level1">
+<h1>Step 2: Add SSH keys (optional)</h1>
+<p>We could have added the keys right at the beginning when creating our droplet. But at the time I started with my first droplet I didn’t know how to do this for all my computer so I added them later. Since it is also a bit more complicated to add the keys after you’ll get to see at least all steps required:</p>
+<div id="creating-individual-keys-for-each-of-your-computers" class="section level2">
+<h2>2.1 Creating individual keys for each of your computers</h2>
+<p>I need to access my server from both my work and home machines so I created for individual keys (from within the respective machine). On my work Mac I opened the terminal and typed (NOTE: I was <strong>not</strong> logged into the droplet!)</p>
+<pre class="shell"><code>$ ssh-keygen -t RSA -b 4096 -C &quot;work machine&quot;</code></pre>
+<p>The <code>-C</code> flag allowed me to add a comment where I could specify that this key will be for my work machine.</p>
+<p>Next, I was asked to specify a file name and location. I could have simply accepted what was suggested by pressing ENTER. But instead of using the default file name ‘id_rsa’, I named the file ‘digitalocean-rsa’ since I also want to use different keys for different connections. But I used the same /.ssh directory as suggested.</p>
+<p>I was then asked for a passphrase, which adds more security in case the computer gets stolen. So for my work machine I added a passphrase, but on my home machine later I left it blank and just pressed ENTER.</p>
+<p>When setting up later a SSH key also in my home machine, I specified in the comment that this key will refer to my “home machine” and named the key file also ‘digitalocean-rsa’. This is not a problem as the public key will anyway not exist on the remote server as an individual file. Instead, the content will be added to the <strong>authorized_keys</strong> file → here the comment becomes important since it will show up as the last line of code per key.</p>
+<p>If you want to get more details about the above steps take a look at my other blog post on <a href="/blog/2019/04/24/linking-2-github/index.html">linking 2 computers to 2 github accounts using SSH keys</a>.</p>
+</div>
+<div id="copy-the-public-keys-to-the-droplets-root-account" class="section level2">
+<h2>2.2 Copy the public keys to the droplet’s root account</h2>
+<p>If the SSH keys generated above are not added when creating the droplet one needs to code a bit more in the terminal to place the public keys in the right directory of the root account. In the remote machine is the file <code>/root/.ssh/authorized_keys</code> where we need to insert the public keys.</p>
+<div id="method-1-ssh-copy-id" class="section level3">
+<h3>Method 1: ssh-copy-id</h3>
+<p>This is probably the most painless solutions. Just open another terminal window with e.g. <code>cmd+N</code> and go to <strong>.ssh</strong> folder of your local machine (the folder is often hidden: under Mac/Linux you’ll find it right in the user’s home director ~/.ssh). Copy the public key file to the root account with the <code>ssh-copy-id</code> command</p>
+<pre class="shell"><code>$ cd path/to/.ssh  
+$ ssh-copy-id -i digitalocean-rsa.pub root@droplet_IP</code></pre>
+<p>and type in your user’s password when prompted.</p>
+</div>
+<div id="method-2-manual-insertion" class="section level3">
+<h3>Method 2: Manual insertion</h3>
+<p>If you don’t have ssh-copy-id installed you can also manually copy and paste the key:</p>
+<p>Open another terminal window and go to .ssh folder of your local machine. Cat out your key file and just copy the output (the public key starts always with ‘ssh-rsa’):</p>
+<pre class="shell"><code>$ cd ~/.ssh 
+$ cat digitalocean-rsa.pub
+ssh-rsa EXAMPLEzaC1yc2EAAA...</code></pre>
+<p>Go to the first terminal window where you are logged into your droplet as root and open the authorized_keys file with your preferred editor (I use nano for this):</p>
+<pre class="shell"><code>$ nano /root/.ssh/authorized_keys</code></pre>
+<p>Paste the contents of your SSH key into the file by right-clicking in your terminal and choosing <em>Paste</em> or by using a keyboard shortcut like <code>cmd+V</code>. Then, save and close the file. In nano, save by pressing <code>ctrl+O</code> and then ENTER, and exit by pressing <code>ctrl+X</code>.</p>
+</div>
+</div>
+<div id="add-a-copy-of-your-local-public-key-to-the-new-users-account" class="section level2">
+<h2>2.3 Add a copy of your local public key to the new user’s account</h2>
+<p>Before we log out, we need to add our SSH keys also to our new user’s account. So far only the root account has the SSH keys (this would be also the case if you added the keys right at the start when creating your droplet). But to be able to log in successfully as non-root user <em>saskia</em> I need to have the public keys also in an authorized_keys file in the home directory of <em>saskia</em> (i.e. at /home/saskia/.ssh/).</p>
+<p>The simplest way to copy the files with the correct ownership and permissions is with the <code>rsync</code> command:</p>
+<pre class="shell"><code>$ rsync --archive --chown=saskia:saskia ~/.ssh /home/saskia</code></pre>
+<p>(Replace here my username <em>saskia</em> with your own)</p>
+</div>
+<div id="modify-the-ssh-server-configuration" class="section level2">
+<h2>2.4 Modify the SSH server configuration</h2>
+<p>Before you can test whether you successfully implemented the SSH connection so that you don’t need your password anymore when logging in, we need to deactivate the password authentication in the SSH server configuration file. Open the <code>sshd_config</code> file in the <code>/etc/ssh/</code>directory (of your droplet) with an editor:</p>
+<pre class="shell"><code>$ sudo nano /etc/ssh/sshd_config</code></pre>
+<p>(requires user password)</p>
+<p>Look for line:</p>
+<pre class="shell"><code># Change to no to disable tunnelled clear text passwords
+PasswordAuthentication yes</code></pre>
+<p>→ The default is ‘yes’ but we will change this to ‘no’.</p>
+<p>Save and exit the editor.</p>
+<p>Now restart the SSH client (under Ubuntu use ssh and not sshd):</p>
+<pre class="shell"><code>$ /etc/init.d/ssh restart 
+# or 
+$ service ssh restart </code></pre>
+<p>(confirm with password)</p>
+<p>If you log out of the server you might not be able to log in again because you need to change also the SSH configuration file on each of your computers.</p>
+</div>
+<div id="edit-the-local-ssh-config-file" class="section level2">
+<h2>2.5 Edit the local SSH config file</h2>
+<p>Open the SSH config file of your local machine with an editor. The file should be located in the .ssh folder as your SSH keys, but if it does not yet exist, create it yourself with the <code>touch</code> command:</p>
+<pre class="shell"><code>$ cd path/to/.ssh
+$ touch config
+$ nano config</code></pre>
+<p>Add the following specifications for your droplet</p>
+<pre class="shell"><code>Host hostalias
+    HostName 123.45.678.910 
+    User username
+    IdentityFile ~/.ssh/digitalocean-rsa</code></pre>
+<p>Replace the ‘hostalias’ with any name you like for your droplet. This can be the name you specified when creating the droplet or another. I suggest to keep it simple since you can use this alias instead of the IP address when logging in. Replace also the dummy IP address with your droplet’s IP address, the ‘username’ with the name of your non-root user (in my case <em>saskia</em>), and the name of the SSH key file (if you have named it differently than me).</p>
+<p>Save and exit.</p>
+<p>Test your SSH connection by using your new log in credentials:</p>
+<pre class="shell"><code>$ ssh username@hostalias</code></pre>
+<p>Instead of the IP address you can now use the host alias after the @ sign. You should not be asked anymore for your password. Only if you’ve set a passphrase for your key, you will be prompted to provide it.</p>
+<p>If you want to know more about SSH configuration settings, a good tutorial is available on the DigitalOcean website: <a href="https://www.digitalocean.com/community/tutorials/how-to-configure-custom-connection-options-for-your-ssh-client" class="uri">https://www.digitalocean.com/community/tutorials/how-to-configure-custom-connection-options-for-your-ssh-client</a></p>
+</div>
+</div>
+<div id="step-3-set-up-a-basic-firewall-optional" class="section level1">
+<h1>Step 3: Set up a basic firewall (optional)</h1>
+<p>Ubuntu comes with a default firewall configuration tool called ‘Uncomplicated Firewall’ (UFW) that makes sure only connections to certain services are allowed.</p>
+<div id="enable-and-disable-the-firewall" class="section level2">
+<h2>3.1 Enable and disable the firewall</h2>
+<p>To turn UFW on with the default set of rules:</p>
+<pre class="shell"><code>$ sudo ufw enable</code></pre>
+<p>Type <code>y</code> and press ENTER to proceed.</p>
+<p>To check the status of UFW:</p>
+<pre class="shell"><code>$ sudo ufw status verbose</code></pre>
+<p>The output should be like this:</p>
+<pre class="shell"><code>username@hostalias:~$ sudo ufw status verbose
+[sudo] password for username:
+Status: active
+Logging: on (low)
+Default: deny (incoming), allow (outgoing)
+New profiles: skip
+username@hostalias:~$</code></pre>
+<p>To disable UFW use:</p>
+<pre class="shell"><code>$ sudo ufw disable</code></pre>
+</div>
+<div id="add-ssh-service" class="section level2">
+<h2>3.2 Add SSH service</h2>
+<p>You can also allow or deny specific services by name since UFW reads from <code>/etc/services</code>. To see the list of available services type</p>
+<pre class="shell"><code>$ less /etc/services</code></pre>
+<p>Allow by service name</p>
+<pre class="shell"><code>$ sudo ufw allow &lt;service name&gt;</code></pre>
+<p>Some applications can register their profiles with UFW upon installation, which allows UFW to manage these applications by name. You can get the list of applications by typing</p>
+<pre class="shell"><code>$ sudo ufw app list
+Available applications:
+  OpenSSH</code></pre>
+<p>You’ll see that OpenSSH, the service allowing us to connect to our server now, has a profile registered with UFW. We can now let the firewall allow SSH connections via OpenSSH so that we can log back in next time:</p>
+<pre class="shell"><code>$ sudo ufw allow OpenSSH</code></pre>
+<p>If you look again at the status</p>
+<pre class="shell"><code>$ sudo ufw status</code></pre>
+<p>you should see this:</p>
+<pre class="shell"><code>Status: active
+
+To                         Action      From
+--                         ------      ----
+OpenSSH                    ALLOW       Anywhere
+OpenSSH (v6)               ALLOW       Anywhere (v6)</code></pre>
+<p>If you want to know more about UFW, this is a good read: <a href="https://help.ubuntu.com/community/UFW" class="uri">https://help.ubuntu.com/community/UFW</a></p>
+</div>
+</div>
+<div id="step-4-add-more-security-by-changing-the-default-port-optional" class="section level1">
+<h1>Step 4: Add more security by changing the default port (optional)</h1>
+<p>Some recommend to change the default port 22 to any other number that is not used already. I did this first but than ran into the problem that I couldn’t log into my droplet from the terminal anymore. Luckily, I was able to access it from the launch console in the DigitalOcean GUI. But it took me some time to realize that it was a firewall issue and that my custom port was not open. Custom ports need to be manually opened in the firewall but then I read that firewall modifications are really critical and any bad firewall rule can mess up the working of the entire server. So I switched back to the default 22 port.</p>
+<p>But in case you’re still interested in how to change the port - e.g. because you rather want to switch off the firewall than keep the default port-, here is a short description:</p>
+<p>Open again the SSH server config file with an editor:</p>
+<pre class="shell"><code>$ sudo nano /etc/ssh/sshd_config</code></pre>
+<p>Got to line 4 where you see ‘Port 22’ and change it to ‘Port XXXXX’ (choose a number - but check before in the internet if that is already used). Save and exit.</p>
+<p>Now restart SSH client again and confirm with your password:</p>
+<pre class="shell"><code>$ service ssh restart</code></pre>
+<p>The new port needs to be also added to the SSH config file at your local machine. Log out of the server (or open a new terminal window) and open the local config file:</p>
+<pre class="shell"><code>$ nano path/to/.ssh/config</code></pre>
+<p>Add the port number (replace the XXXXX) after the last row:</p>
+<pre class="shell"><code>Host hostalias
+    HostName 123.45.678.910 
+    User username
+    IdentityFile ~/.ssh/digitalocean-rsa
+    Port XXXXX</code></pre>
+<p>If you connect more than one computer, change also the config files of your other machines!</p>
+</div>
+<div id="step-5-make-your-droplet-visible" class="section level1">
+<h1>Step 5: Make your droplet visible</h1>
+<div id="install-nginx" class="section level2">
+<h2>5.1 Install nginx</h2>
+<p>To be able to show content to the public using the Hypertext Transfer Protocol (HTTP) your droplet needs a web server to be installed. The two most popular web servers are <a href="https://httpd.apache.org">Apache</a> and <a href="http://nginx.org">nginx</a> and both would be similarly suitable. I went for nginx which is said to be a bit more resource-friendly and followed the <a href="https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-16-04">instructions</a> given by DigitalOcean.</p>
+<p>You can see what the installation does by calling your IP address in your web browser before and after the installation. Visit <code>http://123.45.678.910</code> in your web browser (replace this dummy IP with your own server’s public IP). You should see an error page saying that your browser cannot open this website.</p>
+<p>Now in the terminal, log into your droplet as non-root user and type</p>
+<pre class="shell"><code>$ sudo apt-get update</code></pre>
+<p>This calls Ubuntu’s package manager (the Advanced Package Tool or APT in short) and updates the local package index to get the most recent package listing.</p>
+<p>Next, we install nginx and any required dependencies with</p>
+<pre class="shell"><code>$ sudo apt-get -y install nginx</code></pre>
+<p>The <code>-y</code> flag stands for the configuration option ‘Automatic yes to prompts’. So ‘yes’ as answer to all prompts is assumed and the installation will run non-interactively. Don’t be surprised if you don’t see this flag in later installations.</p>
+</div>
+<div id="adjust-the-firewall" class="section level2">
+<h2>5.2 Adjust the firewall</h2>
+<p>Before we can test nginx, we need to reconfigure our UFW to allow access to this service. Similar to OpenSSH, nginx registers itself as a service with UWF upon installation so you will see it listed when typing:</p>
+<pre class="shell"><code>$ sudo ufw app list
+Available applications:
+  Nginx Full
+  Nginx HTTP
+  Nginx HTTPS
+  OpenSSH</code></pre>
+<p>The 3 nginx profiles stand for:</p>
+<ul>
+<li><strong>Nginx HTTP</strong>: This profile opens only port 80 (normal, unencrypted web traffic)</li>
+<li><strong>Nginx HTTPS</strong>: This profile opens only port 443 (TLS/SSL encrypted traffic)</li>
+<li><strong>Nginx Full</strong>: This profile opens both port 80 and 443</li>
+</ul>
+<p>Usually it is recommended to enable only the most restrictive profile, which would be for now <strong>Nginx HTTP</strong> as we haven’t added yet the SSL certificate.</p>
+<pre class="shell"><code>$ sudo ufw allow &#39;Nginx HTTP&#39;</code></pre>
+<p>Check your new status with</p>
+<pre class="shell"><code>$ sudo ufw status</code></pre>
+<p>You should see this</p>
+<pre class="shell"><code>Status: active
+
+To                         Action      From
+--                         ------      ----
+OpenSSH                    ALLOW       Anywhere                  
+Nginx HTTP                 ALLOW       Anywhere                  
+OpenSSH (v6)               ALLOW       Anywhere (v6)             
+Nginx HTTP (v6)            ALLOW       Anywhere (v6)</code></pre>
+<p>Now check again your browser and refresh your page. You should see a ‘Welcome to nginx!’ message.</p>
+</div>
+<div id="modify-the-welcome-page" class="section level2">
+<h2>5.3 Modify the welcome page</h2>
+<p>Now that your web server is up and running, we should personalize the nginx landing page. After the installation you’ll see a new folder <code>nginx</code> in the <code>/etc</code> directory containing all configuration files including <code>nginx.conf</code>. But all web content is served out of the <code>/var/www/html</code> directory, which by default only contains the nginx landing page <code>index.nginx-debian.html</code>. If you want to change what the webpage shows you need to edit this html file with the sudo command.</p>
+<pre class="shell"><code>$ sudo nano /var/www/html/index.nginx-debian.html</code></pre>
+<p>Note that this is only recommended if you will link one domain to your server as we’ll do. In the case of hosting more than one domain off a single server OceanDigital suggests to use nginx server block files to keep the default as is. Here is a link how to do this: <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-nginx-server-blocks-virtual-hosts-on-ubuntu-16-04" class="uri">https://www.digitalocean.com/community/tutorials/how-to-set-up-nginx-server-blocks-virtual-hosts-on-ubuntu-16-04</a></p>
+<p>Once you edited the HTML file, you will be able to see the changes immediately when you refresh the page in your browser. If you make changes in the nginx configuration file, you need to restart nginx with:</p>
+<pre class="shell"><code>$ sudo service nginx restart</code></pre>
+<div id="a-short-digression-into-html-and-css" class="section level3">
+<h3>A short digression into HTML and CSS</h3>
+<p>You need to know a bit of HTML and CSS to modify the index.nginx-debian.html file in a way that the webpage looks as you want. Good tutorials for both languages can be found here: <a href="https://www.w3schools.com/" class="uri">https://www.w3schools.com/</a>. You can also find many HTML/CSS templates in the internet, which you can then adjust.</p>
+<p>The typical HTML skeleton looks like this</p>
+<pre class="html"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;de&quot;&gt;
+
+    &lt;head&gt;
+        &lt;meta charset=&quot;utf-8&quot;&gt;
+        &lt;title&gt;&lt;/title&gt;
+        &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;&quot;&gt;
+    &lt;/head&gt;
+
+    &lt;body&gt;
+
+    &lt;/body&gt;
+
+&lt;/html&gt;</code></pre>
+<ul>
+<li>The <code>&lt;!DOCTYPE html&gt;</code> declaration defines this document to be HTML5.</li>
+<li>The <code>&lt;html&gt;</code> element is the root element of an HTML page.</li>
+<li>The <code>&lt;head&gt;</code> element contains meta information about the document, including the webpage’s title, the character set, any links and scripts, as well as the CSS styles. The latter can be defined internally within the <code>&lt;style&gt;&lt;/style&gt;</code> tag (so-called internal CSS) or the link of the external CSS stylesheet is provided in the above <code>&lt;link&gt;</code> tag.</li>
+<li>The
+<body>
+element contains the visible page content so this is what you will mainly modify.</li>
+</ul>
+<p>I’d advise to create a new html file outside the terminal with your choice of editor (e.g. I like to use <a href="https://atom.io">Atom</a> particularly for HTML/CSS). Once the webpage looks the way you want it,</p>
+<ul>
+<li>copy the entire content of your new html page into the clipboard,</li>
+<li>go back to the terminal where you should be still logged into your droplet,</li>
+<li>open the index.nginx-debian.html with the nano editor (see above),</li>
+<li>delete all the content of the file, and</li>
+<li>paste the content of your new html file into the index.nginx-debian.html file.</li>
+<li>Save with <code>ctrl+O</code> and ENTER, exit by pressing <code>ctrl+X</code>.</li>
+</ul>
+<p>If you want to use an external CSS stylesheet you will need to add the link to your stylesheet in the html file and in the /var/www/html/ directory you need to create a new css file with the sudo command, in which you insert your CSS code. To keep everything in one file I went instead for the internal CSS option.</p>
+<p>Since the welcome page is pretty static and changes require you to go into the terminal, log into your droplet and edit the file using the sudo command. I’d built a rather simple website that doesn’t require many updates and instead links to other websites:</p>
+<p><img src="/blog/2019-04-28-run-shiny-server-on-your-own-digitalocean-droplet-part-1_files/welcome_page.png" width="60%" height="auto" style="display: block; margin-left: auto; margin-right:auto; margin-top: 20px; margin-bottom: 20px;"/></p>
+</div>
+</div>
+</div>
+<div id="step-6-add-a-custom-domain-name-optional" class="section level1">
+<h1>Step 6: Add a custom domain name (optional)</h1>
+<p>Instead of using the public IP address that contains so many digits no one will remember, you can also connect your droplet with your web domain. This is pretty simple and requires only 2 steps:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Get a domain name</strong> from any domain name registrar.</li>
+<li><strong>Set up the DNS records</strong> for your domain by using a DNS hosting service (which DigitalOcean provides).</li>
+</ol>
+<p>For my droplet, I bought the domain <em>saskiaotto.de</em> from 1&amp;1 in Germany. Once the domain was registered I changed the default name servers to the DigitalOcean servers at my domain registrar 1&amp;1. Luckily, DigitalOcean provides for some registrars such as 1&amp;1 detailed tutorials on <a href="https://www.digitalocean.com/community/tutorials/how-to-point-to-digitalocean-nameservers-from-common-domain-registrars">How To Point to DigitalOcean Nameservers From Common Domain Registrars</a>.</p>
+<p>After, I added the domain to my DO account:</p>
+<ul>
+<li>I modified here the <strong>A flag</strong> where I assigned my domain to the right droplet</li>
+<li>and the <strong>CName flag</strong> where I allow the www.saskiaotto.de to link to the domain name (without www).</li>
+</ul>
+</div>
+<div id="step-7-add-a-ssl-certificate-to-your-http-to-get-https-optional" class="section level1">
+<h1>Step 7: Add a SSL certificate to your HTTP to get HTTPS (optional)</h1>
+<p>Your droplet’s IP address as well as your web domain come with the regular Hypertext Transfer Protocol (HTTP). But the problem with the HTTP protocol is that the information that flows from server to browser is not encrypted, which means it can be easily stolen. HTTPS is basically an HTTP protocol with an additional SSL certificate (the ‘S’ stands for ‘secure’). It encrypts the information that users supply to the site, which basically translates the data into a code. HTTPS is also secured via the TLS (Transport Layer Security) protocol. TLS helps provide authentication, which proves to your users that they are communicating with the intended website, and data integrity and prevents the transfer of data being modified or corrupted.</p>
+<p>Browser developers plan to add new warnings for end users when they surf to websites not encrypted with HTTPS, before eventually phasing out HTTP in favor of HTTPS. And cloud computing companies that offer hosting services for static websites (such as netlify where I run this blog) complain about links to web addresses with unsecure HTTP protocol.</p>
+<p><strong>So how do you add the SSL certificate to enable encrypted HTTPS on your server?</strong></p>
+<p>→ You need to secure nginx with <a href="https://letsencrypt.org">Let’s Encrypt</a> which is a Certificate Authority (CA) that provides an easy way to obtain and install free TLS/SSL certificates. The following instructions are based on this DigitalOcean tutorial: <a href="https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-16-04" class="uri">https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-16-04</a>.</p>
+<div id="install-certbot" class="section level2">
+<h2>7.1 Install Certbot</h2>
+<p>Add the repository</p>
+<pre class="shell"><code>$ sudo add-apt-repository ppa:certbot/certbot</code></pre>
+<p>and press ENTER to accept.</p>
+<p>Then, update the package list to pick up the new repository’s package information</p>
+<pre class="shell"><code>$ sudo apt-get update</code></pre>
+<p>and install Certbot’s nginx package with <code>apt-get</code>.</p>
+<pre class="shell"><code>$ sudo apt-get install python-certbot-nginx</code></pre>
+</div>
+<div id="modify-nginx-config-file" class="section level2">
+<h2>7.2 Modify nginx config file</h2>
+<p>Before Certbot can configure SSL for nginx, we need to add the domain name in nginx’ configuration file.</p>
+<p>Open the Nginx config file <code>default</code> with an editor</p>
+<pre class="shell"><code>$ sudo nano /etc/nginx/sites-available/default</code></pre>
+<p>Find the existing <code>server_name</code> line and replace the underscore, <code>_</code> (which follows <code>server_name</code>) with your <code>domain name</code> (with and without the <em>www</em>):</p>
+<pre class="shell"><code>...
+  server_name example.com www.example.com;
+... </code></pre>
+<p>Save the file and quit your editor.</p>
+<p>Verify the syntax of your configuration edits with</p>
+<pre class="shell"><code>$ sudo nginx -t</code></pre>
+<p>If you get any errors, re-open the file and check for typos, then test it again.</p>
+<p>Once your configuration’s syntax is correct, reload nginx to load the new configuration.</p>
+<pre class="shell"><code>$ sudo systemctl reload nginx</code></pre>
+</div>
+<div id="allow-https-through-your-firewall" class="section level2">
+<h2>7.3 Allow HTTPS through your firewall</h2>
+<p>Since we enabled UFW in <a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-1/#step-3-set-up-a-basic-firewall-optional">step 3</a>, we’ll need to adjust the settings to allow also for HTTPS traffic. We do this by replacing the <strong>Nginx HTTP</strong> with the <strong>Nginx Full</strong> profile:</p>
+<pre class="shell"><code>$ sudo ufw allow &#39;Nginx Full&#39;
+$ sudo ufw delete allow &#39;Nginx HTTP&#39;</code></pre>
+<p>This should be your status now:</p>
+<pre class="shell"><code>$ sudo ufw status
+Status: active
+
+To                         Action      From
+--                         ------      ----
+OpenSSH                    ALLOW       Anywhere                  
+Nginx Full                 ALLOW       Anywhere                  
+OpenSSH (v6)               ALLOW       Anywhere (v6)             
+Nginx Full (v6)            ALLOW       Anywhere (v6) </code></pre>
+<p>If that’s the case we can install our certificate with certbot in the next step.</p>
+</div>
+<div id="obtain-an-ssl-certificate" class="section level2">
+<h2>7.4 Obtain an SSL Certificate</h2>
+<p>Run certbot with the <code>--nginx</code> plugin, using the <code>-d</code> flag to specify the names you’d like the certificate to be valid for (which is your domain with and without <em>www</em>):</p>
+<pre class="shell"><code>$ sudo certbot --nginx -d example.com -d www.example.com</code></pre>
+<p>The first time you run certbot you will be asked for an email address and your agreement to the terms of service. After doing so, certbot will communicate with the Let’s Encrypt server, then run a challenge to verify that you control the domain you’re requesting a certificate for.</p>
+<p>Once that is verified you need to choose the HTTPS settings</p>
+<pre class="shell"><code>Output
+Please choose whether or not to redirect HTTP traffic to HTTPS, removing HTTP access.
+-------------------------------------------------------------------------------
+1: No redirect - Make no further changes to the webserver configuration.
+2: Redirect - Make all requests redirect to secure HTTPS access. Choose this for
+new sites, or if you&#39;re confident your site works on HTTPS. You can undo this
+change by editing your web server&#39;s configuration.
+-------------------------------------------------------------------------------
+Select the appropriate number [1-2] then [enter] (press &#39;c&#39; to cancel):</code></pre>
+<p>Select 2 and hit ENTER.</p>
+<p>You will receive a message indicating that your certificates are successfully downloaded, installed, and loaded.</p>
+<p>If you open your webpage you will see now the <a href="https://" class="uri">https://</a> at the beginning of your web address. If you test your server using the <a href="https://www.ssllabs.com/ssltest/">SSL Labs Server Test</a>, you should get an A grade.</p>
+</div>
+<div id="verify-certbots-auto-renewal" class="section level2">
+<h2>7.5 Verify certbot’s auto-renewal</h2>
+<p>Before you’re done here you need to test one more thing.</p>
+<p>The Let’s Encrypt’s certificates are only valid for ninety days but are automatically renewed by a so-called <strong>cron</strong>, a time-based job scheduler, which runs twice a day and renews any certificate that’s within thirty days of expiration.</p>
+<p>To test the renewal process, do a dry run with certbot:</p>
+<pre class="shell"><code>$ sudo certbot renew --dry-run</code></pre>
+<p>You should hopefully receive the following message with no errors</p>
+<pre class="shell"><code>IMPORTANT NOTES:
+ - Your account credentials have been saved in your Certbot
+   configuration directory at /etc/letsencrypt. You should make a
+   secure backup of this folder now. This configuration directory will
+   also contain certificates and private keys obtained by Certbot so
+   making regular backups of this folder is ideal.</code></pre>
+<p><br> <span style="font-size: 1.5rem; background-color: #ffe34c; border-radius: 2px;">Congratulations! You’re done with the droplet set-up and finally ready to install Shiny and RStudio Server (see <a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-2/index.html">Part 2</a>)</span>.</p>
+</div>
+</div>
