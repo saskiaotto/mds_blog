@@ -17,7 +17,7 @@
   <meta name="description" content="Site template made by Saskia using hugo">
   
 
-  <meta name="generator" content="Hugo 0.49.2" />
+  <meta name="generator" content="Hugo 0.49" />
 
   
   
@@ -96,13 +96,13 @@
       <div class="col-xs-7">
         <div class="social">
           
+          <a href="https://saskiaotto.de" target="_blank" style="opacity: 1;"><i class='fas fa-2x fa-globe'></i></a>
+          
           <a href="https://github.com/mareds" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-github'></i></a>
           
           <a href="https://github.com/saskiaotto" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-github'></i></a>
           
           <a href="https://www.researchgate.net/profile/Saskia_Otto" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-researchgate'></i></a>
-          
-          <a href="https://twitter.com" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-twitter'></i></a>
           
           <a href="https://orcid.org/0000-0001-7780-1322" target="_blank" style="opacity: 1;"><i class='ai ai-2x ai-orcid'></i></a>
           
@@ -340,8 +340,8 @@ spie &lt;- plot_spiechart(sum_sc)
 spie$TZA # shows the spiechart of the indicator TZA
 </code></pre>
 <hr />
-<div id="note-for-spatial-data" class="section level5">
-<h5>NOTE FOR SPATIAL DATA:</h5>
+<div id="note-for-spatial-data" class="section level4">
+<h4>NOTE FOR SPATIAL DATA:</h4>
 <p>All functions are tailored to indicator time series. <strong>Spatial data</strong> and spatial autocorrelation testing is currently not included. However, if you have spatial data you could still use all functions except for <code>model_gamm()</code> as it incorporates only temporal autocorrelation structures (AR and ARMA). Simply do the following and use as <code>time</code> vector in <code>ind_init()</code> an integer variable with <strong>consecutive</strong> numbers (with no gaps!) representing your different stations.</p>
 <pre class="r"><code>### Use of station numbers instead of time vector
 station_id &lt;- 1:nrow(your_indicator_dfr) 
@@ -349,10 +349,10 @@ dat_init &lt;- ind_init(ind_tbl = your_indicator_dfr,
   press_tbl = your_pressure_dfr, time = station_id)</code></pre>
 <hr />
 </div>
-<div id="validation-of-ind-performances" class="section level4">
-<h4>Validation of IND performances</h4>
-<div id="modeling-ind-trends-and-responses-to-single-pressures" class="section level5">
-<h5>Modeling IND trends and responses to single pressures</h5>
+<div id="validation-of-ind-performances" class="section level3">
+<h3>Validation of IND performances</h3>
+<div id="modeling-ind-trends-and-responses-to-single-pressures" class="section level4">
+<h4>Modeling IND trends and responses to single pressures</h4>
 <p>Each IND is modeled as a function of time or a single pressure variable using Generalized Additive Models (GAMs) (based on the mgcv package).</p>
 <ul>
 <li><code>model_trend()</code> models the long-term trend of each IND and returns a tibble with all GAM outputs, the model object, and predicted time series per IND.</li>
@@ -387,8 +387,8 @@ dat_init &lt;- ind_init(ind_tbl = your_indicator_dfr,
 </ul></li>
 </ul>
 </div>
-<div id="scoring-ind-performance-based-on-model-output" class="section level5">
-<h5>Scoring IND performance based on model output</h5>
+<div id="scoring-ind-performance-based-on-model-output" class="section level4">
+<h4>Scoring IND performance based on model output</h4>
 <p>Among the 16 common indicator selection criteria, five criteria relate to the indicator’s performances and require time series for their evaluation, i.e.</p>
 <ol start="8" style="list-style-type: decimal">
 <li>Development reflects ecosystem change caused by variation in manageable pressure(s)</li>
@@ -418,8 +418,8 @@ dat_init &lt;- ind_init(ind_tbl = your_indicator_dfr,
 </ul>
 </div>
 </div>
-<div id="assessment-of-current-state-status" class="section level4">
-<h4>Assessment of current state status</h4>
+<div id="assessment-of-current-state-status" class="section level3">
+<h3>Assessment of current state status</h3>
 <p>Two approaches based on trajectories in state space to determine the current state of the system in comparison to an earlier period as reference using the selected IND suite (state space = n-dimensional space of possible locations of IND variables)</p>
 <ol style="list-style-type: decimal">
 <li><p>Calculation of the <strong>Euclidean distance</strong> in state space of any dimensionality between each single year (or any other time step used) and a defined reference year.</p>
@@ -523,7 +523,7 @@ dat_init &lt;- ind_init(ind_tbl = your_indicator_dfr,
             <li><a href="/categories/indicator">indicator (2)</a>
             </li>
             
-            <li><a href="/categories/programming">programming (1)</a>
+            <li><a href="/categories/programming">programming (4)</a>
             </li>
             
             <li><a href="/categories/statistical-learning">statistical-learning (1)</a>
@@ -552,6 +552,9 @@ dat_init &lt;- ind_init(ind_tbl = your_indicator_dfr,
             </li>
             
             <li><a href="/tags/gam"><i class="fa fa-tags"></i> gam</a>
+            </li>
+            
+            <li><a href="/tags/github"><i class="fa fa-tags"></i> github</a>
             </li>
             
             <li><a href="/tags/oceanography"><i class="fa fa-tags"></i> oceanography</a>
@@ -612,40 +615,40 @@ dat_init &lt;- ind_init(ind_tbl = your_indicator_dfr,
                 
                 <div class="item same-height-row clearfix">
                     <div class="image same-height-always">
-                        <a href="/blog/2019/01/16/helpful-shiny-apps/">
+                        <a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-1/">
                           
-                            <img src="/img/banners/shiny_apps.png" class="img-responsive" alt="Helpful Shiny apps">
+                            <img src="/img/banners/shiny_droplet.png" class="img-responsive" alt="Run Shiny Server on your own DigitalOcean droplet - Part 1">
                           
                         </a>
                     </div>
                     <div class="name same-height-always">
-                        <h5><a href="/blog/2019/01/16/helpful-shiny-apps/">Helpful Shiny apps</a></h5>
+                        <h5><a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-1/">Run Shiny Server on your own DigitalOcean droplet - Part 1</a></h5>
                     </div>
                 </div>
                 
                 <div class="item same-height-row clearfix">
                     <div class="image same-height-always">
-                        <a href="/blog/2019/01/16/oce-package-for-oceanographical-data/">
+                        <a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-2/">
                           
-                            <img src="/img/banners/oce_package.png" class="img-responsive" alt="oce package for oceanographical data">
+                            <img src="/img/banners/shiny_droplet.png" class="img-responsive" alt="Run Shiny Server on your own DigitalOcean droplet - Part 2">
                           
                         </a>
                     </div>
                     <div class="name same-height-always">
-                        <h5><a href="/blog/2019/01/16/oce-package-for-oceanographical-data/">oce package for oceanographical data</a></h5>
+                        <h5><a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-2/">Run Shiny Server on your own DigitalOcean droplet - Part 2</a></h5>
                     </div>
                 </div>
                 
                 <div class="item same-height-row clearfix">
                     <div class="image same-height-always">
-                        <a href="/blog/2019/01/07/normalizing-the-rmse/">
+                        <a href="/blog/2019/04/24/linking-2-github/">
                           
-                            <img src="/img/banners/nrmse.png" class="img-responsive" alt="How to normalize the RMSE">
+                            <img src="/img/banners/linking2github.png" class="img-responsive" alt="Linking 2 computers to 2 GitHub accounts">
                           
                         </a>
                     </div>
                     <div class="name same-height-always">
-                        <h5><a href="/blog/2019/01/07/normalizing-the-rmse/">How to normalize the RMSE</a></h5>
+                        <h5><a href="/blog/2019/04/24/linking-2-github/">Linking 2 computers to 2 GitHub accounts</a></h5>
                     </div>
                 </div>
                 

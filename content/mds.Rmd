@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE,
 
 <p class="date-update">Last update: 2019, Jan. 7</p> 
 
-## What is Marine Data Science (MDS)?
+# What is Marine Data Science (MDS)?
 
 MDS is all about **uncovering findings from marine data** such as **oceanographical** data collected using both *in situ* methods and remote sensing. Typical parameters measured on-board relate to near-surface meteorological conditions (air temperature, wind speed, wind direction, cloudiness, etc.), sea surface conditions (e.g. sea surface temperature (SST), salinity, wave height, and wave direction) as well as subsurface water characteristics (vertical profiles of temperature, salinity, dissolved nutrients, ocean currents, or ocean bottom depth). Marine biological data  comprises of spatial and temporal species **occurrence** and **abundance** data (e.g., trawl data of fish, net sampling of plankton, benthic grab samples or visual counts of mammals or sea birds), **taxonomic** information, **trait** data, **sequence** and high-throughput screening (HTS) data, as well as **digital image** data from optical sensor systems or **hydroacoustic** data from echo sounders. 
 <br>
@@ -27,7 +27,7 @@ When given a challenging question, data scientists become detectives and investi
 With the vast amount of data that are nowadays produced (~90 percent of the data in the world today has been created in the past two years[^1]), twenty-first century marine science becomes increasingly analytical and computational across all disciplines. Since 2012, data science has become a popular buzzword when the Harvard Business Review called it "The Sexiest Job of the 21st Century"[^2] and is often used synonymously with statistics although it comprises of more disciplines. 
 
 
-## Elements of data science
+# Elements of data science
 
 Data science is highly interdisciplinary and a blend of skills in three major areas:
 
@@ -52,13 +52,13 @@ Hence, new generations of marine scientists need to be well trained in
 
 <br>
 
-### Popular data science methods
+## Popular data science methods
 
 The online community platform of data scientists and machine learners [kaggle](https://www.kaggle.com/) conducted in 2017 an industry-wide survey amongst 16,000 data scientist from all over the world. The respondents were asked about their educational background, working environment and programming languages and methods used at work or in the near future. You can find a summery of the survey here [https://www.kaggle.com/surveys/2017](https://www.kaggle.com/surveys/2017) and the complete survey results here [https://www.kaggle.com/amberthomas/kaggle-2017-survey-results](https://www.kaggle.com/amberthomas/kaggle-2017-survey-results). The data can also be download at [https://www.kaggle.com/kaggle/kaggle-survey-2017](https://www.kaggle.com/kaggle/kaggle-survey-2017).
 
 <br>
 
-#### Let's see which methods respondents from all fields or academia currently use most at work:
+### Let's see which methods respondents from all fields or academia currently use most at work:
 
 ```{r, echo=FALSE}
 library(tidyverse)
@@ -123,7 +123,7 @@ gridExtra::grid.arrange(p_all, p_acad, ncol = 2)
 Beside data visualization, logistic regression and cross-validation are the most commonly used data science methods, also in academia.
 
 
-#### Which machine learning or data science method are data scientists most excited about learning in the next year?
+### Which machine learning or data science method are data scientists most excited about learning in the next year?
 ```{r, echo=FALSE}
 question <- "MLMethodNextYearSelect"
 next_yr_all <- cleanMCData %>% 

@@ -77,7 +77,7 @@ plot(ctd, which=33)
 ```
 
 
-### Plot echosounder objects
+## Plot echosounder objects
 
 If you have data from an an echosounder in this format
 ```{r}
@@ -99,7 +99,7 @@ Echo sounding is a type of sonar used to determine the depth of water by transmi
 
 In this plot you clearly see the seafloor, which reflects the signal strongest (hence, the red color). The color scale for the amplitude is log10-transformed and trimmed to zero.
 
-### Plot landsat objects
+## Plot landsat objects
 
 Landsat data can be downloaded from the [USGS earthexplorer](https://earthexplorer.usgs.gov/) website. The following is a subset of the Landsat-8 image designated LC80080292014065LGN00, an image from March 2014 that covers Nova Scotia and portions of the Bay of Fundy and the Scotian Shelf:
 
@@ -115,7 +115,7 @@ plot(landsat, band = "temperature")
 Using `band = "temperature"` will plot an estimate of at-satellite brightness temperature, computed from the tirs1 band. Other band options for the Landsat-8 are `"aerosol"`, `"blue"`, `"green"`, `"red"`, `"nir"`, `"swir1"`, `"swir2"`, `"panchromatic"`, `"cirrus"`, `"tirs1"`, or `"tirs2"`.
 
 
-### Plot coastline objects
+## Plot coastline objects
 
 *oce* provides a coastline dataset downloaded from [Natural Earth](http://www.naturalearthdata.com). This dataset has a coarse resolution with a scale of 1:110M and 10,696 points, making it more suitable for world-scale plots plotted at a small size. If you want coastline files with a finer resolution use the *ocedata* package.
 ```{r}
@@ -167,7 +167,7 @@ mapPlot(coastlineWorld, projection = "+proj=lcc +lat_1=30 +lat_2=50 +lon_0=-40",
 See the `?mapPlot` documentation on the different projections.
 
 
-### Global sea surface and temperature levels in 2013 from the World Ocean Atlas (WOA)
+## Global sea surface and temperature levels in 2013 from the World Ocean Atlas (WOA)
 
 The *ocedata* package has a dataset named `levitus`, which stores sea-surface temperature (SST) and salinity (SSS) from the 2013 version of the World Ocean Atlas (WOA), commonly referred to as the "Levitus"" atlas (package version 0.1.3):
 
@@ -179,7 +179,7 @@ imagep(levitus$longitude, levitus$latitude, levitus$SSS, col = oceColorsJet, zli
 ```
 
 
-### More infos
+## More infos
 
 For more information on the different plotting settings see the general plot help by typing one of the different plot methods, e.g. `?plot,ctd-method`. Since the *oce* plot function produces various different type of plots, it is a bit tricky though to figure out which arguments are useful for which type of plot.
 

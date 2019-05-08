@@ -1,0 +1,330 @@
+---
+title: Run Shiny Server on your own DigitalOcean droplet - Part 2
+author: Saskia
+date: '2019-04-28'
+slug: run-shiny-server-on-your-own-digitalocean-droplet-part-2
+categories:
+  - programming
+tags:
+  - Shiny
+banner: "img/banners/shiny_droplet.png"  
+output: html_document
+---
+
+
+
+<p>This 2nd part will cover the installation of R, RStudio and the Shiny Server and is based on R’s <a href="https://cloud.r-project.org/bin/linux/ubuntu/README.html">Ubuntu packages for R</a> tutorial, the <a href="https://www.digitalocean.com/community/tutorials/how-to-install-r-on-ubuntu-18-04">DigitalOcean manual</a>, RStudio’s <a href="https://www.rstudio.com/products/rstudio/download-server/">RStudio Server</a> and <a href="https://www.rstudio.com/products/shiny/download-server/">Shiny Server</a> guides, and <a href="https://deanattali.com/2015/05/09/setup-rstudio-shiny-server-digital-ocean/">Dean Attali’s</a> great blog post.</p>
+<p><br></p>
+<div id="table-of-contents---part-2" class="section level2">
+<h2>Table of Contents - Part 2</h2>
+<ul>
+<li><a href="#step-8-some-preparations">Step 8: Some preparations</a></li>
+<li><a href="#step-9-install-r-and-packages">Step 9: Install R and packages</a>
+<ul>
+<li><a href="#r">9.1 R</a></li>
+<li><a href="#r-packages">9.2 R Packages</a></li>
+</ul></li>
+<li><a href="#step-10-install-rstudio-server">Step 10: Install RStudio Server</a></li>
+<li><a href="#step-11-install-and-configure-shiny-server">Step 11: Install and configure Shiny Server</a>
+<ul>
+<li><a href="#installation">11.1 Installation</a></li>
+<li><a href="#a-brief-shiny-server-overview">11.2. A brief Shiny Server overview</a></li>
+<li><a href="#configuration">11.3 Configuration</a></li>
+<li><a href="#set-up-proper-authorizations">11.4 Set up proper authorizations</a></li>
+</ul></li>
+<li><a href="#step-12-replace-the-port-number-to-have-an-easier-url">Step 12: Replace the port number to have an easier URL</a></li>
+<li><a href="#step-13-fill-your-shiny-server-with-shiny-apps">Step 13: Fill your Shiny Server with shiny apps</a>
+<ul>
+<li><a href="#option-1-from-the-shell">Option 1: From the shell</a></li>
+<li><a href="#option-2-connect-to-your-droplet-using-a-file-manager">Option 2: Connect to your droplet using a file manager</a></li>
+<li><a href="#option-3-connect-through-git">Option 3: Connect through git</a></li>
+</ul></li>
+</ul>
+</div>
+<div id="step-8-some-preparations" class="section level1">
+<h1>Step 8: Some preparations</h1>
+<p>Before you can install R or anything else on your Ubuntu server you need to be logged in as your non-root user</p>
+<pre class="shell"><code>$ ssh username@hostalias</code></pre>
+<p>The next step is then to add a <strong>GPG key</strong> for Ubuntu’s Apt authentication for downloaded packages. GPG (GNU Privacy Guard) is the tool used in secure apt to sign files and check their signatures, while apt-key is the program that manages a keyring of gpg keys for secure apt.</p>
+<p>This line of code adds the relevant GPG key in one step:</p>
+<pre class="shell"><code>$ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9</code></pre>
+<p>Alternatively do the key retrieval and add to the apt-key in 2 steps:</p>
+<pre class="shell"><code>$ gpg --keyserver keyserver.ubuntu.com --recv-key E298A3A825C0D65DFD57CBB651716619E084DAB9
+$ gpg -a --export E298A3A825C0D65DFD57CBB651716619E084DAB9 | sudo apt-key add -</code></pre>
+<p>(If none of that works, see <a href="https://cran.rstudio.com/bin/linux/ubuntu/README.html">here</a> for more alternatives)</p>
+<p>If you want to know more about Apt authentication read <a href="https://help.ubuntu.com/community/SecureApt">this entry</a> on the Ubuntu Documentation.</p>
+</div>
+<div id="step-9-install-r-and-packages" class="section level1">
+<h1>Step 9: Install R and packages</h1>
+<div id="r" class="section level2">
+<h2>9.1 R</h2>
+<p>To get the latest R packages for Ubuntu (at the time of writing it’s 3.6) we’ll start by adding the external repository maintained by CRAN to the <code>etc/apt/sources.list</code> file. If your droplet runs on Ubuntu 16.04.6 x64, as suggested in <a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-1/#create-a-droplet">step 1.2</a>, you need to add <code>deb https://cloud.r-project.org/bin/linux/ubuntu xenial-cran35/</code> to the file. If you use a different Ubuntu version check here for the correct entry: <a href="https://cloud.r-project.org/bin/linux/ubuntu/README.html" class="uri">https://cloud.r-project.org/bin/linux/ubuntu/README.html</a>.</p>
+<p>You have 2 options to add the repo:</p>
+<p><strong>Option 1</strong>: Using the <code>add-apt-repository</code> command</p>
+<pre class="shell"><code>$ sudo add-apt-repository &#39;deb https://cloud.r-project.org/bin/linux/ubuntu xenial-cran35/&#39;</code></pre>
+<p><strong>Option 2</strong>: By redirecting output to a file appending the redirected output at the end.</p>
+<pre class="shell"><code>$ sudo sh -c &#39;echo &quot;deb https://cloud.r-project.org/bin/linux/ubuntu xenial-cran35/&quot; &gt;&gt; /etc/apt/sources.list&#39;</code></pre>
+<p>By using <a href="https://cloud.r-project.org" class="uri">https://cloud.r-project.org</a>, you will be automatically redirected to a nearby CRAN mirror.</p>
+<p>Now we’re ready to install the complete R system. The following lines of code should look familiar to you from <a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-1/#install-nginx">step 5.1</a> when installing nginx (except that we don’t set the <code>-y</code> flag this time):</p>
+<pre class="shell"><code>$ sudo apt-get update
+$ sudo apt-get install r-base</code></pre>
+<p>During the installation you will be asked if you agree with the disk space used by the program → type <code>y</code></p>
+<p>Check if you can run R by simply typing</p>
+<pre class="shell"><code>$ R</code></pre>
+<p>If everything worked well you should have entered its interactive shell:</p>
+<pre class="shell"><code>R version 3.5.2 (2018-12-20) -- &quot;Eggshell Igloo&quot;
+Copyright (C) 2018 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type &#39;license()&#39; or &#39;licence()&#39; for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type &#39;contributors()&#39; for more information and
+&#39;citation()&#39; on how to cite R or R packages in publications.
+
+Type &#39;demo()&#39; for some demos, &#39;help()&#39; for on-line help, or
+&#39;help.start()&#39; for an HTML browser interface to help.
+Type &#39;q()&#39; to quit R.
+
+&gt;</code></pre>
+<p>Quit R with <code>quit()</code></p>
+</div>
+<div id="r-packages" class="section level2">
+<h2>9.2 R Packages</h2>
+<p>Before you install anything you might need to add some swap space for bigger memory to be able to install packages if you have chosen the cheapest droplet with 1GB memory (this is taken from Dean’s blog):</p>
+<pre class="shell"><code>$ sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=1024
+$ sudo /sbin/mkswap /var/swap.1
+$ sudo /sbin/swapon /var/swap.1
+$ sudo sh -c &#39;echo &quot;/var/swap.1 swap swap defaults 0 0 &quot; &gt;&gt; /etc/fstab&#39;</code></pre>
+<p>Also, if you want to install some packages as development version from GitHub you should install the ‘devtools’ package and all its dependencies. Some of these dependencies are not R packages so we will install them first and with code you should be familiar by now:</p>
+<pre class="shell"><code>$ sudo apt-get -y install libcurl4-gnutls-dev libxml2-dev libssl-dev</code></pre>
+<p>Now you’re ready to install all R packages you need.</p>
+<p>NOTE, there are 2 ways of installing packages in the root library so that they will be available to all users automatically.</p>
+<ol style="list-style-type: decimal">
+<li>Start R as root and install libraries with the known <code>install.packages()</code> function</li>
+<li>Install straight from the shell using <code>sudo su - -c &quot;R ... &quot;</code></li>
+</ol>
+<p>I will demonstrate both options in more detail now:</p>
+<div id="option-1" class="section level3">
+<h3>Option 1</h3>
+<p>Start R as root with</p>
+<pre class="shell"><code>$ sudo -i R</code></pre>
+<p>Now let’s install devtools, tidyverse, modelr, and lubridate within R’s interactive shell:</p>
+<pre class="shell"><code>&gt; install.packages(c(&quot;devtools&quot;, &quot;tidyverse&quot;, &quot;modelr&quot;, &quot;lubridate&quot;), dependencies = TRUE)</code></pre>
+<p>You can see in the output where the packages will be installed</p>
+<pre class="shell"><code>...
+Installing package into ‘/usr/local/lib/R/site-library’
+(as &#39;lib&#39; is unspecified)
+. . .</code></pre>
+<p>This location represents the global library and will make packages available to all users. It is only accessible because we ran R as root. If you would have started R as non-root user, the packages would have been installed in the user’s personal library (which has as location “/home/username/R/x86_64-pc-linux-gnu-library/R_version”).</p>
+<p>Load any of the packages as test, try out some functions and then quit R, e.g.</p>
+<pre class="shell"><code>&gt; library(lubridate)
+&gt; month(ymd(&quot;2019-Dec-01&quot;))
+&gt; quit()</code></pre>
+</div>
+<div id="option-2" class="section level3">
+<h3>Option 2</h3>
+<p>This code is a bit more intimidating. Let’s install rmarkdown, shiny, and shinyjs separately:</p>
+<pre class="shell"><code>$ sudo su - -c &quot;R -e \&quot;install.packages(&#39;rmarkdown&#39;, repos=&#39;http://cran.rstudio.com/&#39;)\&quot;&quot;
+$ sudo su - -c &quot;R -e \&quot;install.packages(&#39;shiny&#39;, repos=&#39;http://cran.rstudio.com/&#39;)\&quot;&quot;
+$ sudo su - -c &quot;R -e \&quot;install.packages(&#39;shinyjs&#39;, repos=&#39;http://cran.rstudio.com/&#39;)\&quot;&quot;</code></pre>
+<p>Now start R as your non-root user</p>
+<pre class="shell"><code>$ R</code></pre>
+<p>and check if you have access to the packages you just installed in the global library:</p>
+<pre class="shell"><code>&gt; library(modelr)
+&gt; library(shiny)</code></pre>
+<p>You can see R’s search path for packages when calling the function <code>.libPaths()</code>. The first entry should be the path under the current user’s home, the second should be the root library where we just installed the packages. I see, for instance, when logged in as <em>saskia</em>:</p>
+<pre class="shell"><code>&gt; .libPaths()
+[1] &quot;/home/saskia/R/x86_64-pc-linux-gnu-library/3.5&quot;
+[2] &quot;/usr/local/lib/R/site-library&quot;                 
+[3] &quot;/usr/lib/R/site-library&quot;                       
+[4] &quot;/usr/lib/R/library&quot;  </code></pre>
+</div>
+</div>
+</div>
+<div id="step-10-install-rstudio-server" class="section level1">
+<h1>Step 10: Install RStudio Server</h1>
+<p>As a first step you need to install the <strong>gdebi-core</strong> package so that gdebi can install RStudio and all of its dependencies.</p>
+<pre class="shell"><code>$ sudo apt-get -y install gdebi-core</code></pre>
+<p>Next, download the latest RStudio Server → check here for the correct version/file: <a href="https://www.rstudio.com/products/rstudio/download-server/" class="uri">https://www.rstudio.com/products/rstudio/download-server/</a> At the time of my installation it was version 1.1.463, released 2018-10-29, for 64bit Ubuntu:</p>
+<pre class="shell"><code>$ wget https://download2.rstudio.org/rstudio-server-1.1.463-amd64.deb</code></pre>
+<p>Now use <strong>GDebi</strong> to install Shiny Server</p>
+<pre class="shell"><code>$ sudo gdebi rstudio-server-1.1.463-amd64.deb</code></pre>
+<p>When you will be asked ‘Do you want to install the software package?’ type <code>y</code>.</p>
+<p>Once the installation is finished, you should be able to log into your own RStudio Server from any Browser.</p>
+<p>How? By simply adding the port number Rstudio uses (which is as default 8787) to your IP address or web domain, e.g. <code>https://123.45.678.910:8787/</code></p>
+<p>If everything worked well you should see this interface in your browser:</p>
+<p><img src="/blog/2019-04-28-run-shiny-server-on-your-own-digitalocean-droplet-part-2_files/rstudio_server_interface.png" width="70%" height="auto" style="display: block; margin-left: auto; margin-right:auto; margin-top: 20px; margin-bottom: 20px;"/></p>
+<p>Any user that has been created in the droplet can access the RStudio Server with its username and password. If you want to share your server with others for collaboration, add the user in the terminal:</p>
+<pre class="shell"><code>$ sudo adduser name_of_new_user</code></pre>
+<p>You can also define groups and assign users to the group:</p>
+<pre class="shell"><code>$ sudo addgroup newgroup
+$ sudo adduser name_of_new_user newgroup</code></pre>
+<p>For more information check also this website: <a href="https://www.digitalocean.com/community/tutorials/how-to-add-delete-and-grant-sudo-privileges-to-users-on-a-debian-vps" class="uri">https://www.digitalocean.com/community/tutorials/how-to-add-delete-and-grant-sudo-privileges-to-users-on-a-debian-vps</a></p>
+</div>
+<div id="step-11-install-and-configure-shiny-server" class="section level1">
+<h1>Step 11: Install and configure Shiny Server</h1>
+<div id="installation" class="section level2">
+<h2>11.1 Installation</h2>
+<p>If you haven’t installed the shiny package as root in <a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-2/#r-packages">step 9.2</a> you need to do this latest now.</p>
+<pre class="shell"><code>$ sudo su - -c &quot;R -e \&quot;install.packages(&#39;shiny&#39;, repos=&#39;http://cran.rstudio.com/&#39;)\&quot;&quot;</code></pre>
+<p>Also, if the <strong>GDebi</strong> tool is NOT installed yet because you skipped the RStudio installation you need to do it now:</p>
+<pre class="shell"><code>$ sudo apt-get -y install gdebi-core</code></pre>
+<p>To install the latest Shiny Server we need to download the correct file for your OS as we did for RStudio Server. Check the Shiny Server download page for the appropriate URL: <a href="https://www.rstudio.com/products/shiny/download-server/" class="uri">https://www.rstudio.com/products/shiny/download-server/</a></p>
+<p>At the time of my installation the version was v1.5.9.923 and the 2 commands required for 64bit Ubuntu 14.04 or later were (but again, check on the webpage for the latest version and URL):</p>
+<pre class="shell"><code>$ wget https://download3.rstudio.org/ubuntu-14.04/x86_64/shiny-server-1.5.9.923-amd64.deb
+$ sudo gdebi shiny-server-1.5.9.923-amd64.deb</code></pre>
+<p>(confirm installation)</p>
+<p>Once the installation finished, you can test the server using the default port 3838: <code>https://123.45.678.910:3838/</code> (again, replace this dummy IP 123.45.678.910 with your server IP).</p>
+<p>If all went well you should see this welcome page with 2 example shiny apps. Try them out and read the welcome text as it provides some useful information worth reading!</p>
+<p><img src="/blog/2019-04-28-run-shiny-server-on-your-own-digitalocean-droplet-part-2_files/shiny_welcome_page.png" width="80%" height="auto" style="display: block; margin-left: auto; margin-right:auto; margin-top: 20px; margin-bottom: 20px;"/></p>
+<div style="border: solid; border-color: #ffe34c; border-radius: 2px; padding: 5px;">
+NOTE: This welcome page was created with an interactive Rmarkdown documents. These documents are a new way to build Shiny apps and allow you to combine Shiny widgets with text and outputs. So even if you’re not interested in hosting shiny apps you can use the server to host html pages generated from R Markdown files! The only requirement is that you need to have the rmarkdown package installed in the <strong>global</strong> library (which we did in <a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-2/#r-packages">step 9.2</a>) and add <code>runtime::shiny</code> to the file’s YAML header.
+</div>
+</div>
+<div id="a-brief-shiny-server-overview" class="section level2">
+<h2>11.2. A brief Shiny Server overview</h2>
+<ul>
+<li><p>All shiny apps and the Shiny Server homepage are located in the root directory <code>/srv/shiny-server/</code>, which means that you can only make changes to these files using the sudo command when logged in as non-root user. To change the homepage file in the editor or remove it completely you’d need to type</p>
+<pre class="shell"><code>$ sudo nano /srv/shiny-server/index.html
+$ sudo rm /srv/shiny-server/index.html</code></pre>
+<p>→ but we will change that in a bit!</p></li>
+<li>Each shiny app or interactive R Markdown document and its supporting files should be saved in a separate folder under this directory. You can also group several shiny app folders into one → to access the app in the browser you would simply add the subdirectory to the IP address.
+<ul>
+<li>For instance, the embedded <strong>It’s Alive</strong> app above is located in the folder <code>hello</code></li>
+<li>which is together with the <strong>Shiny Doc</strong> R Markdown document in the <code>sample-apps</code> folder,</li>
+<li>hence, the full path is <code>/srv/shiny-server/sample-apps/hello</code>.</li>
+<li>Since the port 3838 directs the user already to the /srv/shiny-server/ folder you only need to add the subdirectory /sample-apps/hello to the IP address.</li>
+<li>Try it out: <code>https://123.45.678.910:3838/sample-apps/hello</code> (replace with your server IP)</li>
+<li>So choose your folder names carefully (e.g. don’t use blanks).</li>
+</ul></li>
+<li>The configuration files are located in the <code>/etc/shiny-server</code> directory, which we will soon access.</li>
+<li><p>All Shiny Server log entries are saved in <code>/var/log/shiny-server.log</code>.</p></li>
+</ul>
+</div>
+<div id="configuration" class="section level2">
+<h2>11.3 Configuration</h2>
+<p>You can make sure that all log files will be saved and informative errors printed for debugging by adding a few lines to the shiny server configuration file. Open the <code>shiny-server.conf</code> file with an editor:</p>
+<pre class="shell"><code>$ sudo nano /etc/shiny-server/shiny-server.conf</code></pre>
+<p>→ here you could also change the port number in the server definition.</p>
+<p>After the server definition add these 4 lines (incl. the comments so you know what for):</p>
+<pre class="shell"><code># To make sure that shiny log files will always be preserved
+preserve_logs true;
+# To make sure that informative error messages are printed
+sanitize_errors false;</code></pre>
+<p>You might notice that apps are run as user <code>shiny</code> and not as root our your non-root user (in my case <em>saskia</em>). This means that all packages a shiny app loads need to be available for that user, which is why it is so crucial to install packages in the global library and not redundantly on a user-basis. As a solution you could add your non-root user to the config file by adding this line</p>
+<pre class="shell"><code>run_as username;</code></pre>
+<p>But then it might be difficult to distinguish between you using the server’s resources or a shiny user playing with your app. There is another alternative I’ll describe next so let’s NOT add this line of code, save the file and exit.</p>
+<p>You must reload the shiny server after editing the config file:</p>
+<pre class="shell"><code>$ sudo service shiny-server restart</code></pre>
+</div>
+<div id="set-up-proper-authorizations" class="section level2">
+<h2>11.4 Set up proper authorizations</h2>
+<p>I mentioned before that changes in the entire <code>/srv/shiny-server</code> directory can only be authorized by the <code>root</code> user.</p>
+<p>To check access authorization type</p>
+<pre class="shell"><code>$ cd /srv
+$ ls -la </code></pre>
+<p>You will see something like this:</p>
+<pre class="shell"><code>drwxr-xr-x  2 root root 4096 Jan 26 19:36 shiny-server</code></pre>
+<p>That means that the <strong>user root</strong> has reading (<em>r</em>) , writing (<em>w</em>) and execution (<em>x</em>) rights (indicated by the <code>rwx</code> in position 2-4), the <strong>group root</strong> has only reading and execution rights (indicated by <code>r-x</code> in position 5-7) and all others have also only reading and execution rights (indicated by the <code>r-x</code> in position 8-10).</p>
+<p>Now following <a href="https://deanattali.com/2015/05/09/setup-rstudio-shiny-server-digital-ocean/#shiny-user-perms">step 8.1</a> in Dean Attali’s blog post I set my non-root user <code>saskia</code> as owner of this directory since it will be mainly me as saskia adding apps. Second, I replaced the group by a new group <code>shiny-apps</code> where also the <strong>shiny user</strong> has access to:</p>
+<pre class="shell"><code>$ sudo groupadd shiny-apps
+$ sudo usermod -aG shiny-apps saskia
+$ sudo usermod -aG shiny-apps shiny</code></pre>
+<p>The command <code>usermod</code> modifies a user account and the <code>-aG</code> flag adds the user to the secondary group.</p>
+<p>Next, I gave the group also writing permission:</p>
+<pre class="shell"><code>$ cd shiny-server
+$ sudo chown -R saskia:shiny-apps .
+$ sudo chmod g+w .
+$ sudo chmod g+s .</code></pre>
+<p>Check again:</p>
+<pre class="shell"><code>$ ls -la /srv</code></pre>
+<p>Now you should see:</p>
+<pre class="shell"><code>drwxrwsr-x  2 saskia shiny-apps 4096 Jan 26 19:36 shiny-server</code></pre>
+<p>Both <code>saskia</code> and <code>shiny</code> have now permission to access existing files under /srv/shiny-server or write new files. The latter is usually more relevant for <code>saskia</code> as shiny users won’t upload a shiny app on my server. But it can be important when the shiny app is used as an online form and when every submitted questionnaire will be saved as individual file.</p>
+</div>
+</div>
+<div id="step-12-replace-the-port-number-to-have-an-easier-url" class="section level1">
+<h1>Step 12: Replace the port number to have an easier URL</h1>
+<p>If you have already changed the default server’s IP address by your custom web domain you probably would like to add something else than the 4-digit port number to access your RStudio and Shiny Servers. This can be easily done with only a few additional lines of code in your nginx config file (the following is based on Dean Attali’s blog post):</p>
+<p>Open the nginx <code>default</code> config file with the nano editor</p>
+<pre class="shell"><code>$ sudo nano /etc/nginx/sites-enabled/default</code></pre>
+<p>Look for the line that reads <code>server {</code> and place <strong>above</strong> that line the following:</p>
+<pre class="shell"><code>map $http_upgrade $connection_upgrade {
+  default upgrade;
+  &#39;&#39;      close;
+}</code></pre>
+<p>Then look for the line that reads <code>server_name _;</code> and place <strong>right after in a new line</strong> the following lines:</p>
+<pre class="shell"><code>location /shiny/ {
+  proxy_pass http://127.0.0.1:3838/;
+  proxy_http_version 1.1;
+  proxy_set_header Upgrade $http_upgrade;
+  proxy_set_header Connection &quot;upgrade&quot;; 
+  rewrite ^(/shiny/[^/]+)$ $1/ permanent;
+}
+
+location /rstudio/ {
+  proxy_pass http://127.0.0.1:8787/;
+  proxy_http_version 1.1;
+  proxy_set_header Upgrade $http_upgrade;
+  proxy_set_header Connection $connection_upgrade;
+}</code></pre>
+<p>The 3 lines after each proxy_pass line fix a few issues by allowing nginx to proxy WebSockets. The <code>rewrite</code> command allows to write the URL with and without trailing slashes.</p>
+<div style="border: solid; border-color: #ffe34c; border-radius: 2px; padding: 5px;">
+NOTE: The IP address 127.0.0.1 is NOT the droplet’s IP address and should be therefore not replaced with your own IP. Just copy the above lines with no further changes and paste them into your config file!
+</div>
+<p><br> Restart nginx again:</p>
+<pre class="shell"><code>$ sudo service nginx restart</code></pre>
+<p>Test your changes and go to <code>https://123.45.678.910:shiny/</code> or <code>https://123.45.678.910:rstudio/</code> (replace the IP address with your droplet’s IP our your own domain)</p>
+<p>My servers are now accessible at:</p>
+<ul>
+<li><a href="https://saskiaotto.de/shiny" class="uri">https://saskiaotto.de/shiny</a></li>
+<li><a href="https://saskiaotto.de/rstudio" class="uri">https://saskiaotto.de/rstudio</a></li>
+</ul>
+</div>
+<div id="step-13-fill-your-shiny-server-with-shiny-apps" class="section level1">
+<h1>Step 13: Fill your Shiny Server with shiny apps</h1>
+<p>There are different ways to add apps and files to your Shiny Server, some of them are obviously more convenient than others:</p>
+<div id="option-1-from-the-shell" class="section level2">
+<h2>Option 1: From the shell</h2>
+<p>Let’s say you developed within your new R Studio Server a shiny app that you saved in a folder called <code>hello</code>, which is located right in your R home directory. You could then copy the files from the R directory to your Shiny directory in the shell using the <code>cp</code> command.</p>
+<p>Open the terminal and log into your droplet, then type</p>
+<pre class="shell"><code>$ sudo cp -r /home/your_username/R/hello/ /srv/shiny-server/</code></pre>
+<p>NOTE: The <code>-r</code> flag for the copy command is important: it stands for recursive and means that ALL files within that folder will be copied too!</p>
+<p>To move the entire folder use</p>
+<pre class="shell"><code>$ sudo mv -r /home/your_username/R/hello/ /srv/shiny-server/</code></pre>
+<p>Now test your shiny app in the browser: <code>https://123.45.678.910:shiny/hello</code></p>
+<p>Alternatively, you can use the <code>scp</code> command, which is a file transfer program for <strong>SFTP</strong> in Linux. SFTP stands for <strong>SSH Secure File Transfer Protocol</strong> and supports the full security and authentication functionality of SSH. It uses the same port as the SSH port so there is no need to configure another hole into the firewall.</p>
+<p>The <code>scp</code> usually comes with the OpenSSH package. Once you’re logged out of your droplet type</p>
+<pre class="shell"><code>$ scp -r username@hostalias/home/your_username/R/hello/  username@hostalias/srv/shiny-server/</code></pre>
+</div>
+<div id="option-2-connect-to-your-droplet-using-a-file-manager" class="section level2">
+<h2>Option 2: Connect to your droplet using a file manager</h2>
+<p>Depending on your operating system you have various choices of file managers that also serve as SFTP clients. Here are some examples:</p>
+<ul>
+<li><a href="https://cyberduck.io/">Cyberduck</a> → Mac, Windows</li>
+<li><a href="https://binarynights.com/">Forklift</a> → Mac</li>
+<li><a href="https://filezilla-project.org/index.php">Filezilla</a> → Mac, Linux, Windows</li>
+<li><a href="https://www.putty.org/">PuTTY</a> → Windows</li>
+</ul>
+<p>I personally use on my Macs for many years Forklift and I love it. Not only that it is a much nicer file manager than the default <em>finder</em>, I can also easily connect to my droplet. And once I’m connected I can treat the droplet directory as any other external hard drive. So I can simply drag and drop files from my computer to the droplet and vice versa.</p>
+<p>I only needed to set up the connection once by clicking on <em>Go To &gt; Connect</em> and then a dialog box pops up:</p>
+<p><img src="/blog/2019-04-28-run-shiny-server-on-your-own-digitalocean-droplet-part-2_files/forklift_sftp.png" width="50%" height="auto" style="display: block; margin-left: auto; margin-right:auto; margin-top: 20px; margin-bottom: 20px;"/></p>
+<p>Select <strong>SFTP</strong> as protocol, enter the droplet’s hostalias you defined in <a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-1/#edit-the-local-ssh-config-file">step 2.5</a>, your username and password and the port number if is not the default. You can even add this connection to your favorites and have access to it anytime!</p>
+</div>
+<div id="option-3-connect-through-git" class="section level2">
+<h2>Option 3: Connect through git</h2>
+<p>Last but not least you can convert your <code>/srv/shiny-server</code> directory into a git repository so that you can push your apps or any other file to this repo from your computer. If you then do a git pull on your droplet the new app will be on the server.</p>
+<p>If you want to go this track I recommend that you follow <a href="https://deanattali.com/2015/05/09/setup-rstudio-shiny-server-digital-ocean/#shiny-git">these instructions</a>.</p>
+<p><br></p>
+<p><span style="font-size: 1.5rem; background-color: #ffe34c; border-radius: 2px;">Congratulations, you’re all set now! Have fun with your very own Shiny Server!</span>.</p>
+<p><br><br></p>
+<div style="font-size: 1.2rem; border: solid; border-color: #555555; border-radius: 5px; padding: 2rem;">
+I hope you find this tutorial helpful. If you have any further questions contact me through the contact form, email me or write a comment in the disqus comment field below!
+</div>
+</div>
+</div>

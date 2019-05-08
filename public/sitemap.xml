@@ -3,6 +3,21 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-1/</loc>
+    <lastmod>2019-04-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-2/</loc>
+    <lastmod>2019-04-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/2019/04/24/linking-2-github/</loc>
+    <lastmod>2019-04-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/blog/2019/01/16/helpful-shiny-apps/</loc>
     <lastmod>2019-01-16T00:00:00+00:00</lastmod>
   </url>
@@ -33,7 +48,7 @@
   
   <url>
     <loc>/blog/</loc>
-    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
+    <lastmod>2019-04-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -69,6 +84,12 @@
   </url>
   
   <url>
+    <loc>/tags/github/</loc>
+    <lastmod>2019-04-24T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/categories/indicator/</loc>
     <lastmod>2019-01-07T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -76,7 +97,7 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
+    <lastmod>2019-04-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -96,7 +117,7 @@
   
   <url>
     <loc>/categories/programming/</loc>
-    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
+    <lastmod>2019-04-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -108,7 +129,7 @@
   
   <url>
     <loc>/tags/shiny/</loc>
-    <lastmod>2019-01-16T00:00:00+00:00</lastmod>
+    <lastmod>2019-04-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

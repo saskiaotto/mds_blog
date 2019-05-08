@@ -10,11 +10,25 @@ tags:
 banner: "img/banners/shiny_apps.png"
 ---
 
+<p class="date-update" style="margin-left: 30px;">Last updated: May 01, 2019</p>
+
 If you are an R user but don't know yet what Shiny and Shiny apps are, you definitely should read up on it on [https://shiny.rstudio.com](https://shiny.rstudio.com).
 
 But in a nutshell, Shiny is an R package that **builds interactive web apps** straight from R. You just need to write an R script that follows a specific Shiny syntax and once you run the script, the package builds a HTML file as user interface (UI) with interactive input elements (based on Javascript) that trigger certain computations in R. The output of theses computations can be then shown as output in the UI. You can easily **extend** your Shiny apps with **CSS themes, htmlwidgets**, and **JavaScript actions**. Since you need to run R in the background you can either launch a Shiny app directly in your R Studio IDE or host it on a website that is connected to a Shiny server (e.g. R Studio hosts the cloud service [www.shinyapps.io](https://www.shinyapps.io/), where you can deploy your app).
 
-The Shiny website has a big gallery of apps you can explore. Here are some examples linked to marine science that are worth playing around with. I **embedded the websites** of the Shiny app (if they are served over a secure HTTPS connection) so you can play around with them straight from here: simply move your cursor inside the app frame  and scroll -vertically, but also horizontally- to see more of the app.
+---
+
+Shiny apps can be very helpful to make statistical concepts and theories more accessible and I started to use it more and more in my stats courses at the university. I've even started to set up my own Shiny Server using DigitalOcean (see my recent post on that: [Run shiny server on your own DigitalOcean droplet](/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-1)):
+
+<img src="/blog/2019-01-16-helpful-shiny-apps_files/shiny_app_overview.png" width="100%" height="auto" style="display: block; margin-left: auto; margin-right:auto; margin-top: 20px; margin-bottom: 20px;"/>
+
+Link: [https://saskiaotto.de/shiny](https://saskiaotto.de/shiny)
+
+<br>
+
+---
+
+The Shiny website has also a big gallery of apps you can explore. Here are some examples linked to marine science that are worth playing around with. I **embedded the websites** of the Shiny app (if they are served over a secure HTTPS connection) so you can play around with them straight from here: simply move your cursor inside the app frame  and scroll -vertically, but also horizontally- to see more of the app.
 
 ## ggplot catalogue as Shiny app
 

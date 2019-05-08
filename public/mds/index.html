@@ -17,7 +17,7 @@
   <meta name="description" content="Site template made by Saskia using hugo">
   
 
-  <meta name="generator" content="Hugo 0.49.2" />
+  <meta name="generator" content="Hugo 0.49" />
 
   
   
@@ -95,13 +95,13 @@
       <div class="col-xs-7">
         <div class="social">
           
+          <a href="https://saskiaotto.de" target="_blank" style="opacity: 1;"><i class='fas fa-2x fa-globe'></i></a>
+          
           <a href="https://github.com/mareds" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-github'></i></a>
           
           <a href="https://github.com/saskiaotto" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-github'></i></a>
           
           <a href="https://www.researchgate.net/profile/Saskia_Otto" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-researchgate'></i></a>
-          
-          <a href="https://twitter.com" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-twitter'></i></a>
           
           <a href="https://orcid.org/0000-0001-7780-1322" target="_blank" style="opacity: 1;"><i class='ai ai-2x ai-orcid'></i></a>
           
@@ -229,12 +229,12 @@
 <p class="date-update">
 Last update: 2019, Jan. 7
 </p>
-<div id="what-is-marine-data-science-mds" class="section level2">
-<h2>What is Marine Data Science (MDS)?</h2>
+<div id="what-is-marine-data-science-mds" class="section level1">
+<h1>What is Marine Data Science (MDS)?</h1>
 <p>MDS is all about <strong>uncovering findings from marine data</strong> such as <strong>oceanographical</strong> data collected using both <em>in situ</em> methods and remote sensing. Typical parameters measured on-board relate to near-surface meteorological conditions (air temperature, wind speed, wind direction, cloudiness, etc.), sea surface conditions (e.g. sea surface temperature (SST), salinity, wave height, and wave direction) as well as subsurface water characteristics (vertical profiles of temperature, salinity, dissolved nutrients, ocean currents, or ocean bottom depth). Marine biological data comprises of spatial and temporal species <strong>occurrence</strong> and <strong>abundance</strong> data (e.g., trawl data of fish, net sampling of plankton, benthic grab samples or visual counts of mammals or sea birds), <strong>taxonomic</strong> information, <strong>trait</strong> data, <strong>sequence</strong> and high-throughput screening (HTS) data, as well as <strong>digital image</strong> data from optical sensor systems or <strong>hydroacoustic</strong> data from echo sounders. <br> <br> When given a challenging question, data scientists become detectives and investigate leads and try to understand patterns within the data. It typically starts with data exploration followed by quantitative techniques drawn from mathematics, statistics, information science, and computer science in order to get a level deeper, e.g., inferential models, segmentation analysis, time series forecasting or synthetic control experiments. The overall intent is to scientifically piece together a forensic view of what the data is really saying about marine system dynamics. The data to be used, however, does not need to represent exclusively marine biotic and abiotic data. In fact, any type of data describing a climatological, terrestrial or socio-economic component that could affect the marine system could be analysed. Amongst these, regional and large-scale climatological indices, fisheries, agricultural, and demographic data are commonly used to study the extent of external forcing on the system and potential feedback mechanisms. <br> <br> With the vast amount of data that are nowadays produced (~90 percent of the data in the world today has been created in the past two years<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>), twenty-first century marine science becomes increasingly analytical and computational across all disciplines. Since 2012, data science has become a popular buzzword when the Harvard Business Review called it “The Sexiest Job of the 21st Century”<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> and is often used synonymously with statistics although it comprises of more disciplines.</p>
 </div>
-<div id="elements-of-data-science" class="section level2">
-<h2>Elements of data science</h2>
+<div id="elements-of-data-science" class="section level1">
+<h1>Elements of data science</h1>
 <p>Data science is highly interdisciplinary and a blend of skills in three major areas:</p>
 <video class="video-75 hide-xs" id="mds-video" autoplay loop>
 <source src="/movies/elements_of_mds.mp4" type="video/mp4"> Your browser does not support HTML5 video.
@@ -251,12 +251,12 @@ Last update: 2019, Jan. 7
 <li>data mining, statistical modelling, machine learning, and predictive analytics</li>
 </ul>
 <p><br></p>
-<div id="popular-data-science-methods" class="section level3">
-<h3>Popular data science methods</h3>
+<div id="popular-data-science-methods" class="section level2">
+<h2>Popular data science methods</h2>
 <p>The online community platform of data scientists and machine learners <a href="https://www.kaggle.com/">kaggle</a> conducted in 2017 an industry-wide survey amongst 16,000 data scientist from all over the world. The respondents were asked about their educational background, working environment and programming languages and methods used at work or in the near future. You can find a summery of the survey here <a href="https://www.kaggle.com/surveys/2017" class="uri">https://www.kaggle.com/surveys/2017</a> and the complete survey results here <a href="https://www.kaggle.com/amberthomas/kaggle-2017-survey-results" class="uri">https://www.kaggle.com/amberthomas/kaggle-2017-survey-results</a>. The data can also be download at <a href="https://www.kaggle.com/kaggle/kaggle-survey-2017" class="uri">https://www.kaggle.com/kaggle/kaggle-survey-2017</a>.</p>
 <p><br></p>
-<div id="lets-see-which-methods-respondents-from-all-fields-or-academia-currently-use-most-at-work" class="section level4">
-<h4>Let’s see which methods respondents from all fields or academia currently use most at work:</h4>
+<div id="lets-see-which-methods-respondents-from-all-fields-or-academia-currently-use-most-at-work" class="section level3">
+<h3>Let’s see which methods respondents from all fields or academia currently use most at work:</h3>
 <pre class="r"><code>p_all &lt;- methods_now %&gt;% ggplot(aes(x = selections, y = percent, fill = selections)) + 
     geom_col() + scale_fill_viridis_d(direction = -1) + guides(fill = &quot;none&quot;) + 
     labs(x = &quot;Methods used&quot;, y = &quot;Percent&quot;) + coord_flip() + theme_classic()
@@ -272,8 +272,8 @@ Figure 1: Barplot of most common methods amongst data scientists in all working 
 </div>
 <p>Beside data visualization, logistic regression and cross-validation are the most commonly used data science methods, also in academia.</p>
 </div>
-<div id="which-machine-learning-or-data-science-method-are-data-scientists-most-excited-about-learning-in-the-next-year" class="section level4">
-<h4>Which machine learning or data science method are data scientists most excited about learning in the next year?</h4>
+<div id="which-machine-learning-or-data-science-method-are-data-scientists-most-excited-about-learning-in-the-next-year" class="section level3">
+<h3>Which machine learning or data science method are data scientists most excited about learning in the next year?</h3>
 <div style="border: transparent; padding: 5px; margin-left:15%; margin-right:15%;overflow-y: scroll; height:400px; overflow-x: scroll; width:75%; ">
 <table class="table table-striped table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
 <caption>
@@ -623,40 +623,40 @@ MARS
                 
                 <div class="item same-height-row clearfix">
                     <div class="image same-height-always">
-                        <a href="/blog/2019/01/16/helpful-shiny-apps/">
+                        <a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-1/">
                           
-                            <img src="/img/banners/shiny_apps.png" class="img-responsive" alt="Helpful Shiny apps">
+                            <img src="/img/banners/shiny_droplet.png" class="img-responsive" alt="Run Shiny Server on your own DigitalOcean droplet - Part 1">
                           
                         </a>
                     </div>
                     <div class="name same-height-always">
-                        <h5><a href="/blog/2019/01/16/helpful-shiny-apps/">Helpful Shiny apps</a></h5>
+                        <h5><a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-1/">Run Shiny Server on your own DigitalOcean droplet - Part 1</a></h5>
                     </div>
                 </div>
                 
                 <div class="item same-height-row clearfix">
                     <div class="image same-height-always">
-                        <a href="/blog/2019/01/16/oce-package-for-oceanographical-data/">
+                        <a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-2/">
                           
-                            <img src="/img/banners/oce_package.png" class="img-responsive" alt="oce package for oceanographical data">
+                            <img src="/img/banners/shiny_droplet.png" class="img-responsive" alt="Run Shiny Server on your own DigitalOcean droplet - Part 2">
                           
                         </a>
                     </div>
                     <div class="name same-height-always">
-                        <h5><a href="/blog/2019/01/16/oce-package-for-oceanographical-data/">oce package for oceanographical data</a></h5>
+                        <h5><a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-2/">Run Shiny Server on your own DigitalOcean droplet - Part 2</a></h5>
                     </div>
                 </div>
                 
                 <div class="item same-height-row clearfix">
                     <div class="image same-height-always">
-                        <a href="/blog/2019/01/07/normalizing-the-rmse/">
+                        <a href="/blog/2019/04/24/linking-2-github/">
                           
-                            <img src="/img/banners/nrmse.png" class="img-responsive" alt="How to normalize the RMSE">
+                            <img src="/img/banners/linking2github.png" class="img-responsive" alt="Linking 2 computers to 2 GitHub accounts">
                           
                         </a>
                     </div>
                     <div class="name same-height-always">
-                        <h5><a href="/blog/2019/01/07/normalizing-the-rmse/">How to normalize the RMSE</a></h5>
+                        <h5><a href="/blog/2019/04/24/linking-2-github/">Linking 2 computers to 2 GitHub accounts</a></h5>
                     </div>
                 </div>
                 

@@ -130,8 +130,8 @@ spie &lt;- plot_spiechart(sum_sc)
 spie$TZA # shows the spiechart of the indicator TZA
 </code></pre>
 <hr />
-<div id="note-for-spatial-data" class="section level5">
-<h5>NOTE FOR SPATIAL DATA:</h5>
+<div id="note-for-spatial-data" class="section level4">
+<h4>NOTE FOR SPATIAL DATA:</h4>
 <p>All functions are tailored to indicator time series. <strong>Spatial data</strong> and spatial autocorrelation testing is currently not included. However, if you have spatial data you could still use all functions except for <code>model_gamm()</code> as it incorporates only temporal autocorrelation structures (AR and ARMA). Simply do the following and use as <code>time</code> vector in <code>ind_init()</code> an integer variable with <strong>consecutive</strong> numbers (with no gaps!) representing your different stations.</p>
 <pre class="r"><code>### Use of station numbers instead of time vector
 station_id &lt;- 1:nrow(your_indicator_dfr) 
@@ -139,10 +139,10 @@ dat_init &lt;- ind_init(ind_tbl = your_indicator_dfr,
   press_tbl = your_pressure_dfr, time = station_id)</code></pre>
 <hr />
 </div>
-<div id="validation-of-ind-performances" class="section level4">
-<h4>Validation of IND performances</h4>
-<div id="modeling-ind-trends-and-responses-to-single-pressures" class="section level5">
-<h5>Modeling IND trends and responses to single pressures</h5>
+<div id="validation-of-ind-performances" class="section level3">
+<h3>Validation of IND performances</h3>
+<div id="modeling-ind-trends-and-responses-to-single-pressures" class="section level4">
+<h4>Modeling IND trends and responses to single pressures</h4>
 <p>Each IND is modeled as a function of time or a single pressure variable using Generalized Additive Models (GAMs) (based on the mgcv package).</p>
 <ul>
 <li><code>model_trend()</code> models the long-term trend of each IND and returns a tibble with all GAM outputs, the model object, and predicted time series per IND.</li>
@@ -177,8 +177,8 @@ dat_init &lt;- ind_init(ind_tbl = your_indicator_dfr,
 </ul></li>
 </ul>
 </div>
-<div id="scoring-ind-performance-based-on-model-output" class="section level5">
-<h5>Scoring IND performance based on model output</h5>
+<div id="scoring-ind-performance-based-on-model-output" class="section level4">
+<h4>Scoring IND performance based on model output</h4>
 <p>Among the 16 common indicator selection criteria, five criteria relate to the indicator’s performances and require time series for their evaluation, i.e.</p>
 <ol start="8" style="list-style-type: decimal">
 <li>Development reflects ecosystem change caused by variation in manageable pressure(s)</li>
@@ -208,8 +208,8 @@ dat_init &lt;- ind_init(ind_tbl = your_indicator_dfr,
 </ul>
 </div>
 </div>
-<div id="assessment-of-current-state-status" class="section level4">
-<h4>Assessment of current state status</h4>
+<div id="assessment-of-current-state-status" class="section level3">
+<h3>Assessment of current state status</h3>
 <p>Two approaches based on trajectories in state space to determine the current state of the system in comparison to an earlier period as reference using the selected IND suite (state space = n-dimensional space of possible locations of IND variables)</p>
 <ol style="list-style-type: decimal">
 <li><p>Calculation of the <strong>Euclidean distance</strong> in state space of any dimensionality between each single year (or any other time step used) and a defined reference year.</p>

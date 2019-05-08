@@ -16,7 +16,7 @@ keywords:
 
 In addition to the blog tutorials you here find a list of external courses and tutorials on marine data science taught by me (on [https://github.com/mareds](https://github.com/mareds)) or colleagues.
 
-## General Courses
+# General Courses
 
 <img src="../img/courses/data_analysis_with_r.png" alt="Course-Data analysis with R" style="float:left;clear:right;width:100px;border:150px;padding-right:20px">
 
@@ -27,7 +27,7 @@ The course introduces the principles of data science and how to mine out insight
 <br>
 
 
-## Spatial Analysis
+# Spatial Analysis
 
 <img src="../img/courses/spatialr.png" alt="Spatial R" style="float:left;clear:right;width:100px;border:150px;padding-right:20px">
 
@@ -37,7 +37,7 @@ The course introduces the principles of data science and how to mine out insight
 <br>
 <br>
 
-## Multivariate Analysis
+# Multivariate Analysis
 
 <img src="../img/courses/intro_3d_pta.png" alt="D PTA" style="float:left;clear:right;width:100px;border:150px;padding-right:20px">
 
