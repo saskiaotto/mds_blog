@@ -31,16 +31,18 @@ With the vast amount of data that are nowadays produced (~90 percent of the data
 
 Data science is highly interdisciplinary and a blend of skills in three major areas:
 
+<span>
 <video class="video-75 hide-xs" id="mds-video" autoplay loop>
   <source src="/movies/elements_of_mds.mp4" type="video/mp4">
   Your browser does not support HTML5 video.
 </video>
+</span>
 
 <script>
   var vid = document.getElementById("mds-video");
   vid.playbackRate = 0.5;
 </script>
-
+<br>
 
 
 Hence, new generations of marine scientists need to be well trained in
@@ -165,17 +167,16 @@ next_yr <- left_join(next_yr_all, next_yr_acad, by = "method") %>%
     percent_academic = percent.y
     ) %>% replace_na(list(percent_all = 0, percent_academic = 0))
 
-
-next_yr %>% knitr::kable(format = "html", 
-  col.names = c("Methods", "All (%)", "Academia (%)"),
-  caption = "Usage of methods per working environment in percentage (scroll down to see more methods)") %>%
+next_yr %>%
+  knitr::kable(
+    format = "html",
+    col.names = c("Methods", "All (%)", "Academia (%)"),
+    caption = "Usage of methods per working environment in percentage"
+  ) %>%
   kableExtra::kable_styling(
-    bootstrap_options = c("striped", "condensed", "responsive")#, 
-    #full_width = F
-    #position = "float_left"
-    ) %>%
-  kableExtra::scroll_box(width = "75%", height = "400px",
-    box_css = "border: transparent; padding: 5px; ", extra_css = "margin-left:15%; margin-right:15%;")
+    bootstrap_options = c("condensed", "responsive"),
+    full_width = F
+    )
 ```
 
 

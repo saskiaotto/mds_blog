@@ -1,0 +1,1166 @@
+---
+title: Comparison of change point detection methods
+author: Saskia
+date: '2019-09-28'
+slug: comparison-of-change-point-detection-methods
+categories:
+  - statistical learning
+tags:
+  - regime shifts
+  - method comparison
+banner: "img/banners/changepoints.png"    
+---
+
+
+
+<p>This post compares a few change point detection method available in R given different time series dynamics and research questions. Change points or breakpoints are abrupt variations in time series data and may represent transitions between different states. The detection of change points is useful in modelling and prediction of time series and is found in application areas such as medical condition monitoring, speech and image analysis or climate change detection. In marine ecology, such analysis is often applied to identify sudden shifts in single populations or entire communities and environmental conditions<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. In this case, the change points detection algorithms are applied to single time series and the change points represent simply breaks in time.</p>
+<p>More recently, the presence and location of change points (then often termed <em>thresholds</em>) is studied in ecosystem indicators to better interpret and foresee impacts of changes in the intensities of human and environmental pressures<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. But here, the focus is more on change point in the relationship between a response (i.e. indicator) and explanatory (pressure) variable. But which detection method should be used for this case? I ran into this issue when analyzing indicator-pressure relationships and potential change points for the Baltic Sea. So I started to compare some of the commonly used algorithms by using artificial time series data for which I knew the exact number and location or functional response curve. I thought it might be nice to share the outcome with you and the conclusion I drew from the comparison. I won’t go into too much detail about each package’s function and their settings but I will try to explain a bit more including the R code in the first, real dataset. After that I will only show the numerical and graphical output to be not too lengthy!</p>
+<p><br></p>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<ul>
+<li><a href="#r-packages-for-detecting-change-points">R packages for detecting change points</a></li>
+<li><a href="#summary">Summary</a>
+<ul>
+<li><a href="#take-home-message">Take home message</a></li>
+<li><a href="#pros-and-cons-of-each-method">Pros and cons of each method</a>
+<ul>
+<li><a href="#changes-in-mean">Changes in mean</a></li>
+</ul></li>
+<li><a href="#changes-in-functional-curves-of-relationships-between-x-and-y">Changes in functional curves of relationships between X and Y</a></li>
+</ul></li>
+<li><a href="#detailed-results-and-r-code-of-detection-performance-under-different-scenarios">Detailed results and R code of detection performance under different scenarios</a>
+<ul>
+<li><a href="#change-in-mean">1 change in mean</a>
+<ul>
+<li><a href="#real-data-nile-dataset">Real data: <strong>Nile</strong> dataset</a></li>
+<li><a href="#artificial-data">Artificial data</a></li>
+</ul></li>
+<li><a href="#changes-in-mean">3 changes in mean</a></li>
+<li><a href="#linear-relationship-zx-with-1-break">Linear relationship (z~x) with 1 break</a></li>
+<li><a href="#cubic-decay-function-zx">Cubic decay function (z~x)</a></li>
+<li><a href="#highly-non-linear-3-changes-in-regression">Highly non-linear (3 changes in regression)</a></li>
+</ul></li>
+</ul>
+</div>
+<div id="r-packages-for-detecting-change-points" class="section level1">
+<h1>R packages for detecting change points</h1>
+<p>The following packages available on CRAN will be compared:</p>
+<ul>
+<li><code>changepoint</code>: changes in mean and variance of time series</li>
+<li><code>bcp</code>: changes in mean; Bayesian approach</li>
+<li><code>strucchange</code>: changes in (time series) regression model</li>
+<li><code>segmented</code>: changes in regression (does not have to be time series data)</li>
+<li><code>tree</code>: classification or regression tree</li>
+</ul>
+<p>The <a href="https://www.rdocumentation.org/packages/changepoint/versions/2.2.2">changepoint</a> package provides many methods for performing change point analysis of univariate time series<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>. Although the package only considers the case of independent observations, the theory behind the implemented methods allows for certain types of serial dependence. For specific methods, the expected computational cost can be shown to be linear with respect to the length of the time series. Currently, the changepoint package is only suitable for finding changes in mean or variance. This package also estimates multiple change points through the use of penalization. The drawback to this approach is that it requires a user specified penalty term. A nice tutorial by Rebecca Killick can be found <a href="http://members.cbio.mines-paristech.fr/~thocking/change-tutorial/RK-CptWorkshop.html">here</a>. The core function I will use here is <code>cpt.mean()</code> with</p>
+<ul>
+<li>the default <em>AMOC</em> method for single changepoint detection</li>
+<li>the <em>PELT</em> method for detecting multiple changepoints setting the penalty type to <em>AIC</em> and <em>CROPS</em></li>
+</ul>
+<p>The <a href="https://www.rdocumentation.org/packages/bcp/versions/4.0.3">bcp</a> package is designed to perform Bayesian single change point analysis of univariate time series<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. It returns the posterior probability of a change point occurring at each time index in the series. Recent versions of this package have reduced the computational cost from quadratic to linear with respect to the length of the series. However, all versions of this package are only designed to detect changes in the mean of independent Gaussian observations with its core function <code>bcp()</code>.</p>
+<p>The <a href="https://www.rdocumentation.org/packages/strucchange/versions/1.5-1">strucchange</a> package provides a suite of tools for detecting changes within linear regression models<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>. Many of these tools however, focus on detecting at most one change within the regression model. This package also contains methods that perform online change detection, thus allowing it to be used in settings where there are multiple changes. Additionally, if the number of changes is known a priori then the breakpoint method can be used to perform retrospective analysis. For a given number of changes, this method returns the change point estimates which minimizes the residual sum of squares. There are 3 approaches I will use here:</p>
+<ul>
+<li>tests from the generalized fluctuation test (GFT) framework that can detect various types of structural changes: <code>efp()</code> and <code>sctest()</code></li>
+<li>test from the F test framework, which assume that there is one (un-
+known) breakpoint: <code>Fstats()</code></li>
+<li>test for simultaneous estimation of multiple breakpoints in time series regression models: <code>breakpoints()</code> → here one cane specify in the formula whether one wants to test for a change in the mean (i.e. the intercept) or in the relationship to an explanatory variable.</li>
+</ul>
+<p>The <a href="https://www.rdocumentation.org/packages/segmented/versions/1.0-0/topics/segmented-package">segmented</a> package provides functions for segmented or broken-line models, which are regression models where the relationships between the response and one or more explanatory variables are piecewise linear, namely represented by two or more straight lines connected at specific breakpoints<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>. The number of breakpoints of each segmented relationship must be a priori specified.</p>
+<p>An alternative approach are so-called <em>decision trees</em>. These tree-based methods for regression and classification involve stratifying or segmenting the predictor space into a number of simple regions. The value at which the regions are split can also be seen as change points in the predictor. While there are numerous tree methods (e.g. boosting, bagging, random forest) and implementations in R I will here use the simple single decision tree approach that is provided by the <a href="https://www.rdocumentation.org/packages/tree/versions/1.0-40">tree</a> package.</p>
+<p>This list of change point detection methods is surely not exclusive but represents fairly well the methods that have been commonly used to analyze ecological regime shifts in marine systems.
+<br></p>
+</div>
+<div id="summary" class="section level1">
+<h1>Summary</h1>
+<p>I will start right with the synthesis of my comparison so you can skip the time- and method-specific outcomes. The list of individual results you’ll find below is actually pretty long as I compare 8 methods on 6 different time series (the first is the internal <code>Nile</code> dataset the others are artificial/ simulated datasets). So to spare you all these tedious plots and numeric outputs I summarized here all results into 1 table and a few figures.</p>
+<p>I will start right with the synthesis of my comparison so you can skip the tedious and lengthy outcomes of 8 methods that I test on 1 real and 5 artificial data sets. Here is an overview table that shows for each method and dataset the location of each detected change points.</p>
+<table class="huxtable" style="border-collapse: collapse; margin-bottom: 2em; margin-top: 2em; width: 50%; margin-left: auto; margin-right: auto;  ">
+<caption style="caption-side: top; text-align: left;">Table 1: Comparison of number and location (loc) of change points (cpts) across time series dynamics and methods. Orange cells indicate good matches with the true dataset.</caption><col><col><col><col><col><col><col><col><col><tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(204, 204, 204); font-weight: bold;">Time series (loc of true cpts)</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(204, 204, 204); font-weight: bold;">AMOC</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(204, 204, 204); font-weight: bold;">PELT-AIC</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(204, 204, 204); font-weight: bold;">PELT-CROPS</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(204, 204, 204); font-weight: bold;">bcp</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(204, 204, 204); font-weight: bold;">GFT (F test)</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(204, 204, 204); font-weight: bold;">Breakpoints</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(204, 204, 204); font-weight: bold;">segmented</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(204, 204, 204); font-weight: bold;">tree</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(204, 204, 204); font-weight: bold;">1 change in mean (Nile data, #28)</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(255, 165, 0);">28</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(242, 242, 242);">(too many)</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(242, 242, 242);">(too many)</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(255, 165, 0);">28</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(255, 165, 0);">28</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(255, 165, 0);">28</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(242, 242, 242);">3</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(255, 165, 0);">28</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(204, 204, 204); font-weight: bold;">1 change in mean (at #25)</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(255, 165, 0);">25</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(255, 165, 0);">25</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(230, 230, 230);">13,14,23,24,25</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(255, 165, 0);">25</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(255, 165, 0);">25</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(255, 165, 0);">25</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(230, 230, 230);">14</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(255, 165, 0);">25</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(204, 204, 204); font-weight: bold;">3 changes in mean (at #10,25,45)</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(242, 242, 242);">none</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(255, 165, 0);">10,26,46</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(255, 165, 0);">10,26,46</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(242, 242, 242);">26</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(242, 242, 242);">26</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(242, 242, 242);">10,26,34</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(242, 242, 242);">20</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(242, 242, 242);">10,16,26,33,45</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(204, 204, 204); font-weight: bold;">1 break in relationship (at #10)</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(230, 230, 230);">6</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(230, 230, 230);">3,8,13,18</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(230, 230, 230);">3,8,13,18</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(230, 230, 230);">8</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(230, 230, 230);">8 (6)</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(255, 165, 0);">10</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(255, 165, 0);">11</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(230, 230, 230);">6,14</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(204, 204, 204); font-weight: bold;">Cubic decay function</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(242, 242, 242);">35</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(242, 242, 242);">(too many)</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(242, 242, 242);">none</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(242, 242, 242);">32,43</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(242, 242, 242);">30 (34)</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(242, 242, 242);">8,26,41</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(242, 242, 242);">30</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(242, 242, 242);">25,35,43</td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: left; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(204, 204, 204); font-weight: bold;">Highly non-linear (4 breaks at #10,25,45)</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(230, 230, 230);">none</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(230, 230, 230);">17,32</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(230, 230, 230);">17,31,39,45</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(230, 230, 230);">39,45</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(230, 230, 230);">33 (39)</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(255, 165, 0);">10,26,43</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(255, 165, 0);">11,26,44</td>
+<td style="vertical-align: top; text-align: center; white-space: normal; border-style: solid solid solid solid; border-width: 1pt 1pt 1pt 1pt; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); padding: 4pt 4pt 4pt 4pt; background-color: rgb(230, 230, 230);">16,22,32,39,45</td>
+</tr>
+</table>
+
+<div id="take-home-message" class="section level2">
+<h2>Take home message</h2>
+<ul>
+<li>Obviously there is no one-method-fits-all!</li>
+<li>To detect the <strong>one</strong> major changepoint in the time series <strong>several methods</strong> can be applied.</li>
+<li>But to detect the <strong>multiple</strong> existing changepoints in dataset 3 only the <strong>PELT</strong> algorithm (independent of the penalty type) performed well.</li>
+<li>The changepoints in the <strong>relationship</strong> between 2 variables were only detected by the <strong>regression breakpoint</strong> and <strong>segmented</strong> algorithm.</li>
+<li>Particularly the <code>breakpoints()</code> stands out as it can detect changepoints in means of single time series but also in functional response curves and it <strong>does not require any a priori determination of numbers</strong> of changepoints!</li>
+<li>A good choice might be the <strong>complementary use</strong> of the <strong>PELT</strong> algorithm in the <em>changepoint</em> package with the <strong>breakpoints</strong> method in <em>strucchange</em>.</li>
+<li>If one is interested to know when a response variable such as an ecosystem indicator starts to severely deteriorate due to the intensification of a particular human or environmental pressure than <strong>regression-based method</strong> such as breakpoints or segmented might be a better choice.</li>
+</ul>
+<p>For a visual comparison of the better performing models all five artificial time series and the changes in the mean means or relationship are plotted here:</p>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="pros-and-cons-of-each-method" class="section level2">
+<h2>Pros and cons of each method</h2>
+<div id="changes-in-mean" class="section level3">
+<h3>Changes in mean</h3>
+<ul>
+<li><code>changepoint</code>:
+<ul>
+<li>disadvantage here is that one needs to specify <em>a priori</em> if 1 or multiple changes and</li>
+<li>there are many parameters to set which can lead to different results</li>
+<li>when penalty set to “CROPS”, one needs to visually inspect the optimal number of change points</li>
+</ul></li>
+<li><code>bcp</code>:
+<ul>
+<li>easy to use, not much to specify</li>
+<li>no specification of change points to set <em>a priori</em></li>
+<li>detection rate depends more on the magnitude of change than other methods</li>
+</ul></li>
+<li><code>strucchange</code>:
+<ul>
+<li>can cope with many model types, also for changes in means by specifying y ~ 1</li>
+<li>provides confidence intervals of change points</li>
+<li>several test statistics for checking for structural changes: <code>sctest()</code>, <code>Fstats()</code>, <code>breakpoints()</code></li>
+<li>disav.: sum of the output is tuned to ts object, needs some recoding to adjust to ordinary dataframe (→ applies to <code>sctest()</code>, <code>Fstats()</code>)</li>
+</ul></li>
+<li><code>segmented</code>: useless for changes in mean!</li>
+<li><code>tree</code>:
+<ul>
+<li>the method found all true changepoints</li>
+<li>but unfortunately also some more –&gt; how to choose the optimal one?</li>
+</ul></li>
+</ul>
+</div>
+<div id="changes-in-functional-curves-of-relationships-between-x-and-y" class="section level3">
+<h3>Changes in functional curves of relationships between X and Y</h3>
+<ul>
+<li><code>strucchange</code>:
+<ul>
+<li>provides several test statistics</li>
+<li>no <em>a priori</em> specification of change points</li>
+<li>provides confidence intervals around the location of the change points!</li>
+<li>allows different type of model structures (but that also requires the correct specification)</li>
+</ul></li>
+<li><code>segmented</code>:
+<ul>
+<li>disadv.: requires starting values for the change points, hence, one needs to determine the number of change points <em>a priori</em></li>
+<li>adv.: provides also confidence intervals around the location of the change points!</li>
+<li>disadv.: very simple model structure only allowed</li>
+</ul></li>
+</ul>
+<hr />
+</div>
+</div>
+</div>
+<div id="detailed-results-and-r-code-of-detection-performance-under-different-scenarios" class="section level1">
+<h1>Detailed results and R code of detection performance under different scenarios</h1>
+<pre class="r"><code># Loading packages
+library(changepoint)
+library(bcp)
+library(strucchange)
+library(segmented)
+library(tree)</code></pre>
+<div id="change-in-mean" class="section level2">
+<h2>1 change in mean</h2>
+<div id="real-data-nile-dataset" class="section level3">
+<h3>Real data: <strong>Nile</strong> dataset</h3>
+<p>The Nile dataset comes with the R <code>dataset</code> package and represents measurements of the annual flow (in unit 10<sup>8</sup> m<sup>3</sup>) of the river Nile at Aswan, between 1871 and 1970. Around 1898, the annual flow dropped greatly from circa 1100 to 800<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>. We will test now whether this shift in 1898 (i.e. in year 28 of the time series) will be detected by all 5 methods.</p>
+<pre class="r"><code>data(Nile)
+str(Nile)</code></pre>
+<pre><code>##  Time-Series [1:100] from 1871 to 1970: 1120 1160 963 1210 1160 1160 813 1230 1370 1140 ...</code></pre>
+<pre class="r"><code>plot(Nile)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<div id="changepoint" class="section level4">
+<h4>changepoint</h4>
+<p>Looking for 1 change point using the “AMOC” method (which is also the default):</p>
+<pre class="r"><code>cpt.mean(Nile, method = &quot;AMOC&quot;) </code></pre>
+<pre><code>## Class &#39;cpt&#39; : Changepoint Object
+##        ~~   : S4 class containing 12 slots with names
+##               cpttype date version data.set method test.stat pen.type pen.value minseglen cpts ncpts.max param.est 
+## 
+## Created on  : Fri Apr 26 15:58:35 2019 
+## 
+## summary(.)  :
+## ----------
+## Created Using changepoint version 2.2.2 
+## Changepoint type      : Change in mean 
+## Method of analysis    : AMOC 
+## Test Statistic  : Normal 
+## Type of penalty       : MBIC with value, 13.81551 
+## Minimum Segment Length : 1 
+## Maximum no. of cpts   : 1 
+## Changepoint Locations : 28</code></pre>
+<p>The method identifies correctly a change point in 1898 (#28). What would happen when using the setting for identifying multiple change points (if we wouldn’t know the exact number):</p>
+<pre class="r"><code>cpt.mean(Nile, method = &quot;PELT&quot;, Q = 10)</code></pre>
+<pre><code>## Class &#39;cpt&#39; : Changepoint Object
+##        ~~   : S4 class containing 12 slots with names
+##               cpttype date version data.set method test.stat pen.type pen.value minseglen cpts ncpts.max param.est 
+## 
+## Created on  : Fri Apr 26 15:58:35 2019 
+## 
+## summary(.)  :
+## ----------
+## Created Using changepoint version 2.2.2 
+## Changepoint type      : Change in mean 
+## Method of analysis    : PELT 
+## Test Statistic  : Normal 
+## Type of penalty       : MBIC with value, 13.81551 
+## Minimum Segment Length : 1 
+## Maximum no. of cpts   : Inf 
+## Number of changepoints: 94</code></pre>
+<pre class="r"><code>cpt2 &lt;- cpt.mean(Nile, method = &quot;PELT&quot;, penalty = &quot;CROPS&quot;, pen.value = c(1,25))</code></pre>
+<pre><code>## [1] &quot;Maximum number of runs of algorithm = 6&quot;
+## [1] &quot;Completed runs = 2&quot;
+## [1] &quot;Completed runs = 3&quot;
+## [1] &quot;Completed runs = 5&quot;</code></pre>
+<pre class="r"><code>summary(cpt2)</code></pre>
+<pre><code>## Created Using changepoint version 2.2.2 
+## Changepoint type      : Change in mean 
+## Method of analysis    : PELT 
+## Test Statistic  : Normal 
+## Type of penalty       : CROPS with value, 1 25 
+## Minimum Segment Length : 1 
+## Maximum no. of cpts   : Inf 
+## Changepoint Locations :  
+## Range of segmentations:
+##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]
+## [1,]    1    2    3    4    6    7    8    9   10    11    12    13    14
+## [2,]    1    2    3    4    6    7    8    9   10    11    12    13    14
+## [3,]    1    2    3    4    6    7    8    9   10    11    12    13    14
+## [4,]    1    2    3    4    6    7    8    9   10    11    12    13    14
+##      [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24]
+## [1,]    15    16    17    18    19    20    21    22    23    24    25
+## [2,]    15    16    17    18    19    20    21    22    23    24    25
+## [3,]    15    16    17    18    19    20    21    22    23    24    25
+## [4,]    15    16    17    18    19    20    21    22    23    24    25
+##      [,25] [,26] [,27] [,28] [,29] [,30] [,31] [,32] [,33] [,34] [,35]
+## [1,]    26    27    28    29    30    31    32    33    34    35    36
+## [2,]    26    27    28    29    30    31    32    33    34    35    36
+## [3,]    26    27    28    29    30    31    32    33    34    35    36
+## [4,]    26    27    28    29    30    31    32    33    34    35    36
+##      [,36] [,37] [,38] [,39] [,40] [,41] [,42] [,43] [,44] [,45] [,46]
+## [1,]    37    38    39    40    41    42    43    44    45    46    47
+## [2,]    37    38    39    40    41    42    43    44    45    46    47
+## [3,]    37    38    39    40    41    42    43    44    45    46    47
+## [4,]    37    38    39    40    41    42    43    44    45    46    47
+##      [,47] [,48] [,49] [,50] [,51] [,52] [,53] [,54] [,55] [,56] [,57]
+## [1,]    48    49    50    51    52    53    54    55    56    57    58
+## [2,]    48    49    50    51    52    54    55    56    57    58    59
+## [3,]    48    49    50    51    52    54    55    56    57    58    59
+## [4,]    48    49    50    51    52    54    55    56    57    58    59
+##      [,58] [,59] [,60] [,61] [,62] [,63] [,64] [,65] [,66] [,67] [,68]
+## [1,]    59    60    61    62    63    64    65    66    67    68    69
+## [2,]    60    61    62    63    64    65    66    67    68    69    70
+## [3,]    60    61    62    63    64    65    66    67    68    69    70
+## [4,]    60    61    62    63    64    65    66    67    68    69    70
+##      [,69] [,70] [,71] [,72] [,73] [,74] [,75] [,76] [,77] [,78] [,79]
+## [1,]    70    71    72    73    74    75    76    77    78    79    80
+## [2,]    71    72    73    74    75    76    77    78    79    80    81
+## [3,]    71    72    73    74    75    76    77    78    79    80    81
+## [4,]    71    72    73    74    75    76    77    78    79    80    82
+##      [,80] [,81] [,82] [,83] [,84] [,85] [,86] [,87] [,88] [,89] [,90]
+## [1,]    81    82    83    84    85    86    87    88    89    90    91
+## [2,]    82    83    84    85    86    87    88    89    90    91    92
+## [3,]    82    83    84    85    86    87    88    89    90    91    92
+## [4,]    83    84    85    86    87    88    89    90    91    93    94
+##      [,91] [,92] [,93] [,94] [,95] [,96] [,97] [,98]
+## [1,]    92    93    94    95    96    97    98    99
+## [2,]    93    94    95    96    97    98    99    NA
+## [3,]    93    94    95    96    97    99    NA    NA
+## [4,]    95    96    97    99    NA    NA    NA    NA
+## 
+##  For penalty values: 1 2 8 12.5</code></pre>
+<p>We can also plot the diagnostics to see the number of changepoints in each segmentation against the change in test statistic when adding that change. The plot is similar to the scree plot in principal component analysis as when a true changepoint is added the cost increases or decreases rapidly, but when a changepoint due to noise is added the change is small:</p>
+<pre class="r"><code>plot(cpt2, diagnostic = TRUE)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>The PELT algorithm detects too many change points (same when methods “SegNeigh” or “BinSeg” were used).</p>
+</div>
+<div id="bcp" class="section level4">
+<h4>bcp</h4>
+<pre class="r"><code>x &lt;- Nile
+bcp_x &lt;- bcp(x, return.mcmc = TRUE)
+plot(bcp_x)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>The lower posterior probability plot shows that at one location (looks like #28) the probability of a change is very high. We can get the exact locations where probabilities are high (e.g. &gt; 70%) with this code:</p>
+<!-- To avoid showing the entire data.frame I need to split and repeat the code -->
+<pre class="r"><code>bcp_sum &lt;- as.data.frame(summary(bcp_x))
+# Let&#39;s filter the data frame and identify the year:
+bcp_sum$id &lt;- 1:length(x)
+(sel &lt;- bcp_sum[which(bcp_x$posterior.prob &gt; 0.7), ])
+# Get the year:
+time(x)[sel$id] </code></pre>
+<pre><code>##    Probability       X1 id
+## 28       0.778 1068.629 28</code></pre>
+<pre><code>## [1] 1898</code></pre>
+<p>Also this method identified the correct year of change.</p>
+</div>
+<div id="strucchange" class="section level4">
+<h4>strucchange</h4>
+<pre class="r"><code>ocus_nile &lt;- efp(Nile ~ 1, type = &quot;OLS-CUSUM&quot;)
+op &lt;- par(mfrow = c(1,2))
+plot(ocus_nile)
+plot(ocus_nile, alpha = 0.01, alt.boundary = TRUE)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>The <code>efp</code> function with the type “OLS-CUSUM” computes an empirical fluctuation process of OLS residuals which is plotted above. The process line shows a peak around 1900 which exceeds the boundaries and, hence, indicates a clear structural shift at that time.</p>
+<p>To calculate the corresponding CUSUM and F test statistics for structural change (the first computed on the efp object):</p>
+<pre class="r"><code>sctest(ocus_nile)</code></pre>
+<pre><code>## 
+##  OLS-based CUSUM test
+## 
+## data:  ocus_nile
+## S0 = 2.9518, p-value = 5.409e-08</code></pre>
+<pre class="r"><code>fs_nile &lt;- Fstats(Nile ~ 1)
+plot(fs_nile)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>Both tests suggest a significant change in the time series.</p>
+<p>Test for 1 breakpoint using the <code>breakpoints()</code> function → Note that the number of breakpoints have to be defined beforehand for this method!</p>
+<pre class="r"><code>bp_nile &lt;- breakpoints(Nile ~ 1)
+bp_nile</code></pre>
+<pre><code>## 
+##   Optimal 2-segment partition: 
+## 
+## Call:
+## breakpoints.formula(formula = Nile ~ 1)
+## 
+## Breakpoints at observation number:
+## 28 
+## 
+## Corresponding to breakdates:
+## 1898</code></pre>
+<p>To check for multiple breaks, the <code>breakpoint()</code> function can be also applied to breakpoints objects with an explicit <em>breaks</em> argument (so you actually nest a <code>breakpoints</code> function in <code>breakpoints()</code>:</p>
+<pre class="r"><code>breakpoints(bp_nile, breaks = 2)</code></pre>
+<pre><code>## 
+##   Optimal 3-segment partition: 
+## 
+## Call:
+## breakpoints.breakpointsfull(obj = bp_nile, breaks = 2)
+## 
+## Breakpoints at observation number:
+## 28 83 
+## 
+## Corresponding to breakdates:
+## 1898 1953</code></pre>
+<pre class="r"><code># Nested syntax with 3 breaks:
+breakpoints(breakpoints(Nile ~ 1), breaks = 3)</code></pre>
+<pre><code>## 
+##   Optimal 4-segment partition: 
+## 
+## Call:
+## breakpoints.breakpointsfull(obj = breakpoints(Nile ~ 1), breaks = 3)
+## 
+## Breakpoints at observation number:
+## 28 68 83 
+## 
+## Corresponding to breakdates:
+## 1898 1938 1953</code></pre>
+<p>So how does one know how many breakpoints exist in the time series? Here, the comparison of BIC estimates for different numbers of breakpoint is useful:</p>
+<pre class="r"><code>plot(bp_nile)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p>Based on the BIC we should choose one breakpoint.</p>
+<p>To get the optimal number numerically instead of inspecting the plot each time, here is a solution:</p>
+<pre class="r"><code># get best model
+opt_bpts &lt;- function(x) {
+  #x = bpts_sum$RSS[&quot;BIC&quot;,]
+  n &lt;- length(x)
+  lowest &lt;- vector(&quot;logical&quot;, length = n-1)
+  lowest[1] &lt;- FALSE
+  for (i in 2:n) {
+    lowest[i] &lt;- x[i] &lt; x[i-1] &amp; x[i] &lt; x[i+1]
+  }
+  out &lt;- as.integer(names(x)[lowest])
+  return(out)
+}
+bpts_sum &lt;- summary(bp_nile)
+opt_brks &lt;- opt_bpts(bpts_sum$RSS[&quot;BIC&quot;,])
+opt_brks</code></pre>
+<pre><code>## [1] 1</code></pre>
+<p>To get the location of the breakpoint(s):</p>
+<pre><code>## [1] 28</code></pre>
+<p>One can also visualize the breakpoints in the time series plot with confidence intervals using the <code>stats::confint()</code> function:</p>
+<pre class="r"><code>ci_nile &lt;- confint(bp_nile, breaks = opt_brks)
+plot(Nile)
+lines(ci_nile)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p>We can also add the regression lines of the null model and our model with 1 breakpoint for comparison:</p>
+<pre class="r"><code># null model
+fm0 &lt;- lm(Nile ~ 1)
+coef(fm0)</code></pre>
+<pre><code>## (Intercept) 
+##      919.35</code></pre>
+<pre class="r"><code># breakpoint model
+nile_fac &lt;- breakfactor(bp_nile, breaks = 1)
+fm1 &lt;- lm(Nile ~ nile_fac - 1)
+coef(fm1)</code></pre>
+<pre><code>## nile_facsegment1 nile_facsegment2 
+##        1097.7500         849.9722</code></pre>
+<pre class="r"><code>plot(Nile)
+lines(ci_nile)
+lines(ts(fitted(fm0), start = 1871), col = 3)
+lines(ts(fitted(fm1), start = 1871), col = 4)
+lines(bp_nile)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+</div>
+<div id="segmented" class="section level4">
+<h4>segmented</h4>
+<p>With this method, the number of breakpoints have to be also specified beforehand similar to the <code>strucchange::breakpoints()</code> function:</p>
+<pre class="r"><code>Nile_df &lt;- data.frame(Nile = as.numeric(Nile), Year = 1871:1970)
+seg_nile &lt;- segmented(lm(Nile ~ 1, data = Nile_df), ~ Year, 
+  psi = list(Year = c(1900))) # using 1900 as starting value
+summary(seg_nile)</code></pre>
+<pre><code>## 
+##  ***Regression Model with Segmented Relationship(s)***
+## 
+## Call: 
+## segmented.lm(obj = lm(Nile ~ 1, data = Nile_df), seg.Z = ~Year, 
+##     psi = list(Year = c(1900)))
+## 
+## Estimated Break-Point(s):
+##               Est. St.Err
+## psi1.Year 1872.98 41.048
+## 
+## Meaningful coefficients of the linear terms:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 1147.4404   108.6654  10.559   &lt;2e-16 ***
+## U1.Year       -2.7143     0.5404  -5.023       NA    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 151.3 on 97 degrees of freedom
+## Multiple R-Squared: 0.2165,  Adjusted R-squared: 0.2004 
+## 
+## Convergence attained in 2 iter. (rel. change 2.0964e-16)</code></pre>
+<pre class="r"><code>summary(seg_nile)$psi</code></pre>
+<pre><code>##           Initial    Est.   St.Err
+## psi1.Year    1900 1872.98 41.04761</code></pre>
+<pre class="r"><code>plot(Nile ~ Year, data = Nile_df, type = &quot;l&quot;)
+plot(seg_nile, add=T)
+lines(seg_nile,col=&#39;red&#39;)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p>The <code>segmented()</code> function detects one change, but right at the start (1873). It seems to be not devised for this kind of step change.</p>
+</div>
+<div id="tree" class="section level4">
+<h4>tree</h4>
+<pre class="r"><code>Nile_df &lt;- data.frame(Nile = as.numeric(Nile), Year = 1871:1970)
+tree_nile &lt;- tree(Nile ~ Year, data = Nile_df)
+summary(tree_nile)</code></pre>
+<pre><code>## 
+## Regression tree:
+## tree(formula = Nile ~ Year, data = Nile_df)
+## Number of terminal nodes:  6 
+## Residual mean deviance:  13750 = 1293000 / 94 
+## Distribution of residuals:
+##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -380.100  -62.160   -3.645    0.000   54.840  283.900</code></pre>
+<pre class="r"><code>plot(tree_nile)
+text(tree_nile, pretty = 0)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p>Also the <code>tree()</code> function finds correctly the change point in the Nile time series.</p>
+<p>So let’s try another time series…</p>
+<hr />
+</div>
+</div>
+<div id="artificial-data" class="section level3">
+<h3>Artificial data</h3>
+<pre class="r"><code>set.seed(1)
+# Normal distributed data with a single change in mean (at x = 25/26)
+df &lt;- data.frame(
+  x = 1:50,
+  z = c(rnorm(25,0,1), rnorm(25,5,1))
+)
+plot(df$x, df$z, type = &#39;l&#39;, xlab = &#39;&#39;, ylab = &#39;&#39;)
+lines(x = 1:25, y = rep(0,25), col = &#39;red&#39;, lwd = 3)
+lines(x=26:50, y = rep(5,25), col = &#39;red&#39;, lwd = 3)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p>Since it is difficult to identify the location of change points if data input objects for <code>efp()</code> and <code>Fstats()</code> are not a time series, I will convert <code>df$z</code> and use <code>z_ts</code> similar to the <code>Nile</code> data (this will help identifying the row in the data of the changepoint location):</p>
+<pre class="r"><code>z_ts &lt;- as.ts(df$z)</code></pre>
+<div id="changepoint-1" class="section level4">
+<h4>changepoint</h4>
+<p>Testing for 1 change point</p>
+<pre><code>## Created Using changepoint version 2.2.2 
+## Changepoint type      : Change in mean 
+## Method of analysis    : AMOC 
+## Test Statistic  : Normal 
+## Type of penalty       : MBIC with value, 11.73607 
+## Minimum Segment Length : 1 
+## Maximum no. of cpts   : 1 
+## Changepoint Locations : 25</code></pre>
+<p>Testing for several using PELT method and AIC penalty:</p>
+<pre><code>## Class &#39;cpt&#39; : Changepoint Object
+##        ~~   : S4 class containing 12 slots with names
+##               cpttype date version data.set method test.stat pen.type pen.value minseglen cpts ncpts.max param.est 
+## 
+## Created on  : Fri Apr 26 15:58:35 2019 
+## 
+## summary(.)  :
+## ----------
+## Created Using changepoint version 2.2.2 
+## Changepoint type      : Change in mean 
+## Method of analysis    : PELT 
+## Test Statistic  : Normal 
+## Type of penalty       : AIC with value, 4 
+## Minimum Segment Length : 1 
+## Maximum no. of cpts   : Inf 
+## Changepoint Locations : 25</code></pre>
+<p>Also just 1 change point detected at x = 25.</p>
+<p>Testing for several using PELT method and CROPS penalty:</p>
+<pre><code>## [1] &quot;Maximum number of runs of algorithm = 13&quot;
+## [1] &quot;Completed runs = 2&quot;
+## [1] &quot;Completed runs = 3&quot;
+## [1] &quot;Completed runs = 5&quot;
+## [1] &quot;Completed runs = 9&quot;
+## [1] &quot;Completed runs = 11&quot;
+## [1] &quot;Completed runs = 12&quot;</code></pre>
+<pre><code>## Created Using changepoint version 2.2.2 
+## Changepoint type      : Change in mean 
+## Method of analysis    : PELT 
+## Test Statistic  : Normal 
+## Type of penalty       : CROPS with value, 1 25 
+## Minimum Segment Length : 1 
+## Maximum no. of cpts   : Inf 
+## Changepoint Locations :  
+## Number of segmentations recorded: 7  with between  1  and  12 changepoints.
+##  Penalty value ranges from: 1  to  3.023723</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12]
+## [1,]    3    4   13   14   23   24   25   29   34    37    44    46
+## [2,]    3    4   13   14   23   24   25   29   34    37    NA    NA
+## [3,]    3    4   13   14   23   24   25   29   NA    NA    NA    NA
+## [4,]    3    4   13   14   23   24   25   NA   NA    NA    NA    NA
+## [5,]   13   14   23   24   25   NA   NA   NA   NA    NA    NA    NA
+## [6,]   13   14   25   NA   NA   NA   NA   NA   NA    NA    NA    NA
+## [7,]   25   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA</code></pre>
+<p>CROPS does not give an optimal set of changepoints, thus, we may wish to explore further by looking at the diagnostic plot and the associated penalty transition points:</p>
+<pre class="r"><code>plot(cpt2, diagnostic = TRUE)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<p>With the PELT method and CROPS penalty 5 change points are detected. So the <strong>choice of penalty</strong> can be highly relevant.</p>
+</div>
+<div id="bcp-1" class="section level4">
+<h4>bcp</h4>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<pre><code>##    Probability       X1 id
+## 25           1 0.176899 25</code></pre>
+</div>
+<div id="strucchange-1" class="section level4">
+<h4>strucchange</h4>
+<p><strong>Generalized fluctuation test</strong>
+<img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<pre><code>## 
+##  OLS-based CUSUM test
+## 
+## data:  ocus_mod
+## S0 = 3.3164, p-value = 5.593e-10</code></pre>
+<p><strong>F test</strong></p>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<p><strong>Regression break points</strong></p>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<p>Optimal number of breakpoints:</p>
+<pre><code>## [1] 1</code></pre>
+<p>Location of breakpoint:</p>
+<pre><code>## [1] 25</code></pre>
+<pre class="r"><code>ci_mod &lt;- confint(bpts, breaks = opt_brks)
+plot(z ~ x, data = df, type = &quot;l&quot;)
+for (i in 1: opt_brks) {
+  abline(v = df$x[ci_mod$confint[i,2]], col = &quot;blue&quot;)
+  abline(v = df$x[ci_mod$confint[i,1]], col = &quot;red&quot;, lty = 3)
+  abline(v = df$x[ci_mod$confint[i,3]], col = &quot;red&quot;, lty = 3)
+}
+
+## fit null hypothesis model and model with 1 breakpoint
+fm0 &lt;- lm(z ~ 1, data = df)
+x_fac &lt;- breakfactor(bpts2, breaks = 1)
+fm1 &lt;- lm(z ~ x_fac - 1, data = df)
+fm1_coef &lt;- coef(fm1) 
+
+fit1 &lt;- fitted(fm1)[1:best_brk]
+fit2 &lt;- fitted(fm1)[(best_brk+1):max(df$x)]
+
+# add to previous plot
+lines(df$x, fitted(fm0), col = 3)
+lines(df$x[1:best_brk], fit1, col = &quot;orange&quot;)
+lines(df$x[(best_brk+1):max(df$x)],fit2, col = &quot;orange&quot;)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
+</div>
+<div id="segmented-1" class="section level4">
+<h4>segmented</h4>
+<pre class="r"><code>lin_mod &lt;- lm(z ~ x, data = df)
+segm_mod &lt;- segmented(lin_mod, seg.Z = ~x, psi=20)
+summary(segm_mod)$psi</code></pre>
+<pre><code>##        Initial     Est.   St.Err
+## psi1.x      20 13.99996 5.525805</code></pre>
+<pre class="r"><code>plot(z ~ x, data = df, pch=16)
+plot(segm_mod, add=T)
+lines(segm_mod,col=&#39;red&#39;)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+<p>The detected change point lies around 14 with a wide confidence interval.</p>
+</div>
+<div id="tree-1" class="section level4">
+<h4>tree</h4>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
+<hr />
+</div>
+</div>
+</div>
+<div id="changes-in-mean-1" class="section level2">
+<h2>3 changes in mean</h2>
+<pre class="r"><code>set.seed(2)
+# Normal distributed data with 3 change in mean (at x = 10/11, 25/26, 45/46)
+df &lt;- data.frame(
+  x = 1:50,
+  z=c(rnorm(10, 1, sd = 0.5), rnorm(15, 0, sd = 0.5),
+    rnorm(20, 2, sd = 0.5), rnorm(5, 0.5 , sd = 0.5))
+)
+plot(df$x, df$z, type = &#39;l&#39;, xlab = &#39;&#39;, ylab = &#39;&#39;)
+lines(x = 1:10, y = rep(1,10), col = &#39;red&#39;, lwd = 3)
+lines(x = 11:25, y = rep(0,15), col = &#39;red&#39;, lwd = 3)
+lines(x = 26:45, y = rep(2,20), col = &#39;red&#39;, lwd = 3)
+lines(x = 46:50, y = rep(0.5,5), col = &#39;red&#39;, lwd = 3)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+<pre class="r"><code>z_ts &lt;- as.ts(df$z)</code></pre>
+<div id="changepoint-2" class="section level4">
+<h4>changepoint</h4>
+<p>Testing for 1 change point → nothing detected</p>
+<pre><code>## Created Using changepoint version 2.2.2 
+## Changepoint type      : Change in mean 
+## Method of analysis    : AMOC 
+## Test Statistic  : Normal 
+## Type of penalty       : MBIC with value, 11.73607 
+## Minimum Segment Length : 1 
+## Maximum no. of cpts   : 1 
+## Changepoint Locations :</code></pre>
+<p>Testing for several using PELT method and AIC penalty → 3 change points detected</p>
+<pre><code>## Class &#39;cpt&#39; : Changepoint Object
+##        ~~   : S4 class containing 12 slots with names
+##               cpttype date version data.set method test.stat pen.type pen.value minseglen cpts ncpts.max param.est 
+## 
+## Created on  : Fri Apr 26 15:58:35 2019 
+## 
+## summary(.)  :
+## ----------
+## Created Using changepoint version 2.2.2 
+## Changepoint type      : Change in mean 
+## Method of analysis    : PELT 
+## Test Statistic  : Normal 
+## Type of penalty       : AIC with value, 4 
+## Minimum Segment Length : 1 
+## Maximum no. of cpts   : Inf 
+## Changepoint Locations : 10 26 46</code></pre>
+<p>Testing for several using PELT method and CROP type:</p>
+<pre><code>## [1] &quot;Maximum number of runs of algorithm = 9&quot;
+## [1] &quot;Completed runs = 2&quot;
+## [1] &quot;Completed runs = 3&quot;
+## [1] &quot;Completed runs = 5&quot;
+## [1] &quot;Completed runs = 8&quot;</code></pre>
+<pre><code>## Created Using changepoint version 2.2.2 
+## Changepoint type      : Change in mean 
+## Method of analysis    : PELT 
+## Test Statistic  : Normal 
+## Type of penalty       : CROPS with value, 1 25 
+## Minimum Segment Length : 1 
+## Maximum no. of cpts   : Inf 
+## Changepoint Locations :  
+## Number of segmentations recorded: 7  with between  0  and  7 changepoints.
+##  Penalty value ranges from: 1  to  14.06746</code></pre>
+<p>In the following order are change points detected:</p>
+<pre class="r"><code>cpts_ord(cpts.full(cpt2))</code></pre>
+<pre><code>## [1] 26 46 10 15 16 33 43</code></pre>
+<p>The diagnostic plot shows that the model with only 3 changepoints is the most parsimonious:</p>
+<pre class="r"><code>plot(cpt2, diagnostic = TRUE)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-48-1.png" width="672" /></p>
+<pre class="r"><code>plot(cpt2, ncpts = 3)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-49-1.png" width="672" /></p>
+<p>So also with the CROP penalty type we find in this case the 3 changepoints but only when using the diagnostic plot to identify the appropriate number of changes.</p>
+</div>
+<div id="bcp-2" class="section level4">
+<h4>bcp</h4>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-51-1.png" width="672" /></p>
+<pre><code>##    Probability        X1 id
+## 26       0.868 0.6111902 26</code></pre>
+<p>The highest posterior probabilities for a change are found at location 10, 26 and 46. But only at #26 is the probability higher then 70%, which is considered the minimum to indicate a significant change.</p>
+</div>
+<div id="strucchange-2" class="section level4">
+<h4>strucchange</h4>
+<p><strong>Generalized fluctuation test</strong>
+<img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-52-1.png" width="672" /></p>
+<pre><code>## 
+##  OLS-based CUSUM test
+## 
+## data:  ocus_mod
+## S0 = 2.0704, p-value = 0.0003783</code></pre>
+<p><strong>F test</strong></p>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-53-1.png" width="672" /></p>
+<p><strong>Regression breakpoints</strong></p>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-55-1.png" width="672" /></p>
+<p>Optimal number of breakpoints:</p>
+<pre><code>## [1] 3</code></pre>
+<p>Location of breakpoint:</p>
+<pre><code>## [1] 10 26 34</code></pre>
+<p>While the first 2 frameworks detect only 1 change point, the breakpoints analysis detects all 3 change points but with wider confidence interval:</p>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-58-1.png" width="672" /></p>
+</div>
+<div id="segmented-2" class="section level4">
+<h4>segmented</h4>
+<pre><code>##        Initial     Est.  St.Err
+## psi1.x      20 44.99772 1.29978</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-59-1.png" width="672" /></p>
+<p>Only the last change point is found with this method.</p>
+</div>
+<div id="tree-2" class="section level4">
+<h4>tree</h4>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-60-1.png" width="672" /></p>
+<hr />
+</div>
+</div>
+<div id="linear-relationship-zx-with-1-break" class="section level2">
+<h2>Linear relationship (z~x) with 1 break</h2>
+<pre class="r"><code>set.seed(3)
+z &lt;- numeric(20)
+## Create first segment
+z[1:10] &lt;- 20:11 + rnorm(10, 0, 1.5)
+## Create second segment
+z[11:20] &lt;- seq(11, 15, len=10) + rnorm(10, 0, 1.5)
+df &lt;- data.frame(x = 1:20, z = z)
+
+plot(df$x, df$z, type=&#39;l&#39;,xlab=&#39;&#39;,ylab=&#39;&#39;)
+lines(x = 1:10,y = 20:11, lwd = 3, col = &#39;red&#39;)
+lines(x = 11:20, y = seq(11, 15, len=10), lwd = 3, col = &#39;red&#39;)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-61-1.png" width="672" /></p>
+<pre class="r"><code>z_ts &lt;- as.ts(df$z)</code></pre>
+<p>(changepoints at 10/11)</p>
+<div id="changepoint-3" class="section level4">
+<h4>changepoint</h4>
+<p>Testing for 1 change point in mean</p>
+<pre><code>## Created Using changepoint version 2.2.2 
+## Changepoint type      : Change in mean 
+## Method of analysis    : AMOC 
+## Test Statistic  : Normal 
+## Type of penalty       : MBIC with value, 8.987197 
+## Minimum Segment Length : 1 
+## Maximum no. of cpts   : 1 
+## Changepoint Locations : 6</code></pre>
+<p>Testing for several using PELT method and AIC penalty:</p>
+<pre><code>## Class &#39;cpt&#39; : Changepoint Object
+##        ~~   : S4 class containing 12 slots with names
+##               cpttype date version data.set method test.stat pen.type pen.value minseglen cpts ncpts.max param.est 
+## 
+## Created on  : Fri Apr 26 15:58:35 2019 
+## 
+## summary(.)  :
+## ----------
+## Created Using changepoint version 2.2.2 
+## Changepoint type      : Change in mean 
+## Method of analysis    : PELT 
+## Test Statistic  : Normal 
+## Type of penalty       : AIC with value, 4 
+## Minimum Segment Length : 1 
+## Maximum no. of cpts   : Inf 
+## Changepoint Locations : 3 8 13 18</code></pre>
+<p>Testing for several using PELT method and CROPS penalty:</p>
+<pre><code>## [1] &quot;Maximum number of runs of algorithm = 8&quot;
+## [1] &quot;Completed runs = 2&quot;
+## [1] &quot;Completed runs = 3&quot;
+## [1] &quot;Completed runs = 5&quot;
+## [1] &quot;Completed runs = 6&quot;
+## [1] &quot;Completed runs = 7&quot;</code></pre>
+<pre><code>## Created Using changepoint version 2.2.2 
+## Changepoint type      : Change in mean 
+## Method of analysis    : PELT 
+## Test Statistic  : Normal 
+## Type of penalty       : CROPS with value, 1 25 
+## Minimum Segment Length : 1 
+## Maximum no. of cpts   : Inf 
+## Changepoint Locations :  
+## Number of segmentations recorded: 6  with between  1  and  7 changepoints.
+##  Penalty value ranges from: 1  to  24.57129</code></pre>
+<p>The diagnostic plot, however, suggest the model with 4 change points as most parsimonious:</p>
+<pre class="r"><code>plot(cpt2, diagnostic = TRUE)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-65-1.png" width="672" /></p>
+<pre class="r"><code>plot(cpt2, ncpts = 4)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-66-1.png" width="672" /></p>
+<p>To get the exact locations one has to look at the full matrix of final models found (by row) with their different number of change points:</p>
+<pre class="r"><code>cpts.full(cpt2)</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+## [1,]    3    5    8    9   10   13   18
+## [2,]    3    8    9   10   13   18   NA
+## [3,]    3    8   13   18   NA   NA   NA
+## [4,]    3    8   18   NA   NA   NA   NA
+## [5,]    8   18   NA   NA   NA   NA   NA
+## [6,]    6   NA   NA   NA   NA   NA   NA</code></pre>
+<p>The model with only 4 change points is row 3, so the changepoints are at locations: 3, 8, 13, 18.</p>
+</div>
+<div id="bcp-3" class="section level4">
+<h4>bcp</h4>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-69-1.png" width="672" /></p>
+<pre><code>##   Probability       X1 id
+## 8       0.746 14.36749  8</code></pre>
+<p>The bcp method finds a change point at location 8, which is pretty close to the true value.</p>
+</div>
+<div id="strucchange-3" class="section level4">
+<h4>strucchange</h4>
+<p><strong>Generalized fluctuation test</strong>
+<img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-70-1.png" width="672" /></p>
+<pre><code>## 
+##  OLS-based CUSUM test
+## 
+## data:  ocus_mod
+## S0 = 1.528, p-value = 0.01876</code></pre>
+<p><strong>F test</strong></p>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-71-1.png" width="672" /></p>
+<p>The pattern is less clear here but suggest here optimal change points of 6.</p>
+<p><strong>Regression breakpoints</strong></p>
+<p>To test for changes in relationships the formula needs to be changed from <code>z~1</code> to <code>z~x</code>:</p>
+<pre class="r"><code>bpts &lt;- breakpoints(z ~ x, data = df)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-73-1.png" width="672" /></p>
+<p>Optimal number of breakpoints:</p>
+<pre><code>## [1] 1</code></pre>
+<p>Location of breakpoint:</p>
+<pre><code>## [1] 10</code></pre>
+<p>While the first 2 frameworks detect NO change point, the breakpoints analysis detects it exactly at location 10:</p>
+<pre class="r"><code>ci_mod &lt;- confint(bpts, breaks = opt_brks)
+plot(z ~ x, data = df, type = &quot;l&quot;)
+for (i in 1: opt_brks) {
+  abline(v = df$x[ci_mod$confint[i,2]], col = &quot;blue&quot;)
+  abline(v = df$x[ci_mod$confint[i,1]], col = &quot;red&quot;, lty = 3)
+  abline(v = df$x[ci_mod$confint[i,3]], col = &quot;red&quot;, lty = 3)
+}
+
+## fit null hypothesis model 
+fm0 &lt;- lm(z ~ x, data = df)
+# fit model with 1 breakpoint but formula different then in previous time series:
+fm1 &lt;- lm(z ~ x*(x &lt; best_brk) + x*(x &gt; best_brk), data = df)
+fm1_coef &lt;- coef(fm1) 
+
+fit1 &lt;- (fm1_coef[1] + fm1_coef[3]) + (fm1_coef[2] + fm1_coef[5])*df$x[df$x &lt;= best_brk]
+fit2 &lt;- (fm1_coef[1] + fm1_coef[4]) + (fm1_coef[2])*df$x[df$x &gt;= best_brk]
+
+# add to previous plot
+lines(df$x, fitted(fm0), col = 3)
+lines(df$x[1:best_brk], fit1, col = &quot;orange&quot;)
+lines(df$x[best_brk:max(df$x)], fit2, col = &quot;orange&quot;)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-76-1.png" width="672" /></p>
+</div>
+<div id="segmented-3" class="section level4">
+<h4>segmented</h4>
+<pre><code>##        Initial     Est.    St.Err
+## psi1.x      10 11.64798 0.6721446</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-77-1.png" width="672" /></p>
+<p>Also the segmented function detects correctly the change at location 10.</p>
+</div>
+<div id="tree-3" class="section level4">
+<h4>tree</h4>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-78-1.png" width="672" /></p>
+<p>This tree methods detects 2 changes which are below and above the true change point.</p>
+<hr />
+</div>
+</div>
+<div id="cubic-decay-function-zx" class="section level2">
+<h2>Cubic decay function (z~x)</h2>
+<pre class="r"><code>set.seed(4)
+x &lt;- 1:50
+z_nonoise &lt;- (10000 + 0.05*x + 0.2*x^2 - 0.2*x^3)
+z &lt;- z_nonoise + rnorm(50,1000,500)
+df &lt;- data.frame(x = x, z = z)
+
+plot(df$x, df$z, type = &#39;l&#39;, xlab = &#39;&#39;, ylab = &#39;&#39;)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-79-1.png" width="672" /></p>
+<pre class="r"><code>z_ts &lt;- as.ts(df$z)</code></pre>
+<div id="changepoint-4" class="section level4">
+<h4>changepoint</h4>
+<p>Testing for 1 change point in mean</p>
+<pre><code>## Created Using changepoint version 2.2.2 
+## Changepoint type      : Change in mean 
+## Method of analysis    : AMOC 
+## Test Statistic  : Normal 
+## Type of penalty       : MBIC with value, 11.73607 
+## Minimum Segment Length : 1 
+## Maximum no. of cpts   : 1 
+## Changepoint Locations : 35</code></pre>
+<p>Testing for several using PELT method and AIC penalty:</p>
+<pre><code>## Class &#39;cpt&#39; : Changepoint Object
+##        ~~   : S4 class containing 12 slots with names
+##               cpttype date version data.set method test.stat pen.type pen.value minseglen cpts ncpts.max param.est 
+## 
+## Created on  : Fri Apr 26 15:58:35 2019 
+## 
+## summary(.)  :
+## ----------
+## Created Using changepoint version 2.2.2 
+## Changepoint type      : Change in mean 
+## Method of analysis    : PELT 
+## Test Statistic  : Normal 
+## Type of penalty       : AIC with value, 4 
+## Minimum Segment Length : 1 
+## Maximum no. of cpts   : Inf 
+## Number of changepoints: 49</code></pre>
+<p>Testing for several using PELT method and CROPS penalty:</p>
+<pre><code>## [1] &quot;Maximum number of runs of algorithm = 2&quot;
+## [1] &quot;Completed runs = 2&quot;</code></pre>
+<pre><code>## Created Using changepoint version 2.2.2 
+## Changepoint type      : Change in mean 
+## Method of analysis    : PELT 
+## Test Statistic  : Normal 
+## Type of penalty       : CROPS with value, 1 25 
+## Minimum Segment Length : 1 
+## Maximum no. of cpts   : Inf 
+## Changepoint Locations :  
+## Range of segmentations:
+##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]
+## [1,]    1    2    3    4    5    6    7    8    9    10    11    12    13
+##      [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24]
+## [1,]    14    15    16    17    18    19    20    21    22    23    24
+##      [,25] [,26] [,27] [,28] [,29] [,30] [,31] [,32] [,33] [,34] [,35]
+## [1,]    25    26    27    28    29    30    31    32    33    34    35
+##      [,36] [,37] [,38] [,39] [,40] [,41] [,42] [,43] [,44] [,45] [,46]
+## [1,]    36    37    38    39    40    41    42    43    44    45    46
+##      [,47] [,48] [,49]
+## [1,]    47    48    49
+## 
+##  For penalty values: 1</code></pre>
+<p>Nothing detected.</p>
+</div>
+<div id="bcp-4" class="section level4">
+<h4>bcp</h4>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-84-1.png" width="672" /></p>
+<pre><code>##    Probability        X1 id
+## 32       0.784  5591.184 32
+## 43       0.902 -3204.395 43</code></pre>
+</div>
+<div id="strucchange-4" class="section level4">
+<h4>strucchange</h4>
+<p><strong>Generalized fluctuation test</strong>
+<img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-85-1.png" width="672" /></p>
+<pre><code>## 
+##  OLS-based CUSUM test
+## 
+## data:  ocus_mod
+## S0 = 2.9277, p-value = 7.175e-08</code></pre>
+<p><strong>F test</strong></p>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-86-1.png" width="672" /></p>
+<p><strong>Regression breakpoints</strong></p>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-88-1.png" width="672" /></p>
+<p>Optimal number of breakpoints:</p>
+<pre><code>## [1] 3</code></pre>
+<p>Location of breakpoint:</p>
+<pre><code>## [1]  8 26 41</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-91-1.png" width="672" /></p>
+</div>
+<div id="segmented-4" class="section level4">
+<h4>segmented</h4>
+<pre><code>##        Initial     Est.   St.Err
+## psi1.x      10 29.67403 0.579635</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-92-1.png" width="672" /></p>
+</div>
+<div id="tree-4" class="section level4">
+<h4>tree</h4>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-93-1.png" width="672" /></p>
+<hr />
+</div>
+</div>
+<div id="highly-non-linear-3-changes-in-regression" class="section level2">
+<h2>Highly non-linear (3 changes in regression)</h2>
+<pre class="r"><code>set.seed(5)
+x &lt;- 1:50
+z_nonoise &lt;- c(0.1*x[1:10], 1.5-0.2*(x[11:25]-11), 
+  -1.5 + 0.2*(x[26:45]-26), rep(1,5))
+z &lt;- z_nonoise + rnorm(50,0,0.2)
+df &lt;- data.frame(x = x, z = z)
+
+plot(df$x, df$z, type = &#39;l&#39;, xlab = &#39;&#39;, ylab = &#39;&#39;)
+lines(x = 1:10,y = 0.1*x[1:10], lwd = 3, col = &#39;red&#39;)
+lines(x = 11:25, y = 1.5-0.2*(x[11:25]-11), lwd = 3, col = &#39;red&#39;)
+lines(x = 26:45, y = -1.5 + 0.2*(x[26:45]-26), lwd = 3, col = &#39;red&#39;)
+lines(x = 46:50, y = rep(1,5), lwd = 3, col = &#39;red&#39;)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-94-1.png" width="672" /></p>
+<pre class="r"><code>z_ts &lt;- as.ts(df$z)</code></pre>
+<p>(changepoints at 10/11, 25/26, 45/46)</p>
+<div id="changepoint-5" class="section level4">
+<h4>changepoint</h4>
+<p>Testing for 1 change point in mean</p>
+<pre><code>## Created Using changepoint version 2.2.2 
+## Changepoint type      : Change in mean 
+## Method of analysis    : AMOC 
+## Test Statistic  : Normal 
+## Type of penalty       : MBIC with value, 11.73607 
+## Minimum Segment Length : 1 
+## Maximum no. of cpts   : 1 
+## Changepoint Locations :</code></pre>
+<p>Nothing found with the AMOC method.</p>
+<p>Testing for several using PELT method and AIC penalty:</p>
+<pre><code>## Class &#39;cpt&#39; : Changepoint Object
+##        ~~   : S4 class containing 12 slots with names
+##               cpttype date version data.set method test.stat pen.type pen.value minseglen cpts ncpts.max param.est 
+## 
+## Created on  : Fri Apr 26 15:58:35 2019 
+## 
+## summary(.)  :
+## ----------
+## Created Using changepoint version 2.2.2 
+## Changepoint type      : Change in mean 
+## Method of analysis    : PELT 
+## Test Statistic  : Normal 
+## Type of penalty       : AIC with value, 4 
+## Minimum Segment Length : 1 
+## Maximum no. of cpts   : Inf 
+## Changepoint Locations : 17 32</code></pre>
+<p>Testing for several using PELT method and CROPS penalty:</p>
+<pre><code>## [1] &quot;Maximum number of runs of algorithm = 8&quot;
+## [1] &quot;Completed runs = 2&quot;
+## [1] &quot;Completed runs = 3&quot;
+## [1] &quot;Completed runs = 5&quot;
+## [1] &quot;Completed runs = 7&quot;</code></pre>
+<pre><code>## Created Using changepoint version 2.2.2 
+## Changepoint type      : Change in mean 
+## Method of analysis    : PELT 
+## Test Statistic  : Normal 
+## Type of penalty       : CROPS with value, 1 25 
+## Minimum Segment Length : 1 
+## Maximum no. of cpts   : Inf 
+## Changepoint Locations :  
+## Number of segmentations recorded: 7  with between  0  and  6 changepoints.
+##  Penalty value ranges from: 1  to  14.97552</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-97-1.png" width="672" /></p>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6]
+## [1,]    4   16   23   31   39   45
+## [2,]   17   23   31   39   45   NA
+## [3,]   17   31   39   45   NA   NA
+## [4,]   17   31   39   NA   NA   NA
+## [5,]   17   32   NA   NA   NA   NA
+## [6,]   39   NA   NA   NA   NA   NA
+## [7,]   NA   NA   NA   NA   NA   NA</code></pre>
+<p>Changepoints at 17, 31, 39, and 45 detected:</p>
+<pre class="r"><code>plot(cpt2, ncpts = 4)</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-98-1.png" width="672" /></p>
+</div>
+<div id="bcp-5" class="section level4">
+<h4>bcp</h4>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-100-1.png" width="672" /></p>
+<pre><code>##    Probability        X1 id
+## 39       0.718 0.6137687 39
+## 45       0.942 2.0753858 45</code></pre>
+<p>The bcp method finds also at x = 39 and 45 change points but not before.</p>
+</div>
+<div id="strucchange-5" class="section level4">
+<h4>strucchange</h4>
+<p><strong>Generalized fluctuation test</strong>
+<img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-101-1.png" width="672" /></p>
+<pre><code>## 
+##  OLS-based CUSUM test
+## 
+## data:  ocus_mod
+## S0 = 1.9381, p-value = 0.001093</code></pre>
+<p><strong>F test</strong></p>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-102-1.png" width="672" /></p>
+<p><strong>Regression breakpoints</strong></p>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-104-1.png" width="672" /></p>
+<p>Get the optimal number numerically:</p>
+<pre class="r"><code>bpts_sum &lt;- summary(bpts)
+opt_brks &lt;- opt_bpts(bpts_sum$RSS[&quot;BIC&quot;,])
+opt_brks</code></pre>
+<pre><code>## [1] 3</code></pre>
+<p>Location of breakpoint:</p>
+<pre><code>## [1] 10 26 43</code></pre>
+<p>The first 2 approaches in <em>strucchange</em> find one significant change point while the breakpoints algorithm finds 3:</p>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-107-1.png" width="672" /></p>
+</div>
+<div id="segmented-5" class="section level4">
+<h4>segmented</h4>
+<p>Since I need to specify the number of change points directly in the function and i see already in the z~x plot several changes I provide 3 starting values (but for the purpose of performance evaluation will choose rather different ones):</p>
+<pre class="r"><code>lin_mod &lt;- lm(z ~ x, data = df)
+segm_mod &lt;- segmented(lin_mod, seg.Z = ~x,
+  psi=list(x=c(5,20,35)))
+summary(segm_mod)$psi</code></pre>
+<pre><code>##        Initial     Est.    St.Err
+## psi1.x       5 11.02788 0.6905547
+## psi2.x      20 26.00047 0.5059189
+## psi3.x      35 43.99998 0.6284971</code></pre>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-109-1.png" width="672" /></p>
+<p>The segmented method finds the 3 change points at location 11, 26, and 44.</p>
+</div>
+<div id="tree-5" class="section level4">
+<h4>tree</h4>
+<p><img src="/blog/2019-09-28-comparison-of-change-point-detection-methods_files/figure-html/unnamed-chunk-110-1.png" width="672" /></p>
+<p>The tree methods finds 4 change points.</p>
+<!-- Footnotes: -->
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Kortsch, S., Primicerio, R., Beuchel, F., Renaud, P.E., Rodrigues, J., Lønne, O.J. et al. (2012), Climate-driven regime shifts in Arctic marine benthos. Proc Nat Acad Sci U.S.A. 109:14052-14057, doi: <a href="https://doi.org/10.1073/pnas.1207509109">10.1073/pnas.1207509109</a><a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Samhouri, J.F., Andrews, K.S., Fay, G., Harvey, C.J., Hazen, E.L., Hennessey, S.M. et al. (2017), Defining ecosystem thresholds for human activities and environmental pressures in the California Current. Ecosphere 8:e01860, doi: <a href="https://doi.org/10.1002/ecs2.1860">10.1002/ecs2.1860</a><a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>Killick, R. &amp; Eckley, I. A. (2014), changepoint: An R Package for Changepoint Analysis. <em>J Stat Softw</em> 58(3), 15p., doi: <a href="https://www.jstatsoft.org/article/view/v058i03">10.18637/jss.v058.i03</a><a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p>Erdman, C. &amp; Emerson, J. W. (2008), A fast Bayesian change point analysis for the segmentation of microarray data. <em>Bioinformatics</em> 24: 2143-2148, doi: <a href="https://doi.org/10.1093/bioinformatics/btn404">10.1093/bioinformatics/btn404</a><a href="#fnref4" class="footnote-back">↩</a></p></li>
+<li id="fn5"><p>Zeileis, A., Leisch, F., Hornik, K. &amp; Kleiber, C. (2002), strucchange: An R Package for Testing for Structural Change in Linear Regression Models. <em>J Stat Softw</em> 7(2), 38p., doi: <a href="https://www.jstatsoft.org/article/view/v007i02">10.18637/jss.v007.i02</a><a href="#fnref5" class="footnote-back">↩</a></p></li>
+<li id="fn6"><p>Muggeo, V.M.R. (2008), Segmented: an R package to fit regression models with broken-line relationships. R News 8/1, 20–25.<a href="#fnref6" class="footnote-back">↩</a></p></li>
+<li id="fn7"><p>Cobb, G. W. (1978), The problem of the Nile: conditional solution to a change-point problem. <em>Biometrika</em> 65:243–51. doi: <a href="https://doi.org/10.1093/biomet/65.2.243">10.1093/biomet/65.2.243</a><a href="#fnref7" class="footnote-back">↩</a></p></li>
+</ol>
+</div>

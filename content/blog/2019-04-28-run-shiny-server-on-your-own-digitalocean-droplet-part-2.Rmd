@@ -400,13 +400,15 @@ location /rstudio/ {
   proxy_pass http://127.0.0.1:8787/;
   proxy_http_version 1.1;
   proxy_set_header Upgrade $http_upgrade;
-  proxy_set_header Connection $connection_upgrade;
+  proxy_set_header Connection "upgrade";
 }
 ```
 
 The 3 lines after each proxy_pass line fix a few issues by allowing nginx to proxy WebSockets. The `rewrite` command allows to write the URL with and without trailing slashes.
 
-<div style="border: solid; border-color: #ffe34c; border-radius: 2px; padding: 5px;"> NOTE: The IP address 127.0.0.1 is NOT the droplet's IP address and should be therefore not replaced with your own IP. Just copy the above lines with no further changes and paste them into your config file!</div> 
+Note, the IP address 127.0.0.1 is NOT the droplet's IP address and should be therefore not replaced with your own IP. Just copy the above lines with no further changes and paste them into your config file!
+
+<div style="border: solid; border-color: #ffe34c; border-radius: 2px; padding: 5px;"> UPDATE (July 17, 2019): The last line (which was previously `proxy_set_header Connection $connection_upgrade;`) failed when running the certbot's auto-renewal of the SSL certificate ( I got the error message that the "connection_upgrade" variable was not found). I fixed it by changing this line to `proxy_set_header Connection "upgrade";` as I had it for the shiny location.</div> 
 
 <br>
 Restart nginx again:

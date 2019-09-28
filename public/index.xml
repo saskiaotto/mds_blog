@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018 - present [Saskia Otto](https://github.com/saskiaotto)</copyright>
-    <lastBuildDate>Sun, 28 Apr 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 28 Sep 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Comparison of change point detection methods</title>
+      <link>/blog/2019/09/28/comparison-of-change-point-detection-methods/</link>
+      <pubDate>Sat, 28 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/09/28/comparison-of-change-point-detection-methods/</guid>
+      <description>This post compares a few change point detection method available in R given different time series dynamics and research questions. Change points or breakpoints are abrupt variations in time series data and may represent transitions between different states. The detection of change points is useful in modelling and prediction of time series and is found in application areas such as medical condition monitoring, speech and image analysis or climate change detection.</description>
+    </item>
     
     <item>
       <title>Run Shiny Server on your own DigitalOcean droplet - Part 1</title>
@@ -124,7 +133,7 @@ The package builds upon the tidy data principles and offers functions to
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/mds/</guid>
-      <description>Last update: 2019, Jan. 7 What is Marine Data Science (MDS)? MDS is all about uncovering findings from marine data such as oceanographical data collected using both in situ methods and remote sensing. Typical parameters measured on-board relate to near-surface meteorological conditions (air temperature, wind speed, wind direction, cloudiness, etc.), sea surface conditions (e.g. sea surface temperature (SST), salinity, wave height, and wave direction) as well as subsurface water characteristics (vertical profiles of temperature, salinity, dissolved nutrients, ocean currents, or ocean bottom depth).</description>
+      <description>Last update: 2019, Jan. 7 What is Marine Data Science (MDS)? MDS is all about uncovering findings from marine data such as oceanographical data collected using both in situ methods and remote sensing. Typical parameters measured on-board relate to near-surface meteorological conditions (air temperature, wind speed, wind direction, cloudiness, etc.), sea surface conditions (e.g. sea surface temperature (SST), salinity, wave height, and wave direction) as well as subsurface water characteristics (vertical profiles of temperature, salinity, dissolved nutrients, ocean currents, or ocean bottom depth).</description>
     </item>
     
     <item>

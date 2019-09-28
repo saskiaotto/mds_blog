@@ -1,0 +1,1465 @@
+---
+title: Comparison of change point detection methods
+author: Saskia
+date: '2019-09-28'
+slug: comparison-of-change-point-detection-methods
+categories:
+  - statistical learning
+tags:
+  - regime shifts
+  - method comparison
+banner: "img/banners/changepoints.png"    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE,
+  message = FALSE, warning = FALSE, error = FALSE)
+source("render_toc.R")
+library(tidyverse)
+library(huxtable)
+
+library(changepoint)
+library(bcp)
+library(strucchange)
+library(segmented)
+library(tree)
+```
+
+
+```{r, echo=FALSE}
+# Some functions for later
+cpts_ord <- function(mat) {
+  matr <- nrow(mat)
+  
+  get_cpts <- function(x){
+    out <- x[!is.na(x)]
+  }
+  
+  y<-apply(mat, 1, get_cpts)
+  y <- rev(y)
+  
+  if (matr > 0) {
+    for (i in 1:matr) {
+      if (i == 1) {
+        out <- y[[1]]
+      } else {
+        out <- c(out, y[[i]][!y[[i]] %in% out])
+      }
+    }
+  } else {
+    out <- NA
+  }
+  return(out)
+  
+}
+```
+
+This post compares a few change point detection method available in R given different time series dynamics and research questions. Change points or breakpoints are abrupt variations in time series data and may represent transitions between different states. The detection of change points is useful in modelling and prediction of time series and is found in application areas such as medical condition monitoring, speech and image analysis or climate change detection. In marine ecology, such analysis is often applied to identify sudden shifts in single populations or entire communities and environmental conditions[^1]. In this case, the change points detection algorithms are applied to single time series and the change points represent simply breaks in time.
+
+More recently, the presence and location of change points (then often termed *thresholds*) is studied in ecosystem indicators to better interpret and foresee impacts of changes in the intensities of human and environmental pressures[^2]. But here, the focus is more on change point in the relationship between a response (i.e. indicator) and explanatory (pressure) variable. But which detection method should be used for this case? I ran into this issue when analyzing indicator-pressure relationships and potential change points for the Baltic Sea. So I started to compare some of the commonly used algorithms by using artificial time series data for which I knew the exact number and location or functional response curve. I thought it might be nice to share the outcome with you and the conclusion I drew from the comparison. I won't go into too much detail about each package's function and their settings but I will try to explain a bit more including the R code in the first, real dataset. After that I will only show the numerical and graphical output to be not too lengthy!
+
+<br>
+
+## Overview
+
+```{r toc, echo=FALSE, eval = TRUE}
+this_post <- "2019-09-28-comparison-of-change-point-detection-methods.Rmd"
+render_toc(this_post,
+  toc_header_name = "Overview",
+  base_level = NULL,
+  toc_depth = 3)
+```
+
+
+
+# R packages for detecting change points
+
+The following packages available on CRAN will be compared:
+
+- `changepoint`: changes in mean and variance of time series
+- `bcp`: changes in mean; Bayesian approach
+- `strucchange`: changes in (time series) regression model
+- `segmented`: changes in regression (does not have to be time series data)
+- `tree`: classification or regression tree
+
+
+The [changepoint](https://www.rdocumentation.org/packages/changepoint/versions/2.2.2) package provides many methods for performing change point analysis of univariate time series[^3]. Although the package only considers the case of independent observations, the theory behind the implemented methods allows for certain types of serial dependence. For specific methods, the expected computational cost can be shown to be linear with respect to the length of the time series. Currently, the changepoint package is only suitable for finding changes in mean or variance. This package also estimates multiple change points through the use of penalization. The drawback to this approach is that it requires a user specified penalty term. A nice tutorial by Rebecca Killick can be found [here](http://members.cbio.mines-paristech.fr/~thocking/change-tutorial/RK-CptWorkshop.html). The core function I will use here is `cpt.mean()` with 
+
+  - the default *AMOC* method for single changepoint detection
+  - the *PELT* method for detecting multiple changepoints setting the penalty type to *AIC* and *CROPS*
+
+The [bcp](https://www.rdocumentation.org/packages/bcp/versions/4.0.3) package is designed to perform Bayesian single change point analysis of univariate time series[^5]. It returns the posterior probability of a change point occurring at each time index in the series. Recent versions of this package have reduced the computational cost from quadratic to linear with respect to the length of the series. However, all versions of this package are only designed to detect changes in the mean of independent Gaussian observations with its core function `bcp()`.
+
+The [strucchange](https://www.rdocumentation.org/packages/strucchange/versions/1.5-1) package provides a suite of tools for detecting changes within linear regression models[^4]. Many of these tools however, focus on detecting at most one change within the regression model. This package also contains methods that perform online change detection, thus allowing it to be used in settings where there are multiple changes. Additionally, if the number of changes is known a priori then the breakpoint method can be used to perform retrospective analysis. For a given number of changes, this method returns the change point estimates which minimizes the residual sum of squares. There are 3 approaches  I will use here:
+
+  - tests from the generalized fluctuation test (GFT) framework that can detect various types of structural changes: `efp()` and `sctest()`
+  - test from the F test framework, which assume that there is one (un-
+known) breakpoint: `Fstats()`
+  - test for simultaneous estimation of multiple breakpoints in time series regression models: `breakpoints()` → here one cane specify in the formula whether one wants to test for a change in the mean (i.e. the intercept) or in the relationship to an explanatory variable.
+
+The [segmented](https://www.rdocumentation.org/packages/segmented/versions/1.0-0/topics/segmented-package) package provides functions for segmented or broken-line models, which are regression models where the relationships between the response and one or more explanatory variables are piecewise linear, namely represented by two or more straight lines connected at specific breakpoints[^6]. The number of breakpoints of each segmented relationship must be a priori specified. 
+
+An alternative approach are so-called *decision trees*. These tree-based methods for regression and classification involve stratifying or segmenting the predictor space into a number of simple regions. The value at which the regions are split can also be seen as change points in the predictor. While there are numerous tree methods (e.g. boosting, bagging, random forest) and implementations in R I will here use the simple single decision tree approach that is provided by the [tree](https://www.rdocumentation.org/packages/tree/versions/1.0-40) package.
+
+This list of change point detection methods is surely not exclusive but represents fairly well the methods that have been commonly used to analyze ecological regime shifts in marine systems.
+<br>
+
+# Summary
+
+I will start right with the synthesis of my comparison so you can skip the time- and method-specific outcomes. The list of individual results you'll find below is actually pretty long as I compare 8 methods on 6 different time series (the first is the internal `Nile` dataset the others are artificial/ simulated datasets). So to spare you all these tedious plots and numeric outputs I summarized here all results into 1 table and a few figures.
+
+I will start right with the synthesis of my comparison so you can skip the tedious and lengthy outcomes of 8 methods that I test on 1 real and 5 artificial data sets. Here is an overview table that shows for each method and dataset the location of each detected change points. 
+
+```{r, echo=FALSE}
+# I use here the huxtable package where it's much easier
+# to modify single cells (only drawback, I cannot make table 
+# responsive as with kableExtra).
+# The column names have to be also in the first row 
+# (hence the matrix)
+cpt_loc <-  c(
+    "28","(too many)","(too many)","28","28","28","3","28",
+    "25","25","13,14,23,24,25","25","25","25","14","25",
+    "none","10,26,46","10,26,46", "26", "26","10,26,34", "20","10,16,26,33,45",
+    "6","3,8,13,18","3,8,13,18","8","8 (6)","10","11","6,14",
+    "35","(too many)","none","32,43","30 (34)","8,26,41","30","25,35,43",
+    "none","17,32","17,31,39,45","39,45","33 (39)","10,26,43","11,26,44","16,22,32,39,45"
+    )
+cpt_loc_mat <- matrix(cpt_loc, nrow = 6, byrow = TRUE)
+
+first_row <- matrix(c("AMOC", "PELT-AIC", "PELT-CROPS",
+    "bcp", "GFT (F test)", "Breakpoints", "segmented", "tree"), nrow = 1)
+cpt_loc_mat2 <- rbind(first_row, cpt_loc_mat)
+
+time_ser_col <- matrix(c("Time series (loc of true cpts)", 
+  "1 change in mean (Nile data, #28)",
+    "1 change in mean (at #25)",
+    "3 changes in mean (at #10,25,45)",
+    "1 break in relationship (at #10)",
+   "Cubic decay function",
+    "Highly non-linear (4 breaks at #10,25,45)"), ncol = 1)
+cpt_loc_ht <- cbind(time_ser_col, cpt_loc_mat2)
+
+# Now the table:
+ht <- as_hux(cpt_loc_ht)  
+cols <- "orange"
+ht <- ht %>%
+  theme_grey() %>%
+  set_caption("Table 1: Comparison of number and location (loc) of change points (cpts) across time series dynamics and methods. Orange cells indicate good matches with the true dataset.") %>% 
+  set_caption_pos("topleft") %>%
+  set_align(everywhere, col = 2:9, value = 'center') %>%
+  set_background_color(2, c(2,5:7,9), cols) %>%
+  set_background_color(3, c(2:3,5:7,9), cols) %>%
+  set_background_color(4, c(3:4), cols) %>%
+  set_background_color(5, c(7:8), cols) %>%
+  set_background_color(7, c(7:8), cols) %>%
+  set_width(value = 0.5)
+# this allows text wrapping:
+wrap(ht) <- TRUE
+ht
+```
+
+## Take home message
+
+- Obviously there is no one-method-fits-all! 
+- To detect the **one** major changepoint in the time series **several methods** can be applied. 
+- But to detect the **multiple** existing changepoints in dataset 3 only the **PELT** algorithm (independent of the penalty type) performed well. 
+- The changepoints in the **relationship** between 2 variables were only detected by the **regression breakpoint** and **segmented** algorithm. 
+- Particularly the `breakpoints()` stands out as it can detect changepoints in means of single time series but also in functional response curves and it **does not require any a priori determination of numbers** of changepoints!
+- A good choice might be the **complementary use** of the **PELT** algorithm in the *changepoint* package with the **breakpoints** method in *strucchange*. 
+- If one is interested to know when a response variable such as an ecosystem indicator starts to severely deteriorate due to the intensification of a particular human or environmental pressure than **regression-based method** such as breakpoints or segmented might be a better choice. 
+
+For a visual comparison of the better performing models all five artificial time series and the changes in the mean means or relationship are plotted here:
+
+```{r, echo=FALSE,fig.height=10}
+
+op <- par(mfrow = c(3,2))
+
+#data 1
+set.seed(1)
+# Normal distributed data with a single change in mean (at x = 25/26)
+dat1 <- data.frame(
+  x = 1:50,
+  z = c(rnorm(25,0,1), rnorm(25,5,1))
+)
+
+# data 2
+set.seed(2)
+# Normal distributed data with 3 change in mean (at x = 10/11, 25/26, 45/46)
+dat2 <- data.frame(
+  x = 1:50,
+  z=c(rnorm(10, 1, sd = 0.5), rnorm(15, 0, sd = 0.5),
+    rnorm(20, 2, sd = 0.5), rnorm(5, 0.5 , sd = 0.5))
+)
+
+# data 3
+set.seed(3)
+z <- numeric(20)
+## Create first segment
+z[1:10] <- 20:11 + rnorm(10, 0, 1.5)
+## Create second segment
+z[11:20] <- seq(11, 15, len=10) + rnorm(10, 0, 1.5)
+dat3 <- data.frame(x = 1:20, z = z)
+
+
+# data 4
+set.seed(4)
+x <- 1:50
+z_nonoise <- (10000 + 0.05*x + 0.2*x^2 - 0.2*x^3)
+z <- z_nonoise + rnorm(50,1000,500)
+dat4 <- data.frame(x = x, z = z)
+
+# data 5
+set.seed(5)
+x <- 1:50
+z_nonoise <- c(0.1*x[1:10], 1.5-0.2*(x[11:25]-11), 
+  -1.5 + 0.2*(x[26:45]-26), rep(1,5))
+z <- z_nonoise + rnorm(50,0,0.2)
+dat5 <- data.frame(x = x, z = z)
+
+
+opt_bpts <- function(x) {
+  #x = bpts_sum$RSS["BIC",]
+  n <- length(x)
+  lowest <- vector("logical", length = n-1)
+  lowest[1] <- FALSE
+  for (i in 2:n) {
+    lowest[i] <- x[i] < x[i-1] & x[i] < x[i+1]
+  }
+  out <- as.integer(names(x)[lowest])
+  return(out)
+}
+
+# -----------------------------------------------------
+
+colb <- "blue"
+colt <- "red"
+cols <- "green3"
+lwds <- 2
+
+### Plot 1
+
+# breakpoint values
+dat <- dat1
+bpts <- breakpoints(z ~ 1, data = dat)
+bpts_sum <- summary(bpts)
+opt_brks <- opt_bpts(bpts_sum$RSS["BIC",])
+bpts2 <- breakpoints(bpts, breaks = opt_brks)
+best_brk <- bpts2$breakpoints
+x_fac <- breakfactor(bpts2, breaks = opt_brks)
+fm1 <- lm(z ~ x_fac - 1, data = dat)
+fm1_coef <- coef(fm1) 
+fit1 <- fitted(fm1)[1:best_brk]
+fit2 <- fitted(fm1)[(best_brk+1):max(dat$x)]
+
+# changepoint values (PELT-AIC)
+cpt1 <- cpt.mean(dat$z, method = "PELT", penalty = "AIC")
+mean_1 <- cpt1@param.est$mean[1]
+mean_2 <- cpt1@param.est$mean[2]
+split <- cpt1@cpts[1]
+
+# plot
+dat <- dat1
+plot(z ~ x, data = dat, type = "l")
+lines(dat$x[1:best_brk], fit1, col = colb, lwd = lwds)
+lines(dat$x[(best_brk+1):max(dat$x)],fit2, col = colb, lwd = lwds)
+segments(x0 = dat$x[1], x1 = dat$x[split], 
+  y0 = mean_1, y1 = mean_1, col = colt, lwd = lwds, lty=2)
+segments(x0 = dat$x[split], x1 = dat$x[max(dat$x)], 
+  y0 = mean_2, y1 = mean_2, col = colt, lwd = lwds, lty=2)
+text(x = 0, y = 6, adj = c(0,0), labels = "breakpoints", col = colb)
+text(x = 0, y = 5, adj = c(0,0), labels = "PELT-AIC", col = colt)
+title("1 change in mean")
+
+### Plot 2
+
+# breakpoint values
+dat <- dat2
+bpts <- breakpoints(z ~ 1, data = dat)
+bpts_sum <- summary(bpts)
+opt_brks <- opt_bpts(bpts_sum$RSS["BIC",])
+bpts2 <- breakpoints(bpts, breaks = opt_brks)
+best_brk <- bpts2$breakpoints
+
+x_fac <- breakfactor(bpts2, breaks = opt_brks)
+fm1 <- lm(z ~ x_fac - 1, data = dat)
+fm1_coef <- coef(fm1)
+fit1 <- fitted(fm1)[1:best_brk[1]]
+fit2 <- fitted(fm1)[(best_brk[1]+1):best_brk[2]]
+fit3 <- fitted(fm1)[(best_brk[2]+1):best_brk[3]]
+fit4 <- fitted(fm1)[(best_brk[3]+1):max(dat$x)]
+
+# changepoint values (PELT-AIC)
+cpt1 <- cpt.mean(dat$z, method = "PELT", penalty = "AIC")
+mean_1 <- cpt1@param.est$mean[1]
+mean_2 <- cpt1@param.est$mean[2]
+mean_3 <- cpt1@param.est$mean[3]
+mean_4 <- cpt1@param.est$mean[4]
+split <- cpt1@cpts[-4]
+
+# plot
+plot(z ~ x, data = dat, type = "l")
+lines(dat$x[1:best_brk[1]], fit1, col = colb, lwd = lwds)
+lines(dat$x[(best_brk[1]+1):best_brk[2]],fit2, col = colb, lwd = lwds)
+lines(dat$x[(best_brk[2]+1):best_brk[3]],fit3, col = colb, lwd = lwds)
+lines(dat$x[(best_brk[3]+1):max(dat$x)],fit4, col = colb, lwd = lwds)
+
+segments(x0 = dat$x[1], x1 = dat$x[split[1]],
+  y0 = mean_1, y1 = mean_1, col = colt, lwd = lwds, lty=2)
+segments(x0 = dat$x[(split[1]+1)], x1 = dat$x[split[2]],
+  y0 = mean_2, y1 = mean_2, col = colt, lwd = lwds, lty=2)
+segments(x0 = dat$x[(split[2]+1)], x1 = dat$x[split[3]],
+  y0 = mean_3, y1 = mean_3, col = colt, lwd = lwds, lty=2)
+segments(x0 = dat$x[(split[3]+1)], x1 = dat$x[max(dat$x)],
+  y0 = mean_4, y1 = mean_4, col = colt, lwd = lwds, lty=2)
+
+text(x = 0, y = 2.7, adj = c(0,0), labels = "breakpoints", col = colb)
+text(x = 0, y = 2.2, adj = c(0,0), labels = "PELT-AIC", col = colt)
+title("3 changes in mean")
+
+
+#-----
+
+### Plot 3
+
+# breakpoint values
+dat <- dat3
+bpts <- breakpoints(z ~ x, data = dat)
+bpts_sum <- summary(bpts)
+opt_brks <- opt_bpts(bpts_sum$RSS["BIC",])
+bpts2 <- breakpoints(bpts, breaks = opt_brks)
+best_brk <- bpts2$breakpoints
+fm1 <- lm(z ~ x*(x < best_brk) + x*(x > best_brk), data = dat)
+fm1_coef <- coef(fm1)
+
+fit1 <- (fm1_coef[1] + fm1_coef[3]) + (fm1_coef[2] + fm1_coef[5])*dat$x[dat$x <= best_brk]
+fit2 <- (fm1_coef[1] + fm1_coef[4]) + (fm1_coef[2])*dat$x[dat$x > best_brk]
+
+# changepoint values (PELT-AIC)
+cpt1 <- cpt.mean(dat$z, method = "PELT", penalty = "AIC")
+mean_1 <- cpt1@param.est$mean[1]
+mean_2 <- cpt1@param.est$mean[2]
+mean_3 <- cpt1@param.est$mean[3]
+mean_4 <- cpt1@param.est$mean[4]
+mean_5 <- cpt1@param.est$mean[5]
+split <- cpt1@cpts[-6]
+
+# segmented
+lin_mod <- lm(z ~ x, data = dat)
+segm_mod <- segmented(lin_mod, seg.Z = ~x, psi=10)
+
+# plot
+plot(z ~ x, data = dat, type = "l")
+lines(dat$x[1:best_brk], fit1, col = colb, lwd = lwds)
+lines(dat$x[(best_brk+1):max(dat$x)],fit2, col = colb, lwd = lwds)
+segments(x0 = dat$x[1], x1 = dat$x[split[1]],
+  y0 = mean_1, y1 = mean_1, col = colt, lwd = lwds, lty=2)
+segments(x0 = dat$x[(split[1]+1)], x1 = dat$x[split[2]],
+  y0 = mean_2, y1 = mean_2, col = colt, lwd = lwds, lty=2)
+segments(x0 = dat$x[(split[2]+1)], x1 = dat$x[split[3]],
+  y0 = mean_3, y1 = mean_3, col = colt, lwd = lwds, lty=2)
+segments(x0 = dat$x[(split[3]+1)], x1 = dat$x[split[4]],
+  y0 = mean_4, y1 = mean_4, col = colt, lwd = lwds, lty=2)
+segments(x0 = dat$x[(split[4]+1)], x1 = dat$x[max(dat$x)],
+  y0 = mean_4, y1 = mean_4, col = colt, lwd = lwds, lty=2)
+plot(segm_mod, add = TRUE, col = cols, lwd = lwds, lty = 4)
+
+text(x = 15, y = 18.5, adj = c(0,0), labels = "breakpoints", col = colb)
+text(x = 15, y = 18, adj = c(0,0), labels = "PELT-AIC", col = colt)
+text(x = 15, y = 17.5, adj = c(0,0), labels = "segmented", col = cols)
+title("1 change in regression")
+
+#-----
+
+### Plot 4
+
+dat <- dat4
+bpts <- breakpoints(z ~ x, data = dat)
+bpts_sum <- summary(bpts)
+opt_brks <- opt_bpts(bpts_sum$RSS["BIC",])
+bpts2 <- breakpoints(bpts, breaks = opt_brks)
+best_brk <- bpts2$breakpoints
+fm1 <- lm(z ~ x*(x < best_brk[1]) + x*(x > best_brk[1] & x < best_brk[2]) +
+    x*(x > best_brk[2] & x < best_brk[3]) + x*(x > best_brk[3]), data = dat)
+fm1_coef <- coef(fm1)
+
+fit1 <- (fm1_coef[1] + fm1_coef[3]) + (fm1_coef[2] + fm1_coef[7])*dat$x[dat$x <= best_brk[1]]
+fit2 <- (fm1_coef[1] + fm1_coef[4]) + (fm1_coef[2] +
+    fm1_coef[8])*dat$x[dat$x > best_brk[1] & dat$x <= best_brk[2]]
+fit3 <- (fm1_coef[1] + fm1_coef[5]) + (fm1_coef[2] +
+    fm1_coef[9])*dat$x[dat$x > best_brk[2] & dat$x <= best_brk[3]]
+fit4 <- (fm1_coef[1] + fm1_coef[6]) + (fm1_coef[2] + fm1_coef[10])*dat$x[dat$x > best_brk[3]]
+
+# segmented
+lin_mod <- lm(z ~ x, data = dat)
+segm_mod <- segmented(lin_mod, seg.Z = ~x, psi=10)
+
+plot(z ~ x, data = dat, type = "l")
+lines(dat$x[1:best_brk[1]], fit1, col = colb, lwd = lwds)
+lines(dat$x[(best_brk[1]+1):best_brk[2]], fit2, col = colb, lwd = lwds)
+lines(dat$x[(best_brk[2]+1):best_brk[3]], fit3, col = colb, lwd = lwds)
+lines(dat$x[(best_brk[3]+1):max(dat$x)], fit4, col = colb, lwd = lwds)
+plot(segm_mod, add = TRUE, col = cols, lwd = lwds, lty = 4)
+
+text(x = 0, y = -9000, adj = c(0,0), labels = "breakpoints", col = colb)
+text(x = 0, y = -12000, adj = c(0,0), labels = "segmented", col = cols)
+title("Cubic decay function")
+
+#-----
+
+### Plot 5
+
+dat <- dat5
+bpts <- breakpoints(z ~ x, data = dat)
+bpts_sum <- summary(bpts)
+opt_brks <- opt_bpts(bpts_sum$RSS["BIC",])
+bpts2 <- breakpoints(bpts, breaks = opt_brks)
+best_brk <- bpts2$breakpoints
+fm1 <- lm(z ~ x*(x < best_brk[1]) + x*(x > best_brk[1] & x < best_brk[2]) +
+    x*(x > best_brk[2] & x < best_brk[3]) + x*(x > best_brk[3]), data = dat)
+fm1_coef <- coef(fm1)
+
+fit1 <- (fm1_coef[1] + fm1_coef[3]) + (fm1_coef[2] + fm1_coef[7])*dat$x[dat$x <= best_brk[1]]
+fit2 <- (fm1_coef[1] + fm1_coef[4]) + (fm1_coef[2] +
+    fm1_coef[8])*dat$x[dat$x > best_brk[1] & dat$x <= best_brk[2]]
+fit3 <- (fm1_coef[1] + fm1_coef[5]) + (fm1_coef[2] +
+    fm1_coef[9])*dat$x[dat$x > best_brk[2] & dat$x <= best_brk[3]]
+fit4 <- (fm1_coef[1] + fm1_coef[6]) + (fm1_coef[2] + fm1_coef[10])*dat$x[dat$x > best_brk[3]]
+
+# segmented
+lin_mod <- lm(z ~ x, data = dat)
+segm_mod <- segmented(lin_mod, seg.Z = ~x,
+  psi=list(x=c(5,20,35)))
+
+
+plot(z ~ x, data = dat, type = "l")
+lines(dat$x[1:best_brk[1]], fit1, col = colb, lwd = lwds)
+lines(dat$x[(best_brk[1]+1):best_brk[2]], fit2, col = colb, lwd = lwds)
+lines(dat$x[(best_brk[2]+1):best_brk[3]], fit3, col = colb, lwd = lwds)
+lines(dat$x[(best_brk[3]+1):max(dat$x)], fit4, col = colb, lwd = lwds)
+plot(segm_mod, add = TRUE, col = cols, lwd = lwds, lty = 4)
+
+text(x = 0, y = 2.2, adj = c(0,0), labels = "breakpoints", col = colb)
+text(x = 0, y = 1.8, adj = c(0,0), labels = "segmented", col = cols)
+title("3 changes in regression")
+
+par(op)
+```
+
+
+## Pros and cons of each method
+
+### Changes in mean
+
+- `changepoint`: 
+    - disadvantage here is that one needs to specify *a priori* if 1 or multiple changes and 
+    - there are many parameters to set which can lead to different results
+    - when penalty set to "CROPS", one needs to visually inspect the optimal number of change points
+- `bcp`: 
+    - easy to use, not much to specify
+    - no specification of change points to set *a priori*
+    - detection rate depends more on the magnitude of change than other methods
+- `strucchange`:
+    - can cope with many model types, also for changes in means by specifying y ~ 1
+    - provides confidence intervals of change points
+    - several test statistics for checking for structural changes: `sctest()`,  `Fstats()`, `breakpoints()`
+    - disav.: sum of the output is tuned to ts object, needs some recoding to adjust to ordinary dataframe (→ applies to `sctest()`,  `Fstats()`)
+- `segmented`: useless for changes in mean!
+- `tree`:
+    - the method found all true changepoints
+    - but unfortunately also some more --> how to choose the optimal one?
+    
+### Changes in functional curves of relationships between X and Y
+
+- `strucchange`:
+    - provides several test statistics
+    - no *a priori* specification of change points
+    - provides confidence intervals around the location of the change points!
+    - allows different type of model structures (but that also requires the correct specification)
+- `segmented`:  
+    - disadv.: requires starting values for the change points, hence, one needs to determine the number of change points *a priori* 
+    - adv.: provides also confidence intervals around the location of the change points!
+    - disadv.: very simple model structure only allowed 
+    
+---
+
+# Detailed results and R code of detection performance under different scenarios
+
+```{r, eval = FALSE}
+# Loading packages
+library(changepoint)
+library(bcp)
+library(strucchange)
+library(segmented)
+library(tree)
+```
+
+
+## 1 change in mean
+
+### Real data: **Nile** dataset
+
+The Nile dataset comes with the R `dataset` package and represents measurements of the annual flow (in unit 10^8^ m^3^) of the river Nile at Aswan, between 1871 and 1970. Around 1898, the annual flow dropped greatly from circa 1100 to 800[^7]. We will test now whether this shift in 1898 (i.e. in year 28 of the time series) will be detected by all 5 methods. 
+
+
+```{r}
+data(Nile)
+str(Nile)
+plot(Nile)
+```
+
+#### changepoint
+Looking for 1 change point using the "AMOC" method (which is also the default):
+```{r}
+cpt.mean(Nile, method = "AMOC") 
+```
+
+The method identifies correctly a change point in 1898 (#28). What would happen when using the setting for identifying multiple change points (if we wouldn't know the exact number):
+```{r}
+cpt.mean(Nile, method = "PELT", Q = 10)
+cpt2 <- cpt.mean(Nile, method = "PELT", penalty = "CROPS", pen.value = c(1,25))
+summary(cpt2)
+```
+
+We can also plot the diagnostics to see the number of changepoints in each segmentation against the change in test statistic when adding that change. The plot is similar to the scree plot in principal component analysis as when a true changepoint is added the cost increases or decreases rapidly, but when a changepoint due to noise is added the change is small:
+
+```{r}
+plot(cpt2, diagnostic = TRUE)
+```
+
+The PELT algorithm detects too many change points (same when methods  "SegNeigh" or "BinSeg" were used).
+
+
+#### bcp
+
+```{r, warning=FALSE, message=TRUE}
+x <- Nile
+bcp_x <- bcp(x, return.mcmc = TRUE)
+plot(bcp_x)
+```
+
+The lower posterior probability plot shows that at one location (looks like #28) the probability of a change is very high. We can get the exact locations where probabilities are high (e.g. > 70%) with this code:
+
+<!-- To avoid showing the entire data.frame I need to split and repeat the code -->
+```{r, eval = FALSE}
+bcp_sum <- as.data.frame(summary(bcp_x))
+# Let's filter the data frame and identify the year:
+bcp_sum$id <- 1:length(x)
+(sel <- bcp_sum[which(bcp_x$posterior.prob > 0.7), ])
+# Get the year:
+time(x)[sel$id] 
+```
+
+```{r, echo=FALSE, results='hide'}
+bcp_sum <- as.data.frame(summary(bcp_x))
+```
+
+```{r, echo=FALSE}
+bcp_sum$id <- 1:length(x)
+sel <- bcp_sum[which(bcp_x$posterior.prob > 0.7), ]
+print(sel)
+time(x)[sel$id] # Year
+```
+
+
+Also this method identified the correct year of change.
+
+#### strucchange
+```{r}
+ocus_nile <- efp(Nile ~ 1, type = "OLS-CUSUM")
+op <- par(mfrow = c(1,2))
+plot(ocus_nile)
+plot(ocus_nile, alpha = 0.01, alt.boundary = TRUE)
+```
+
+```{r, echo = FALSE}
+par(op)
+```
+
+The `efp` function with the type "OLS-CUSUM" computes an empirical fluctuation process of OLS residuals which is plotted above. The process line shows a peak around 1900 which exceeds the boundaries and, hence, indicates a clear structural shift at that time.
+
+To calculate the corresponding CUSUM and F test statistics for structural change (the first computed on the efp object):
+```{r}
+sctest(ocus_nile)
+fs_nile <- Fstats(Nile ~ 1)
+plot(fs_nile)
+```
+
+Both tests suggest a significant change in the time series.
+
+Test for 1 breakpoint using the `breakpoints()` function → Note that the number of breakpoints have to be defined beforehand for this method!
+```{r}
+bp_nile <- breakpoints(Nile ~ 1)
+bp_nile
+```
+
+To check for multiple breaks, the `breakpoint()` function can be also applied to breakpoints objects with an explicit *breaks* argument (so you actually nest a `breakpoints` function in `breakpoints()`:
+```{r}
+breakpoints(bp_nile, breaks = 2)
+# Nested syntax with 3 breaks:
+breakpoints(breakpoints(Nile ~ 1), breaks = 3)
+```
+
+So how does one know how many breakpoints exist in the time series? Here, the comparison of BIC estimates for different numbers of breakpoint is useful:
+```{r}
+plot(bp_nile)
+```
+
+Based on the BIC we should choose one breakpoint.
+
+To get the optimal number numerically instead of inspecting the plot each time, here is a solution:
+```{r}
+# get best model
+opt_bpts <- function(x) {
+  #x = bpts_sum$RSS["BIC",]
+  n <- length(x)
+  lowest <- vector("logical", length = n-1)
+  lowest[1] <- FALSE
+  for (i in 2:n) {
+    lowest[i] <- x[i] < x[i-1] & x[i] < x[i+1]
+  }
+  out <- as.integer(names(x)[lowest])
+  return(out)
+}
+bpts_sum <- summary(bp_nile)
+opt_brks <- opt_bpts(bpts_sum$RSS["BIC",])
+opt_brks
+```
+
+To get the location of the breakpoint(s):
+
+```{r, echo=FALSE}
+bpts2 <- breakpoints(bp_nile, breaks = opt_brks)
+best_brk <- bpts2$breakpoints
+best_brk
+```
+
+
+One can also visualize the breakpoints in the time series plot with confidence intervals using the `stats::confint()` function:
+```{r}
+ci_nile <- confint(bp_nile, breaks = opt_brks)
+plot(Nile)
+lines(ci_nile)
+```
+
+We can also add the regression lines of the null model and our model with 1 breakpoint for comparison:
+```{r}
+# null model
+fm0 <- lm(Nile ~ 1)
+coef(fm0)
+# breakpoint model
+nile_fac <- breakfactor(bp_nile, breaks = 1)
+fm1 <- lm(Nile ~ nile_fac - 1)
+coef(fm1)
+plot(Nile)
+lines(ci_nile)
+lines(ts(fitted(fm0), start = 1871), col = 3)
+lines(ts(fitted(fm1), start = 1871), col = 4)
+lines(bp_nile)
+```
+
+
+#### segmented
+
+With this method, the number of breakpoints have to be also specified beforehand similar to the `strucchange::breakpoints()` function:
+```{r}
+Nile_df <- data.frame(Nile = as.numeric(Nile), Year = 1871:1970)
+seg_nile <- segmented(lm(Nile ~ 1, data = Nile_df), ~ Year, 
+  psi = list(Year = c(1900))) # using 1900 as starting value
+summary(seg_nile)
+summary(seg_nile)$psi
+```
+
+```{r}
+plot(Nile ~ Year, data = Nile_df, type = "l")
+plot(seg_nile, add=T)
+lines(seg_nile,col='red')
+```
+
+The `segmented()` function detects one change, but right at the start (1873). It seems to be not devised for this kind of step change.
+
+
+#### tree
+
+```{r}
+Nile_df <- data.frame(Nile = as.numeric(Nile), Year = 1871:1970)
+tree_nile <- tree(Nile ~ Year, data = Nile_df)
+summary(tree_nile)
+plot(tree_nile)
+text(tree_nile, pretty = 0)
+```
+
+Also the `tree()` function finds correctly the change point in the Nile time series.
+
+So let's try another time series...
+
+---
+
+### Artificial data
+
+```{r}
+set.seed(1)
+# Normal distributed data with a single change in mean (at x = 25/26)
+df <- data.frame(
+  x = 1:50,
+  z = c(rnorm(25,0,1), rnorm(25,5,1))
+)
+plot(df$x, df$z, type = 'l', xlab = '', ylab = '')
+lines(x = 1:25, y = rep(0,25), col = 'red', lwd = 3)
+lines(x=26:50, y = rep(5,25), col = 'red', lwd = 3)
+```
+
+Since it is difficult to identify the location of change points if data input objects for `efp()` and `Fstats()` are not a time series, I will convert `df$z` and use `z_ts` similar to the `Nile` data (this will help identifying the row in the data of the changepoint location):
+
+```{r}
+z_ts <- as.ts(df$z)
+```
+
+#### changepoint
+
+
+Testing for 1 change point
+```{r, echo=FALSE}
+cpt1 <- cpt.mean(df$z) 
+summary(cpt1)
+```
+
+Testing for several using PELT method and AIC penalty:
+```{r, echo=FALSE}
+cpt.mean(df$z, method = "PELT", penalty = "AIC")
+```
+Also just 1 change point detected at x = 25.
+
+Testing for several using PELT method and CROPS penalty:
+```{r, echo=FALSE}
+cpt2 <- cpt.mean(df$z, method = "PELT", penalty = "CROPS", 
+  pen.value = c(1,25) ) 
+summary(cpt2)
+cpts.full(cpt2) 
+```
+
+CROPS does not give an optimal set of changepoints, thus, we may wish to explore further by looking at the diagnostic plot and the associated penalty transition points:
+
+```{r}
+plot(cpt2, diagnostic = TRUE)
+```
+
+With the PELT method and CROPS penalty 5 change points are detected. So the **choice of penalty** can be highly relevant.
+
+#### bcp
+
+```{r, echo=FALSE, results="hide"}
+x <- df$z
+bcp_x <- bcp(x)
+bcp_sum <- as.data.frame(summary(bcp_x))
+```
+
+```{r, echo=FALSE}
+plot(bcp_x)
+bcp_sum$id <- 1:length(x)
+sel <- bcp_sum[which(bcp_x$posterior.prob > 0.7), ]
+print(sel)
+```
+
+
+#### strucchange
+
+**Generalized fluctuation test**
+```{r, echo=FALSE}
+ocus_mod <- efp(z_ts ~ 1, type = "OLS-CUSUM")
+plot(ocus_mod)
+
+## calculate corresponding test statistic for structural change
+sctest(ocus_mod)
+```
+
+**F test**
+
+```{r, echo=FALSE} 
+fs_mod <- Fstats(z_ts ~ 1)
+plot(fs_mod)
+```
+
+**Regression break points**
+```{r, echo=FALSE, results='hide'} 
+# breakpoint estimation
+bpts <- breakpoints(z ~ 1, data = df)
+```
+
+```{r, echo=FALSE} 
+## BIC
+plot(bpts)
+```
+
+Optimal number of breakpoints:
+```{r, echo=FALSE}
+bpts_sum <- summary(bpts)
+opt_brks <- opt_bpts(bpts_sum$RSS["BIC",])
+opt_brks
+```
+
+Location of breakpoint:
+```{r, echo=FALSE}
+bpts2 <- breakpoints(bpts, breaks = opt_brks)
+best_brk <- bpts2$breakpoints
+best_brk
+```
+
+```{r, echo=TRUE}
+ci_mod <- confint(bpts, breaks = opt_brks)
+plot(z ~ x, data = df, type = "l")
+for (i in 1: opt_brks) {
+  abline(v = df$x[ci_mod$confint[i,2]], col = "blue")
+  abline(v = df$x[ci_mod$confint[i,1]], col = "red", lty = 3)
+  abline(v = df$x[ci_mod$confint[i,3]], col = "red", lty = 3)
+}
+
+## fit null hypothesis model and model with 1 breakpoint
+fm0 <- lm(z ~ 1, data = df)
+x_fac <- breakfactor(bpts2, breaks = 1)
+fm1 <- lm(z ~ x_fac - 1, data = df)
+fm1_coef <- coef(fm1) 
+
+fit1 <- fitted(fm1)[1:best_brk]
+fit2 <- fitted(fm1)[(best_brk+1):max(df$x)]
+
+# add to previous plot
+lines(df$x, fitted(fm0), col = 3)
+lines(df$x[1:best_brk], fit1, col = "orange")
+lines(df$x[(best_brk+1):max(df$x)],fit2, col = "orange")
+```
+
+
+
+#### segmented
+
+```{r, echo=TRUE}
+lin_mod <- lm(z ~ x, data = df)
+segm_mod <- segmented(lin_mod, seg.Z = ~x, psi=20)
+summary(segm_mod)$psi
+
+plot(z ~ x, data = df, pch=16)
+plot(segm_mod, add=T)
+lines(segm_mod,col='red')
+```
+
+The detected change point lies around 14 with a wide confidence interval.
+
+#### tree
+
+```{r, echo=FALSE}
+tree_mod <- tree(z ~ x, data = df)
+plot(tree_mod)
+text(tree_mod, pretty = 0)
+```
+
+---
+
+## 3 changes in mean
+
+
+```{r}
+set.seed(2)
+# Normal distributed data with 3 change in mean (at x = 10/11, 25/26, 45/46)
+df <- data.frame(
+  x = 1:50,
+  z=c(rnorm(10, 1, sd = 0.5), rnorm(15, 0, sd = 0.5),
+    rnorm(20, 2, sd = 0.5), rnorm(5, 0.5 , sd = 0.5))
+)
+plot(df$x, df$z, type = 'l', xlab = '', ylab = '')
+lines(x = 1:10, y = rep(1,10), col = 'red', lwd = 3)
+lines(x = 11:25, y = rep(0,15), col = 'red', lwd = 3)
+lines(x = 26:45, y = rep(2,20), col = 'red', lwd = 3)
+lines(x = 46:50, y = rep(0.5,5), col = 'red', lwd = 3)
+
+z_ts <- as.ts(df$z)
+```
+
+
+
+#### changepoint
+
+Testing for 1 change point → nothing detected
+```{r, echo=FALSE}
+cpt1 <- cpt.mean(df$z) 
+summary(cpt1)
+```
+
+Testing for several using PELT method and AIC penalty → 3 change points detected
+```{r, echo=FALSE}
+cpt.mean(df$z, method = "PELT", penalty = "AIC")
+```
+
+
+Testing for several using PELT method and CROP type:
+```{r, echo=FALSE}
+cpt2 <- cpt.mean(df$z, method = "PELT", penalty = "CROPS", 
+  pen.value = c(1,25) ) 
+summary(cpt2)
+```
+
+In the following order are change points detected:
+```{r}
+cpts_ord(cpts.full(cpt2))
+```
+
+The diagnostic plot shows that the model with only 3 changepoints is the most parsimonious:
+```{r}
+plot(cpt2, diagnostic = TRUE)
+```
+
+```{r}
+plot(cpt2, ncpts = 3)
+```
+
+So also with the CROP penalty type we find in this case the 3 changepoints but only when using the diagnostic plot to identify the appropriate number of changes. 
+
+
+#### bcp
+
+```{r, echo=FALSE, results="hide"}
+x <- df$z
+bcp_x <- bcp(x)
+bcp_sum <- as.data.frame(summary(bcp_x))
+```
+
+```{r, echo=FALSE}
+plot(bcp_x)
+bcp_sum$id <- 1:length(x)
+sel <- bcp_sum[which(bcp_x$posterior.prob > 0.7), ]
+print(sel)
+```
+
+The highest posterior probabilities for a change are found at location 10, 26 and 46. But only at #26 is the probability higher then 70%, which is considered the minimum to indicate a significant change.
+
+#### strucchange
+
+**Generalized fluctuation test**
+```{r, echo=FALSE}
+ocus_mod <- efp(z_ts ~ 1, type = "OLS-CUSUM")
+plot(ocus_mod)
+sctest(ocus_mod)
+```
+
+**F test**
+
+```{r, echo=FALSE}
+fs_mod <- Fstats(z_ts ~ 1)
+plot(fs_mod)
+```
+
+**Regression breakpoints**
+```{r, echo=FALSE, results='hide'} 
+bpts <- breakpoints(z ~ 1, data = df)
+```
+
+```{r, echo=FALSE} 
+## BIC
+plot(bpts)
+```
+
+Optimal number of breakpoints:
+```{r, echo=FALSE}
+bpts_sum <- summary(bpts)
+opt_brks <- opt_bpts(bpts_sum$RSS["BIC",])
+opt_brks
+```
+
+Location of breakpoint:
+```{r, echo=FALSE}
+bpts2 <- breakpoints(bpts, breaks = opt_brks)
+best_brk <- bpts2$breakpoints
+best_brk
+```
+
+While the first 2 frameworks detect only 1 change point, the breakpoints analysis detects all 3 change points but with wider confidence interval:
+
+```{r, echo=FALSE}
+ci_mod <- confint(bpts, breaks = opt_brks)
+plot(z ~ x, data = df, type = "l")
+for (i in 1: opt_brks) {
+  abline(v = df$x[ci_mod$confint[i,2]], col = "blue")
+  abline(v = df$x[ci_mod$confint[i,1]], col = "red", lty = 3)
+  abline(v = df$x[ci_mod$confint[i,3]], col = "red", lty = 3)
+}
+```
+
+
+#### segmented
+
+```{r, echo=FALSE}
+lin_mod <- lm(z ~ x, data = df)
+segm_mod <- segmented(lin_mod, seg.Z = ~x, psi=20)
+summary(segm_mod)$psi
+
+plot(z ~ x, data = df, pch=16)
+plot(segm_mod, add=T)
+lines(segm_mod,col='red')
+```
+
+Only the last change point is found with this method.
+
+#### tree
+
+```{r, echo=FALSE}
+tree_mod <- tree(z ~ x, data = df)
+plot(tree_mod)
+text(tree_mod, pretty = 0)
+```
+
+---
+
+## Linear relationship (z~x) with 1 break
+
+```{r}
+set.seed(3)
+z <- numeric(20)
+## Create first segment
+z[1:10] <- 20:11 + rnorm(10, 0, 1.5)
+## Create second segment
+z[11:20] <- seq(11, 15, len=10) + rnorm(10, 0, 1.5)
+df <- data.frame(x = 1:20, z = z)
+
+plot(df$x, df$z, type='l',xlab='',ylab='')
+lines(x = 1:10,y = 20:11, lwd = 3, col = 'red')
+lines(x = 11:20, y = seq(11, 15, len=10), lwd = 3, col = 'red')
+
+z_ts <- as.ts(df$z)
+```
+
+(changepoints at 10/11)
+
+#### changepoint
+
+Testing for 1 change point in mean
+```{r, echo=FALSE}
+cpt1 <- cpt.mean(df$z) 
+summary(cpt1)
+```
+
+Testing for several using PELT method and AIC penalty:
+```{r, echo=FALSE}
+cpt.mean(df$z, method = "PELT", penalty = "AIC")
+```
+
+
+Testing for several using PELT method and CROPS penalty:
+```{r, echo=FALSE}
+cpt2 <- cpt.mean(df$z, method = "PELT", penalty = "CROPS", 
+  pen.value = c(1,25) ) 
+summary(cpt2)
+```
+
+The diagnostic plot, however, suggest the model with 4 change points as most parsimonious:
+```{r}
+plot(cpt2, diagnostic = TRUE)
+```
+
+```{r}
+plot(cpt2, ncpts = 4)
+```
+
+To get the exact locations one has to look at the full matrix of final models found (by row) with their different number of change points:
+
+```{r}
+cpts.full(cpt2)
+```
+
+The model with only 4 change points is row 3, so the changepoints are at locations: 3, 8, 13, 18.
+
+
+#### bcp
+
+```{r, echo=FALSE, results="hide"}
+x <- df$z
+bcp_x <- bcp(x)
+bcp_sum <- as.data.frame(summary(bcp_x))
+```
+
+```{r, echo=FALSE}
+plot(bcp_x)
+bcp_sum$id <- 1:length(x)
+sel <- bcp_sum[which(bcp_x$posterior.prob > 0.7), ]
+print(sel)
+```
+
+The bcp method finds a change point at location 8, which is pretty close to the true value.
+
+#### strucchange
+
+**Generalized fluctuation test**
+```{r, echo=FALSE}
+ocus_mod <- efp(z_ts ~ 1, type = "OLS-CUSUM")
+plot(ocus_mod)
+sctest(ocus_mod)
+```
+
+**F test**
+
+```{r, echo=FALSE}
+fs_mod <- Fstats(z_ts ~ 1)
+plot(fs_mod)
+```
+
+The pattern is less clear here but suggest here optimal change points of 6.
+
+**Regression breakpoints**
+
+To test for changes in relationships the formula needs to be changed from `z~1` to `z~x`: 
+```{r, echo=TRUE, results='hide'} 
+bpts <- breakpoints(z ~ x, data = df)
+```
+
+```{r, echo=FALSE} 
+## BIC
+plot(bpts)
+```
+
+Optimal number of breakpoints:
+```{r, echo=FALSE}
+bpts_sum <- summary(bpts)
+opt_brks <- opt_bpts(bpts_sum$RSS["BIC",])
+opt_brks
+```
+
+Location of breakpoint:
+```{r, echo=FALSE}
+bpts2 <- breakpoints(bpts, breaks = opt_brks)
+best_brk <- bpts2$breakpoints
+best_brk
+```
+
+While the first 2 frameworks detect NO change point, the breakpoints analysis detects it exactly at location 10:
+
+```{r, echo=TRUE}
+ci_mod <- confint(bpts, breaks = opt_brks)
+plot(z ~ x, data = df, type = "l")
+for (i in 1: opt_brks) {
+  abline(v = df$x[ci_mod$confint[i,2]], col = "blue")
+  abline(v = df$x[ci_mod$confint[i,1]], col = "red", lty = 3)
+  abline(v = df$x[ci_mod$confint[i,3]], col = "red", lty = 3)
+}
+
+## fit null hypothesis model 
+fm0 <- lm(z ~ x, data = df)
+# fit model with 1 breakpoint but formula different then in previous time series:
+fm1 <- lm(z ~ x*(x < best_brk) + x*(x > best_brk), data = df)
+fm1_coef <- coef(fm1) 
+
+fit1 <- (fm1_coef[1] + fm1_coef[3]) + (fm1_coef[2] + fm1_coef[5])*df$x[df$x <= best_brk]
+fit2 <- (fm1_coef[1] + fm1_coef[4]) + (fm1_coef[2])*df$x[df$x >= best_brk]
+
+# add to previous plot
+lines(df$x, fitted(fm0), col = 3)
+lines(df$x[1:best_brk], fit1, col = "orange")
+lines(df$x[best_brk:max(df$x)], fit2, col = "orange")
+```
+
+#### segmented
+
+```{r, echo=FALSE}
+lin_mod <- lm(z ~ x, data = df)
+segm_mod <- segmented(lin_mod, seg.Z = ~x, psi=10)
+summary(segm_mod)$psi
+
+plot(z ~ x, data = df, pch=16)
+plot(segm_mod, add=T)
+lines(segm_mod,col='red')
+```
+
+Also the segmented function detects correctly the change at location 10.
+
+#### tree
+
+```{r, echo=FALSE}
+tree_mod <- tree(z ~ x, data = df)
+plot(tree_mod)
+text(tree_mod, pretty = 0)
+```
+
+This tree methods detects 2 changes which are below and above the true change point.
+
+---
+
+## Cubic decay function (z~x)
+
+```{r}
+set.seed(4)
+x <- 1:50
+z_nonoise <- (10000 + 0.05*x + 0.2*x^2 - 0.2*x^3)
+z <- z_nonoise + rnorm(50,1000,500)
+df <- data.frame(x = x, z = z)
+
+plot(df$x, df$z, type = 'l', xlab = '', ylab = '')
+
+z_ts <- as.ts(df$z)
+```
+
+
+#### changepoint
+
+Testing for 1 change point in mean
+```{r, echo=FALSE}
+cpt1 <- cpt.mean(df$z) 
+summary(cpt1)
+```
+
+Testing for several using PELT method and AIC penalty:
+```{r, echo=FALSE}
+cpt.mean(df$z, method = "PELT", penalty = "AIC")
+```
+
+Testing for several using PELT method and CROPS penalty:
+```{r, echo=FALSE}
+cpt2 <- cpt.mean(df$z, method = "PELT", penalty = "CROPS", 
+  pen.value = c(1,25) ) 
+summary(cpt2)
+```
+Nothing detected.
+
+#### bcp
+
+```{r, echo=FALSE, results="hide"}
+x <- df$z
+bcp_x <- bcp(x)
+bcp_sum <- as.data.frame(summary(bcp_x))
+```
+
+```{r, echo=FALSE}
+plot(bcp_x)
+bcp_sum$id <- 1:length(x)
+sel <- bcp_sum[which(bcp_x$posterior.prob > 0.7), ]
+print(sel)
+```
+
+
+#### strucchange
+
+**Generalized fluctuation test**
+```{r, echo=FALSE}
+ocus_mod <- efp(z_ts ~ 1, type = "OLS-CUSUM")
+plot(ocus_mod)
+sctest(ocus_mod)
+```
+
+**F test**
+
+```{r, echo=FALSE}
+fs_mod <- Fstats(z_ts ~ 1)
+plot(fs_mod)
+```
+
+**Regression breakpoints**
+```{r, echo=FALSE, results='hide'}
+bpts <- breakpoints(z ~ x, data = df)
+```
+
+```{r, echo=FALSE} 
+## BIC
+plot(bpts)
+```
+
+Optimal number of breakpoints:
+```{r, echo=FALSE}
+bpts_sum <- summary(bpts)
+opt_brks <- opt_bpts(bpts_sum$RSS["BIC",])
+opt_brks
+```
+
+Location of breakpoint:
+```{r, echo=FALSE}
+bpts2 <- breakpoints(bpts, breaks = opt_brks)
+best_brk <- bpts2$breakpoints
+best_brk
+```
+
+```{r, echo=FALSE}
+ci_mod <- confint(bpts, breaks = opt_brks)
+plot(z ~ x, data = df, type = "l")
+for (i in 1: opt_brks) {
+  abline(v = df$x[ci_mod$confint[i,2]], col = "blue")
+  abline(v = df$x[ci_mod$confint[i,1]], col = "red", lty = 3)
+  abline(v = df$x[ci_mod$confint[i,3]], col = "red", lty = 3)
+}
+```
+
+
+#### segmented
+
+```{r, echo=FALSE}
+lin_mod <- lm(z ~ x, data = df)
+segm_mod <- segmented(lin_mod, seg.Z = ~x, psi=10)
+summary(segm_mod)$psi
+
+plot(z ~ x, data = df, pch=16)
+plot(segm_mod, add=T)
+lines(segm_mod,col='red')
+```
+
+#### tree
+
+```{r, echo=FALSE}
+tree_mod <- tree(z ~ x, data = df)
+plot(tree_mod)
+text(tree_mod, pretty = 0)
+```
+
+
+---
+
+## Highly non-linear (3 changes in regression)
+
+```{r}
+set.seed(5)
+x <- 1:50
+z_nonoise <- c(0.1*x[1:10], 1.5-0.2*(x[11:25]-11), 
+  -1.5 + 0.2*(x[26:45]-26), rep(1,5))
+z <- z_nonoise + rnorm(50,0,0.2)
+df <- data.frame(x = x, z = z)
+
+plot(df$x, df$z, type = 'l', xlab = '', ylab = '')
+lines(x = 1:10,y = 0.1*x[1:10], lwd = 3, col = 'red')
+lines(x = 11:25, y = 1.5-0.2*(x[11:25]-11), lwd = 3, col = 'red')
+lines(x = 26:45, y = -1.5 + 0.2*(x[26:45]-26), lwd = 3, col = 'red')
+lines(x = 46:50, y = rep(1,5), lwd = 3, col = 'red')
+
+z_ts <- as.ts(df$z)
+```
+
+(changepoints at 10/11, 25/26, 45/46)
+
+#### changepoint
+
+Testing for 1 change point in mean
+```{r, echo=FALSE}
+cpt1 <- cpt.mean(df$z, penalty="MBIC") 
+summary(cpt1)
+```
+Nothing found with the AMOC method.
+
+Testing for several using PELT method and AIC penalty:
+```{r, echo=FALSE}
+cpt.mean(df$z, method = "PELT", penalty = "AIC")
+```
+
+Testing for several using PELT method and CROPS penalty:
+```{r, echo=FALSE}
+cpt2 <- cpt.mean(df$z, method = "PELT", penalty = "CROPS", 
+  pen.value = c(1,25) ) 
+summary(cpt2)
+plot(cpt2, diagnostic = TRUE)
+cpts.full(cpt2)
+```
+
+Changepoints at 17, 31, 39, and 45 detected:
+```{r}
+plot(cpt2, ncpts = 4)
+```
+
+
+#### bcp
+
+```{r, echo=FALSE, results="hide"}
+x <- df$z
+bcp_x <- bcp(x)
+bcp_sum <- as.data.frame(summary(bcp_x))
+```
+
+```{r, echo=FALSE}
+plot(bcp_x)
+bcp_sum$id <- 1:length(x)
+sel <- bcp_sum[which(bcp_x$posterior.prob > 0.7), ]
+print(sel)
+```
+
+The bcp method finds also at x = 39 and 45 change points but not before.
+
+#### strucchange
+
+**Generalized fluctuation test**
+```{r, echo=FALSE}
+ocus_mod <- efp(z_ts ~ 1, type = "OLS-CUSUM")
+plot(ocus_mod)
+sctest(ocus_mod)
+```
+
+**F test**
+
+```{r, echo=FALSE}
+fs_mod <- Fstats(z_ts ~ 1)
+plot(fs_mod)
+```
+
+**Regression breakpoints**
+```{r, echo=FALSE, results='hide'}
+bpts <- breakpoints(z ~ x, data = df)
+```
+
+```{r, echo=FALSE} 
+## BIC
+plot(bpts)
+```
+
+Get the optimal number numerically:
+```{r}
+bpts_sum <- summary(bpts)
+opt_brks <- opt_bpts(bpts_sum$RSS["BIC",])
+opt_brks
+```
+
+Location of breakpoint:
+```{r, echo=FALSE}
+bpts2 <- breakpoints(bpts, breaks = opt_brks)
+best_brk <- bpts2$breakpoints
+best_brk
+```
+
+The first 2 approaches in *strucchange* find one significant change point while the breakpoints algorithm finds 3:
+
+```{r, echo=FALSE}
+ci_mod <- confint(bpts, breaks = opt_brks)
+plot(z ~ x, data = df, type = "l")
+for (i in 1: opt_brks) {
+  abline(v = df$x[ci_mod$confint[i,2]], col = "blue")
+  abline(v = df$x[ci_mod$confint[i,1]], col = "red", lty = 3)
+  abline(v = df$x[ci_mod$confint[i,3]], col = "red", lty = 3)
+}
+```
+
+
+#### segmented
+
+Since I need to specify the number of change points directly in the function and i see already in the z~x plot several changes I provide 3 starting values (but for the purpose of performance evaluation will choose rather different ones):
+```{r, echo=TRUE}
+lin_mod <- lm(z ~ x, data = df)
+segm_mod <- segmented(lin_mod, seg.Z = ~x,
+  psi=list(x=c(5,20,35)))
+summary(segm_mod)$psi
+```
+
+```{r, echo=FALSE}
+plot(z ~ x, data = df, pch=16)
+plot(segm_mod, add=T)
+lines(segm_mod,col='red')
+```
+
+The segmented method finds the 3 change points at location 11, 26, and 44.
+
+#### tree
+
+```{r, echo=FALSE}
+tree_mod <- tree(z ~ x, data = df)
+plot(tree_mod)
+text(tree_mod, pretty = 0)
+```
+
+The tree methods finds 4 change points.
+
+
+<!-- Footnotes: -->
+[^1]: Kortsch, S., Primicerio, R., Beuchel, F., Renaud, P.E., Rodrigues, J., Lønne, O.J. et al. (2012), Climate-driven regime shifts in Arctic marine benthos. Proc Nat Acad Sci U.S.A. 109:14052-14057, doi: [10.1073/pnas.1207509109](https://doi.org/10.1073/pnas.1207509109)
+[^2]: Samhouri, J.F., Andrews, K.S., Fay, G., Harvey, C.J., Hazen, E.L., Hennessey, S.M. et al. (2017), Defining ecosystem thresholds for human activities and environmental pressures in the California Current. Ecosphere 8:e01860, doi:  [10.1002/ecs2.1860](https://doi.org/10.1002/ecs2.1860)
+[^3]: Killick, R. & Eckley, I. A. (2014), changepoint: An R Package for Changepoint Analysis. *J Stat Softw* 58(3), 15p., doi: [10.18637/jss.v058.i03](https://www.jstatsoft.org/article/view/v058i03)
+[^4]: Zeileis, A., Leisch, F., Hornik, K. & Kleiber, C. (2002), strucchange: An R Package for Testing for Structural Change in Linear Regression Models. *J Stat Softw* 7(2), 38p., doi: [10.18637/jss.v007.i02](https://www.jstatsoft.org/article/view/v007i02)
+[^5]: Erdman, C. & Emerson, J. W. (2008), A fast Bayesian change point analysis for the segmentation of microarray data. *Bioinformatics* 24: 2143-2148, doi: [10.1093/bioinformatics/btn404](https://doi.org/10.1093/bioinformatics/btn404)
+[^6]: Muggeo, V.M.R. (2008), Segmented: an R package to fit regression models with broken-line relationships. R News 8/1, 20–25.
+[^7]: Cobb, G. W. (1978), The problem of the Nile: conditional solution to a change-point problem. *Biometrika* 65:243–51. doi: [10.1093/biomet/65.2.243](https://doi.org/10.1093/biomet/65.2.243)
