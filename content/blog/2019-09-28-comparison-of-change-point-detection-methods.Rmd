@@ -1454,6 +1454,13 @@ text(tree_mod, pretty = 0)
 
 The tree methods finds 4 change points.
 
+<br><br>
+To cite this work:
+<span class="citation-style">
+  Otto, S.A. (2019, Sept.,28). Comparison of change point detection methods [Blog post].
+  Retrieved from https://www.marinedatascience.co/blog/2019/09/28/comparison-of-change-point-detection-methods/
+</span>
+
 
 <!-- Footnotes: -->
 [^1]: Kortsch, S., Primicerio, R., Beuchel, F., Renaud, P.E., Rodrigues, J., Lønne, O.J. et al. (2012), Climate-driven regime shifts in Arctic marine benthos. Proc Nat Acad Sci U.S.A. 109:14052-14057, doi: [10.1073/pnas.1207509109](https://doi.org/10.1073/pnas.1207509109)
