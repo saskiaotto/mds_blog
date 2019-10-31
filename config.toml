@@ -87,7 +87,7 @@ paginate = 10
     name = "GitHub-mareds"
     url = "https://github.com/mareds"
     pre = "<i class='fab fa-2x fa-github'></i>"  # changed from fa to fab with new stylesheet
-    
+
 [[menu.topbar]]
     weight = 3
     name = "GitHub-saskiaotto"
@@ -202,8 +202,11 @@ paginate = 10
     tags = true
     search = true
 
-[params.carousel]
+[params.globe]
     enable = true
+
+[params.carousel]
+    enable = false
     # All carousel items are defined in their own files. You can find example items
     # at 'exampleSite/data/carousel'.
     # For more informtion take a look at the README.
