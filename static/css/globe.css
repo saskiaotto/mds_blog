@@ -39,12 +39,6 @@
   letter-spacing: 0.08em;
 }
 
-
-@media (max-width: 991px) {
-  .globe-title h1 {
-    font-size: 36px;
-  }
-}
 .globe-title h2 {
   font-weight: 700;
   text-transform: uppercase;
@@ -59,12 +53,8 @@
   text-transform: uppercase;
   letter-spacing: 0.10em;
 }
-@media (max-width: 991px) {
-  .globe-title ul,
-  .globe-title p {
-    font-size: 14px;
-  }
-}
+
+
 
 .globe {
   margin-top: 0;
@@ -74,6 +64,32 @@
   position: relative;
 }
 
+
+/* responsive design */
+@media (max-width: 991px) {
+  .globe-title h1 {
+    font-size: 36px;
+  }
+}
+@media (max-width: 991px) {
+  .globe-title ul,
+  .globe-title p {
+    font-size: 14px;
+  }
+}
+@media (max-width: 1023px) {
+  /* show only text and no globe */
+  .globe-title {
+    width: 100%;
+  }
+  .globe {
+    display: none;
+  }
+}
+
+
+
+/* globe tiles  */
 .globe,
 .globe .row {
   transform-style: preserve-3d;
