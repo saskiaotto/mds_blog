@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/blog/2019/11/03/example-code-for-integrated-trend-analysis/</loc>
+    <lastmod>2019-11-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/blog/2019/09/28/comparison-of-change-point-detection-methods/</loc>
     <lastmod>2019-09-28T00:00:00+00:00</lastmod>
   </url>
@@ -53,7 +58,7 @@
   
   <url>
     <loc>/blog/</loc>
-    <lastmod>2019-09-28T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -96,13 +101,13 @@
   
   <url>
     <loc>/categories/indicator/</loc>
-    <lastmod>2019-01-07T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/</loc>
-    <lastmod>2019-09-28T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -112,7 +117,7 @@
   
   <url>
     <loc>/tags/method-comparison/</loc>
-    <lastmod>2019-09-28T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -140,7 +145,7 @@
   
   <url>
     <loc>/tags/regime-shifts/</loc>
-    <lastmod>2019-09-28T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

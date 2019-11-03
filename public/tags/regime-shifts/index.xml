@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018 - present [Saskia Otto](https://github.com/saskiaotto)</copyright>
-    <lastBuildDate>Sat, 28 Sep 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 03 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/regime-shifts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Example code for an Integrated Trend Analysis (ITA)</title>
+      <link>/blog/2019/11/03/example-code-for-integrated-trend-analysis/</link>
+      <pubDate>Sun, 03 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/11/03/example-code-for-integrated-trend-analysis/</guid>
+      <description>I wrote the following R Code for an Integrated Trend Analysis (ITA) during my PhD thesis in 2010, when I attended for the first time the annual meeting of the ICES/HELCOM Working Group on Integrated Assessments of the Baltic Sea (WGIAB). The code helped running a cross-comparison of several Baltic Sea sub-systems (see the 2010 report1). Together with Rabea Diekmann we fine-tuned the code and published it along with a full description on ITA methods in a Book chapter2 in Climate Impacts on the Baltic Sea: From Science to Policy.</description>
+    </item>
     
     <item>
       <title>Comparison of change point detection methods</title>

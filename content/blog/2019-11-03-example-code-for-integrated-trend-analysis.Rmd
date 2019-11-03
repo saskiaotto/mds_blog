@@ -1,0 +1,515 @@
+---
+title: Example code for an Integrated Trend Analysis (ITA)
+author: Saskia O.
+date: '2019-11-03'
+slug: example-code-for-integrated-trend-analysis
+categories:
+  - indicator
+tags:
+  - method comparison
+  - regime shifts
+banner: "img/banners/traffic_light_plot.png"  
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE,
+	message = FALSE, warning = FALSE, error = FALSE)
+source("render_toc.R")
+```
+
+I wrote the following R Code for an Integrated Trend Analysis (ITA) during my PhD thesis in 2010, when I attended for the first time the annual meeting of the ICES/HELCOM Working Group on Integrated Assessments of the Baltic Sea ([WGIAB](https://www.ices.dk/community/groups/Pages/WGIAB.aspx)). The code helped running a cross-comparison of several Baltic Sea sub-systems (see the 2010 report[^1]). Together with [Rabea Diekmann](https://www.hs-bremerhaven.de/organisation/personen/personenverzeichnis/prof-dr-rabea-diekmann/) we fine-tuned the code and published it along with a full description on ITA methods in a Book chapter[^2] in [Climate Impacts on the Baltic Sea: From Science to Policy](https://link.springer.com/book/10.1007/978-3-642-25728-5). Since then I've seen the code being used for several ITAs of other systems, particularly the Traffic Light Plot dispite the fact that there are better heatmap packages out there, which honestly make much nicer graphs.
+
+So for everyone who doesn't have access to the Book chapter (if you are interested you could request it from me), I'll have posted here the code but without the full method description as provided in the book chapter.
+
+<span style="color: red">But please note that</span>
+
+- this code is rather old and stems from my earlier R coding attempts so there surely will be better functions or packages available that could implement this analysis simpler or faster.
+- this code represents only one approach of conducting an ITA, which is the approach of the WGIAB and some other ICES Integrated Ecosystem Assessments (IEA) working groups in former years. 
+- the methods applied here are not comprehensive and do not comprise all necessary or possible techniques for identifying joint shifts in the time series. A thorough data exploration always needs to take place beforehand to decide which transformations are necessary and which are the most appropriate tools to analyse the time series. 
+- the Principal Component Analysis (PCA) applied here on the full dataset should be rather split into state and pressure variables (i.e. into biological and environmental variables)! Also, the PCA has been recently discusses as being inappropriate for identifying joint changes in time series data (see Planque & Arneberg, 2018[^3]). So you should consider replacing this step with alternative methods such as Dynamic Factor Analysis (for details on this methods see this useful [online book chapter](https://nwfsc-timeseries.github.io/atsa-labs/sec-dfa.html)).
+
+## Table of Contents
+```{r toc, echo=FALSE}
+this_post <- "2019-11-03-example-code-for-integrated-trend-analysis.Rmd"
+render_toc(this_post,
+  toc_header_name = "Table of Contents",
+  base_level = NULL,
+  toc_depth = 2)
+```
+
+
+
+The following code is run on a dummy dataset comprising of **5 biological time series** (2 fish species, 2 zooplankton species and 1 phytoplankton group) and **4 environmental time series** (nutrient concentrations, temperature and salinity and a large-scale climate index, i.e. the North Altantic Oscillation Index NAP) for the period 1979-2006:
+
+```{r}
+Data <- read.table("data/ita_data.txt", header = TRUE)                     
+str(Data)
+```
+
+
+
+# 1. Data exploration 
+
+## 1.1 Data distribution 
+
+Although normal distribution is not a prerequisite for the following analyses, the visual inspection of the data distribution is useful. Very often biological data are clearly right-skewed, whereas many physical parameters show a close-to-normal distribution. To linearise the relationships between variables and reduce the relationship between the variance and the mean, some variables most likely need a transformation. 
+
+**Untransformed data**:
+
+```{r, out.width="100%"}
+# Create Histograms for each variable (using a loop)
+par(mfrow = c(3, 3))
+for(i in 2:dim(Data)[2]) {       
+  hist(Data[ ,i], main = "", xlab = colnames(Data)[i])
+}
+```
+
+
+**Log10- and sqrt-transformed data**:
+
+For a PCA, transformations of some variables may be necessary → When transformations are applied, repeat checking the distributions:
+Here, two examples are given with using a log(x+0.001) to the base of 10 and a root-transformation for all variables (usually needed only for some). But be aware that for log- and sqrt-transformation, values have to be > 0 or >= 0 respectively (so the transformation of the NAO is not possible):
+
+```{r, out.width="100%"}
+# Create Histograms for each log10-transformed variable (using a loop, excluding NAO)
+par(mfrow = c(3,3))
+for(i in c(2:7, 9:10)) {       
+  hist(log(Data[ ,i] + 0.001, 10), main = "", xlab = colnames(Data)[i])
+}
+```
+
+
+```{r, out.width="100%"}
+# Create Histograms for each root-transformed variable (using a loop, excluding NAO)
+par(mfrow = c(3,3))
+for(i in c(2:7, 9:10)) {       
+  hist(sqrt(Data[ ,i]), main = "", xlab = colnames(Data)[i])
+}
+```
+
+
+
+##  1.2 Linearity in relationship and correlation
+
+The following plots and analysis are shown for completeness:
+Because PCA is a linear method, sometimes we like to check whether the variable relationships are linear, unimodal or any other shape. Usually you can use pairplots for this purpose. However, if the number of variables is high this is not always a good option. Then do single scatterplots and a correlation matrix:
+
+**Pairplot showing additionally the histograms, correlation coefficients and a regression line**:
+
+```{r, fig.height=6, out.width="100%"}
+# Some add-on functions to show in the pairplot
+panel_cor <- function(x, y) {
+  par(usr = c(0, 1, 0, 1))
+  r <- cor(x, y,use = "pairwise.complete.obs")
+  txt <- format(r, digits = 1)
+  text(0.5, 0.5, txt, cex = 0.9/strwidth(txt) * abs(r))
+}
+panel_lines <- function (x, y) {
+  points(x, y, bg = NA, cex = 1)
+  sel <- is.finite(x) & is.finite(y)
+  if (any(sel)){
+    lml <- lm(y[sel] ~ x[sel])
+    abline(lml, col = "blue")}
+}
+panel_hist <- function(x) {
+  usr <- par("usr")
+  par(usr = c(usr[1:2], 0, 1.5) )
+  h <- hist(x, plot = FALSE)
+  breaks <- h$breaks
+  nB <- length(breaks)
+  y <- h$counts / max(h$counts)
+  rect(breaks[-nB], 0, breaks[-1], y, col="grey80")
+}
+# Excluding Year in the pairplot
+pairs(Data[ , -1], lower.panel=panel_lines,
+      upper.panel=panel_cor, diag.panel=panel_hist)
+
+# Now with all biological variables log10-transformed
+LogData <- Data
+for(i in c(2:6)) {      
+	LogData[ ,i] <- log(LogData[ ,i] + 0.001, 10)
+}
+pairs(LogData[ , -1], lower.panel=panel_lines,
+      upper.panel=panel_cor, diag.panel=panel_hist)
+```
+
+
+**Single Scatterplots**
+If all possible scatterplots should be investigated, the following code can be used including a smoothing line (lowess) (plots are not shown here)
+```{r, eval = FALSE}
+par(mfrow=c(4,4), mar=c(4,4,1,1), tcl=-0.2)
+for(i in 2:(dim(Data) [2])) {
+  for(j in i:(dim(Data) [2])) {      
+    plot(Data[,i],Data[,j], xlab=colnames(Data)[i], ylab=colnames(Data)[j])
+    lines(panel.smooth(Data[,i],Data[,j]), col="red")
+  }}
+```
+
+
+The correlation  matrix for all variables:
+```{r}
+cor(Data[2:dim(Data)[2]], Data[2:dim(Data)[2]],
+   method="pearson", use="pairwise.complete.obs")
+```
+
+
+
+##  1.3 Temporal anomalies of original data
+
+The temporal dynamics of variables can be presented in various ways. Here is the R-code for barplots using deviations from the mean $z_{i} = x_{i}-\bar{x}$. 
+
+Create dataset containing the anomaly values:
+```{r}
+AnomData <- Data
+# Save the dimensions (number of rows[1] and columns[2] ) in a vector
+n <- dim(AnomData)
+# Loop to convert actual values into anomaly values (incl. missing 
+# values in the average- and anomaly-calculation); the loop starts with the 
+# second column to exclude "Year" (no variable) and ends with the last column 
+# (defined by the second element of the vector n (n[2]) )
+for (i in 2:n[2]) {
+  AnomData[ ,i] <- AnomData[ ,i] - mean(AnomData[ ,i], na.rm = TRUE)}
+```
+(Note: If you want to substract the mean as I did here, you could also simply use the `scale()` function)
+
+Plot anomalies as barplot:
+```{r, out.width = "100%"}
+# First, the limits of the y-axes (ylim) are defined by calculating the minimum
+# and maximum anomaly of each variable
+y.low <- apply(AnomData, MARGIN = 2, FUN = min, na.rm = TRUE)
+y.low <- y.low+1/10*y.low
+y.upp <- apply(AnomData, MARGIN = 2, FUN = max, na.rm = TRUE)
+y.upp <- y.upp+1/10*y.upp
+
+par(mfrow = c(3,3), mar = c(5,5,2,1))
+for(i in 2:dim(AnomData)[2]) {       
+  barplot(AnomData[ ,i], col = "black", space = 0.7, 
+          ylim = c(y.low[i], y.upp[i]), axis.lty = "solid", 
+          names.arg = AnomData$Year, axisnames = TRUE, 
+          ylab = "Anomalies", main = colnames(AnomData [i]))
+  box(lty = "solid", col = "black")
+  # creates a horizontal reference line at y = 0
+  abline(a = NULL, b = NULL, h = 0, v = NULL, reg = NULL,
+         coef = NULL, untf = FALSE)       
+}
+```
+
+
+
+## 1.4 Traffic light plot of original data
+
+**Data preparation**: Convert actual values into ranks based on quintiles and place the `Year` column at the end.
+```{r}
+# Place Year column at end
+Data2 <- Data[ ,c(2:ncol(Data), 1)]
+names(Data2)
+# Save the dimensions (number of rows[1] and columns[2] ) in a vector
+n <- dim(Data2)
+# Get names for the plot axes 
+# the y-axis (without the last column (years) )
+Variablenames <- names(Data2)[-n[2]]
+# the x-axis
+Years <- Data2[ ,n[2]]
+
+# Generate a matrix containing the quintile values for each variable
+# (exluding the time vector by setting the column number and loop end to n[2] -1) 
+Quintiles <- matrix(nrow = 5, ncol = n[2]-1, byrow = FALSE)
+for (i in 1:(n[2]-1)) {
+  Quintiles[, i] <- quantile(Data2[,i],
+                             probs = c(0.2, 0.4, 0.6, 0.8, 1.0), na.rm = TRUE)
+ }
+
+# Generate a dataframe where original values are converted
+# into code 1 to 5 (depending on the quintile) using two loops:
+# first create new dataframe based on the orignal dataframe
+CodedData <- Data2
+# then convert the actual values into codes using a loop:
+# the first (outer) loop repeats process for every variable,
+# the second (inner) loop repeats process for every element within
+# a variable
+for(j in seq(along = CodedData[1:(n[2]-1)])) {
+  for(i in seq(along = CodedData[[j]])) {
+    if(is.na(CodedData[[j]][i]) == TRUE) {
+      is.na(CodedData[[j]][i])<- TRUE} else
+        if(CodedData[[j]][i] < Quintiles[1,j]) {
+          CodedData[[j]][i]<-1} else
+            if((CodedData[[j]][i] >= Quintiles[1,j]) && 
+                (CodedData[[j]][i] < Quintiles[2,j])) {
+              CodedData[[j]][i]<-2} else
+                if((CodedData[[j]][i] >= Quintiles[2,j]) && 
+                    (CodedData[[j]][i] < Quintiles[3,j])) {
+                  CodedData[[j]][i]<-3} else
+                    if((CodedData[[j]][i] >= Quintiles[3,j]) && 
+                        (CodedData[[j]][i] < Quintiles[4,j])) {
+                      CodedData[[j]][i]<-4} else
+                        if(CodedData[[j]][i] >= Quintiles[4,j]) {
+                          CodedData[[j]][i]<-5} }
+} 
+```
+
+**Plot preparation**: To order variables in the plot in accordance to the standardised variable averages over the first five data points (excluding the Year column):  
+```{r}
+# First create vector  
+Avg5year <- vector(length = n[2]-1)
+# Then fill the vector with the standardised variable averages over the 
+# first five data points (mean of first 5 years - mean of full time series/ 
+# standard deviation of full time series)
+for (i in 1:(n[2]-1)) {
+	Avg5year[i] <- (mean(Data[c(1:5), i], na.rm = TRUE) -
+		mean(Data[, i], na.rm = TRUE)) / 
+		sd(Data[, i], na.rm = TRUE) }
+# Finally, order the variable and create an index vector
+OrdVar <- order(Avg5year)
+# To sort coded dataframe in accordance to the 5-year standardised 
+# average, use the vector OrdVar as an index
+CodedData.sorted <- CodedData[ ,c(1:n[2]-1)][OrdVar]
+# Convert dataframe into a matrix (necessary for an image plot)
+CodedData.mat <- as.matrix(CodedData.sorted)
+```
+One can sort the variables in many ways actually, e.g. using the scores from ordination techniques such as the PCA, but this above approach is less transformed as it sorts by the original values!
+
+**Image plot**: Colours can be easily adjusted;, also the axes titles in case you have a different time vector and/or will use a different sorting procedure:
+
+```{r, out.width="100%"}
+x <- c(1:n[1])
+y <- c(1:(n[2]-1))
+par(mar = c(4,5,3,6), oma = c(0.5,2,0,0), xpd = TRUE)
+image(x, y, z = CodedData.mat, zlim = c(1,5), 
+      col = c("green", "yellowgreen", "yellow", "gold", "red"), 
+      axes = FALSE, xlab = "Years", ylab = "")
+axis(1, at = seq(1, n[1], by = 1), tick = FALSE, labels = Years, 
+     cex.axis = 0.7, las = 3)
+axis(2, at = seq(1, (n[2]-1), by = 1), tick = FALSE, 
+     labels = Variablenames[OrdVar],
+     cex.axis = 0.7, las = 1, padj = 1) 
+box()
+mtext("Variables (sorted by the 5-year standardised average)", 
+      outer = TRUE, side = 2, cex = 0.8)
+legend(x = max(x)+1, y = max(y), legend = c("< 0.2 quintile", 
+                                            "< 0.4 quintile", "< 0.6 quintile", "< 0.8 quintile", 
+                                            "> 0.8 quintile", "missing value"),
+       fill = c("green", "yellowgreen", "yellow", "gold", "red", "white"),
+       cex = 0.6, bty = "n")
+```
+
+
+# Ordination method: Principal Component Analysis (PCA)
+
+**Data preparation**: For the following PCA, missing values need to be replaced. There are different imputation methods, here we will replace NAs with averages of the 2 previous and 2 following years. Further, some variables need to be previously transformed, e.g. by logarithmic transformations to linearise the relationships (in this dummy dataset the biological variables).
+```{r}
+Data.transf <- Data
+# Save the dimensions (number of rows[1] and columns[2] ) in a vector
+n <- dim(Data.transf)
+
+# Function to replace NAs with 4-yr average (or less depending on position of NA)
+fill_na <- function(x) {
+	loc.na <- which(is.na(x))
+	n <- length(x)
+	for(i in loc.na) {
+		 d <- n - i
+			if(i == 1) x[i] <- mean(x[c(i+1, i+2)], na.rm = TRUE)
+			if(i == 2) x[i] <- mean(x[c(i-1, i+1, i+2)], na.rm = TRUE)
+			if(i >= 3) {
+					if(d >= 2) x[i] <- mean(x[c(i-2, i-1, i+1, i+2)], na.rm = TRUE)
+					if(d == 1) x[i] <- mean(x[c(i-2, i-1, i+1)], na.rm = TRUE)
+					if(d == 0) x[i] <- mean(x[c(i-2, i-1)], na.rm = TRUE)
+		}
+	}
+	return(x)
+}
+
+# Apply function
+for(i in 2:n[2]) {
+	Data.transf[ ,i] <- fill_na(Data.transf[ ,i])
+}
+
+# Log10-transform biological variables
+for(i in 2:6) {
+	Data.transf[ ,i] <- log(Data.transf[ ,i] + 0.001, 10)
+}
+```
+
+## PCA and numerical output
+
+We will apply a PCA based on the correlation matrix using the function `vegan::rda()`
+```{r}
+# Load package
+library(vegan)
+
+# Use all rows but exclude the 'Year' column in the PCA --> [ ,c(2:n[2])]
+# To use the correlation matrix, set scale = TRUE)
+PCA.vegan <- rda(Data.transf[, -1], scale = TRUE)
+
+# Obtaining eigenvalues
+PCA.vegan.eigen <- PCA.vegan$CA$eig
+PCA.vegan.eigen
+# the summary gives the eigenvalues, explained variance, cumulative variance,
+# loadings (species scores) and scores (site scores, which are scaled by a
+# a constant given in the output) 
+PCA.vegan.sum <- summary(PCA.vegan)
+PCA.vegan.sum # displays summary output in R console
+```
+
+If desired, the Eigenvalues, scores and loadings can be separately exported:
+```{r, eval=FALSE}
+write.table(PCA.vegan.sum$cont$importance, file = "PCA_eigenvalues.txt", sep = " ",
+            row.names = T, col.names = T, quote = F)
+# loadings:
+write.table(PCA.vegan.sum$species, file = "PCA_loadings.txt", sep = " ",
+            row.names = T, col.names = T, quote = F)
+# scores:
+write.table(PCA.vegan.sum$sites, file = "PCA_scores.txt", sep = " ",
+            row.names = T, col.names = T, quote = F)
+```
+
+
+## Plots
+
+Create first a character vector for the score labels (the years)
+```{r}
+years.char <- paste(Data.transf$Year, sep = "")
+```
+
+<br>
+
+### 1. Biplot(with loadings and scores):
+
+To have more control of the plot, labels will be added seperately
+
+- the "choices" argument determines the PC axes (1:2 chooses PC1/PC2); 
+- the argument "scaling = 3" scales species and sites symmetrically by the square root of the eigenvalues
+- variable names and scores are not defined by setting `type = c("points","none"))` as we want to set both manually; 
+
+```{r}
+biplot(PCA.vegan, choices = 1:2, scaling = 3,
+       display = c("sites", "species"), type = c("points","none"),
+       col = c("darkgreen"))
+# Add the variable names using same scaling value
+text(PCA.vegan, display = "species", col = "darkgreen", cex = 0.8, 
+     scaling = 3)
+# Add now the scores with the year label using the same scaling value
+text(PCA.vegan, display = "sites", labels = years.char, cex = 0.7,	scaling = 3)
+```
+
+
+
+### 2. Biplot with loadings, time trajectory is in the background:
+```{r}
+biplot(PCA.vegan, choices = 1:2, scaling = 3,
+       display = c("sites", "species"), type = c("points","none"),
+       col = c("darkgreen"))
+# Add now the scores with the year label using the same scaling value
+text(PCA.vegan, display = "sites", labels = years.char, cex = 0.7,	
+     col = "grey", scaling = 3)
+# For the lines the coordinates of the scaled PC1/2 scores have to be obtained:
+scores.sc <- scores(PCA.vegan, scaling = 3)
+# Connect the sites in an ascending order of the year
+lines(x = scores.sc$sites[, 1][order(Data.transf$Year)], 	
+      y = scores.sc$sites[, 2][order(Data.transf$Year)],
+      lty = 1, col = "grey")
+# Add the variable names using same scaling value
+text(PCA.vegan, display = "species", col = "darkgreen", cex = 0.8, 
+     scaling = 3)
+```
+
+
+### 3. Time trajectory plot with the unscaled scores; 
+
+In the plot, scores and loadings are not shown (by setting: type = c("none","none") )
+```{r}
+biplot(PCA.vegan, choices = 1:2, scaling = 0, 	
+       display = c("sites", "species"), type = "n")
+text(PCA.vegan, display = "sites", labels = years.char, cex = 0.8,
+     scaling = 0)
+# For the lines the coordinates of the unscaled PC1/2 scores have to be obtained
+scores.unsc <- scores(PCA.vegan, scaling = 0)
+# Connect the sites in an ascending order of the year
+lines(x = scores.unsc$sites[, 1][order(Data.transf$Year)], 	
+      y = scores.unsc$sites[, 2][order(Data.transf$Year)],
+      lty = 1, col = "blue")
+```
+
+
+
+### 4. Time series plot of PC1 and PC2 scores vs. time
+
+Get unscaled PC1/PC2 site scores from `rda()` results
+```{r}
+scores.unsc <- scores(PCA.vegan, scaling = 0)
+# Get the min/max value for the limit of the x- and y-axis
+y.low <- min(scores.unsc$sites)
+y.upp <- max(scores.unsc$sites)
+x.low <- min(Data.transf$Year)
+x.upp <- max(Data.transf$Year)
+
+plot(Data.transf$Year, scores.unsc$sites[ ,1], pch = 16, 
+     ylab = "PC scores", xlab = "Years", axes = FALSE, 
+     xlim = c(x.low, x.upp), ylim = c(y.low, y.upp), cex = 0.7, cex.lab = 0.9, cex.main = 0.9)
+axis(2, cex.axis = 0.7, las = 1)
+axis(1, cex.axis = 0.7)
+box(col = "black")
+abline(h = 0, lty = "dotted")
+lines(Data.transf$Year, scores.unsc$sites[, 1], col = "black", 
+      lwd = 0.8)
+points(Data.transf$Year, scores.unsc$sites[, 2], 
+       pch = 1, cex = 0.7, col = "black", type = "b", lty = 3)
+legend("bottomright", legend = c("PC1 scores", "PC2 scores"),
+       text.col = c("black", "black"), cex = 0.7, 
+       col = c("black", "black"), 
+       pch = c(16, 1), lty = c(1, 3),
+       pt.cex = 0.7, bty = "n")
+```
+
+
+
+
+# 3. Clustering method: Constrained Clustering    
+
+Chronological Clustering is not yet available in R. Here we will use a different method designed for spatial data called **Constrained Clustering**. This method is not recommended for temporal data as it is a hierarchical solution but we can use it here to get a first impression if and when we might expect sudden shifts in the multivariate dataset.
+To make the results comparable to the PCA we use the same dataset, i.e. Data.transf, and normalise it afterwards
+
+```{r}
+# load packages
+library(vegan)
+library(rioja)
+
+# Use same data as for PCA, but normalise the data (excl. Year column):
+Data.stand <- decostand(Data.transf[ ,-1], method="standardize", MARGIN = 2, na.rm = T)
+
+# Create a separate time vector for labels
+Time <- Data.transf$Year
+
+# Save the dimensions (number of rows[1] and columns[2] ) in a vector
+n <- dim(Data.stand)
+
+# Calculate the Euclidean distance matrix from the standardised data 
+# using the stats::dist() function:
+Data.dist <- dist(Data.stand, "euclidean", 	diag = TRUE, upper = TRUE)
+
+
+### Constrained hierarchical Clustering as described in "rioja" package: 
+
+# Coniss = constrained incremental sum of squares clustering
+CC <- chclust(Data.dist, method="coniss")
+
+# plot outcome: Show both plots next to each other
+par(mfrow = c(1, 2))
+# cluster-plot with labels
+plot(CC,labels= Time, main = "Coniss cluster plot", cex=0.8)
+# broken stick plot
+bstick(CC) 
+title("Coniss -broken stick plot")
+```
+
+
+The broken stock plot suggests 1 shift in the joint time series data, i.e. around 1987/1988.
+
+
+<!-- footnotes -->
+
+[^1]: ICES (2010). Report of the ICES/HELCOM Working Group on Integrated Assessments of the Baltic Sea (WGIAB), 19–23 April 2010, ICES Headquarters, Copenhagen, Den- mark. ICES CM 2010/SSGRSP:02. 94 pp.
+
+[^2]: Diekmann, R., Otto, S., and Möllmann, C. (2012). "Towards Integrated Ecosystem Assessments (IEAs) of the Baltic Sea: Investigating Ecosystem State and Historical Development," in [Climate Impacts on the Baltic Sea: From Science to Policy](https://link.springer.com/book/10.1007/978-3-642-25728-5), eds. M. Reckermann, K. Brander, B.R. Mackenzie & A. Omstedt.  (Berlin Heidelberg: Springer), 161-199.
+
+[^3]: Planque, B., and Arneberg, P. (2018). [Principal component analyses for integrated ecosystem assessments may primarily reflect methodological artefacts](http://dx.doi.org/10.1093/icesjms/fsx223). ICES J. Mar. Sci. 75, 1021-1028.

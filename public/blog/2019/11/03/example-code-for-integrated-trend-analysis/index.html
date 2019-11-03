@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Example code for an Integrated Trend Analysis (ITA)</title>
+  <meta name="author" content="" />
+
+  
+  <meta name="keywords" content="marine, data, R">
+  
+
+  
+  <meta name="description" content="Site template made by Saskia using hugo">
+  
+
+  <meta name="generator" content="Hugo 0.49" />
+
+  
+  
+
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+  
+  
+  <link rel="stylesheet" href="/css/academicons.min.css" >
+
+
+  
+  
+  
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicons/favicon-16x16.png">
+  <link rel="manifest" href="/img/favicons/site.webmanifest">
+  <link rel="mask-icon" href="/img/favicons/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#0f1f25">
+  <meta name="theme-color" content="#ffffff">
+
+
+  
+  <meta property="og:title" content="Example code for an Integrated Trend Analysis (ITA)" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/blog/2019/11/03/example-code-for-integrated-trend-analysis//" />
+  <meta property="og:image" content="img/mds_logo_notext@2x.png" />
+
+  
+  <link href="/css/owl.carousel.css" rel="stylesheet">
+  <link href="/css/owl.theme.css" rel="stylesheet">
+
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Marine Data Science">
+
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/css/atom-one-dark_custom.css" rel="stylesheet" id="theme-stylesheet">
+
+
+  
+  <link href="/css/animate.css" rel="stylesheet">
+
+
+  
+  <link href="/css/style.blue_custom.css" rel="stylesheet" id="theme-stylesheet">
+  
+  <link href="/css/globe.css" rel="stylesheet">
+
+
+</head>
+
+
+  <body>
+
+    <div id="all">
+
+        <header>
+
+          
+          
+<div id="top">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-5">
+        
+      </div>
+      <div class="col-xs-7">
+        <div class="social">
+          
+          <a href="https://saskiaotto.de" target="_blank" style="opacity: 1;"><i class='fas fa-2x fa-globe'></i></a>
+          
+          <a href="https://github.com/mareds" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-github'></i></a>
+          
+          <a href="https://github.com/saskiaotto" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-github'></i></a>
+          
+          <a href="https://www.researchgate.net/profile/Saskia_Otto" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-researchgate'></i></a>
+          
+          <a href="https://orcid.org/0000-0001-7780-1322" target="_blank" style="opacity: 1;"><i class='ai ai-2x ai-orcid'></i></a>
+          
+          <a href="mailto:saskia.otto@uni-hamburg.de" target="_blank" style="opacity: 1;"><i class='fa fa-2x fa-envelope'></i></a>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+          <div class="navbar-affixed-top" data-spy="affix" data-offset-top="200">
+
+    <div class="navbar navbar-default yamm" role="navigation" id="navbar">
+
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand home" href="/">
+                    <img src="/img/mds_logo_notext@2x.png" alt="Example code for an Integrated Trend Analysis (ITA) logo" class="hidden-xs hidden-sm" style="max-height:50px;">
+                    <img src="/img/mds_logo_notext_small.png" alt="Example code for an Integrated Trend Analysis (ITA) logo" class="visible-xs visible-sm" style="max-height:40px;">
+                    <span class="sr-only">Example code for an Integrated Trend Analysis (ITA) - go to homepage</span>
+                </a>
+                <div class="navbar-buttons">
+                    <button type="button" class="navbar-toggle btn-template-main" data-toggle="collapse" data-target="#navigation">
+                      <span class="sr-only">Toggle Navigation</span>
+                        <i class="fa fa-align-justify"></i>
+                    </button>
+                </div>
+            </div>
+            
+
+            <div class="navbar-collapse collapse" id="navigation">
+                <ul class="nav navbar-nav navbar-right">
+
+                  
+
+                  
+
+                  
+                  <li class="" title="Home">
+                        <a href="/">Home</a>
+                      </li>
+                  <li class="" title="MDS">
+                        <a href="/mds/">MDS</a>
+                      </li>
+                  <li class="active" title="Blog">
+                        <a href="/blog/">Blog</a>
+                      </li>
+                  <li class="" title="Courses">
+                        <a href="/courses/">Courses</a>
+                      </li>
+                  <li class="" title="Data">
+                        <a href="/data/">Data</a>
+                      </li>
+                  <li class="" title="Software">
+                        <a href="/software/">Software</a>
+                      </li>
+                  <li class="" title="About">
+                        <a href="/about/">About</a>
+                      </li>
+                  <li class="" title="Contact">
+                        <a href="/contact/">Contact</a>
+                      </li>
+                  
+
+                </ul>
+            </div>
+            
+
+            <div class="collapse clearfix" id="search">
+
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                        <span class="input-group-btn">
+
+                    <button type="submit" class="btn btn-template-main"><i class="fa fa-search"></i></button>
+
+                </span>
+                    </div>
+                </form>
+
+            </div>
+            
+
+        </div>
+    </div>
+    
+
+</div>
+
+
+
+
+        </header>
+
+        <div id="heading-breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                  <h1 class="title toc-ignore">Example code for an Integrated Trend Analysis (ITA)</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <div id="content">
+            <div class="container">
+
+                <div class="row">
+
+                    
+
+                    <div class="col-md-9" id="blog-post">
+
+                        <p class="text-muted text-uppercase mb-small text-right">By <a href="#">Saskia O.</a> | November 3, 2019</p>
+
+                        <div id="post-content">
+                          <p>I wrote the following R Code for an Integrated Trend Analysis (ITA) during my PhD thesis in 2010, when I attended for the first time the annual meeting of the ICES/HELCOM Working Group on Integrated Assessments of the Baltic Sea (<a href="https://www.ices.dk/community/groups/Pages/WGIAB.aspx">WGIAB</a>). The code helped running a cross-comparison of several Baltic Sea sub-systems (see the 2010 report<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>). Together with <a href="https://www.hs-bremerhaven.de/organisation/personen/personenverzeichnis/prof-dr-rabea-diekmann/">Rabea Diekmann</a> we fine-tuned the code and published it along with a full description on ITA methods in a Book chapter<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> in <a href="https://link.springer.com/book/10.1007/978-3-642-25728-5">Climate Impacts on the Baltic Sea: From Science to Policy</a>. Since then I’ve seen the code being used for several ITAs of other systems, particularly the Traffic Light Plot dispite the fact that there are better heatmap packages out there, which honestly make much nicer graphs.</p>
+<p>So for everyone who doesn’t have access to the Book chapter (if you are interested you could request it from me), I’ll have posted here the code but without the full method description as provided in the book chapter.</p>
+<p><span style="color: red">But please note that</span></p>
+<ul>
+<li>this code is rather old and stems from my earlier R coding attempts so there surely will be better functions or packages available that could implement this analysis simpler or faster.</li>
+<li>this code represents only one approach of conducting an ITA, which is the approach of the WGIAB and some other ICES Integrated Ecosystem Assessments (IEA) working groups in former years.</li>
+<li>the methods applied here are not comprehensive and do not comprise all necessary or possible techniques for identifying joint shifts in the time series. A thorough data exploration always needs to take place beforehand to decide which transformations are necessary and which are the most appropriate tools to analyse the time series.</li>
+<li>the Principal Component Analysis (PCA) applied here on the full dataset should be rather split into state and pressure variables (i.e. into biological and environmental variables)! Also, the PCA has been recently discusses as being inappropriate for identifying joint changes in time series data (see Planque &amp; Arneberg, 2018<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>). So you should consider replacing this step with alternative methods such as Dynamic Factor Analysis (for details on this methods see this useful <a href="https://nwfsc-timeseries.github.io/atsa-labs/sec-dfa.html">online book chapter</a>).</li>
+</ul>
+<div id="table-of-contents" class="section level2">
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#data-exploration">1. Data exploration</a>
+<ul>
+<li><a href="#data-distribution">1.1 Data distribution</a></li>
+<li><a href="#12-linearity-in-relationship-and-correlation">1.2 Linearity in relationship and correlation</a></li>
+<li><a href="#13-temporal-anomalies-of-original-data">1.3 Temporal anomalies of original data</a></li>
+<li><a href="#traffic-light-plot-of-original-data">1.4 Traffic light plot of original data</a></li>
+</ul></li>
+<li><a href="#ordination-method-principal-component-analysis-pca">Ordination method: Principal Component Analysis (PCA)</a>
+<ul>
+<li><a href="#pca-and-numerical-output">PCA and numerical output::</a></li>
+<li><a href="#plots">Plots</a></li>
+</ul></li>
+<li><a href="#clustering-method-constrained-clustering---">3. Clustering method: Constrained Clustering</a></li>
+</ul>
+<p>The following code is run on a dummy dataset comprising of <strong>5 biological time series</strong> (2 fish species, 2 zooplankton species and 1 phytoplankton group) and <strong>4 environmental time series</strong> (nutrient concentrations, temperature and salinity and a large-scale climate index, i.e. the North Altantic Oscillation Index NAP) for the period 1979-2006:</p>
+<pre class="r"><code>Data &lt;- read.table(&quot;data/ita_data.txt&quot;, header = TRUE)                     
+str(Data)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    28 obs. of  10 variables:
+##  $ Year      : int  1979 1980 1981 1982 1983 1984 1985 1986 1987 1988 ...
+##  $ FishA     : int  579671 696743 666132 670941 645258 657667 544911 399372 320471 299277 ...
+##  $ FishB     : int  386000 249000 222000 279000 418000 585000 543000 495000 409000 370000 ...
+##  $ ZooA      : num  NA 6.72 1.73 8.65 3.42 ...
+##  $ ZooB      : num  NA 113.1 44.2 85.6 21.8 ...
+##  $ PhytoA    : num  2.76 1.35 4.6 2.33 1.77 ...
+##  $ NutrientsA: num  3.42 4.39 3.9 4.04 5.23 ...
+##  $ NAO       : num  -2.25 0.56 2.05 0.8 3.42 1.6 -0.63 0.5 -0.75 0.72 ...
+##  $ Temp      : num  5.83 5.24 4.71 5.66 7.59 ...
+##  $ Salinity  : num  7.58 7.53 7.49 7.31 7.35 ...</code></pre>
+</div>
+<div id="data-exploration" class="section level1">
+<h1>1. Data exploration</h1>
+<div id="data-distribution" class="section level2">
+<h2>1.1 Data distribution</h2>
+<p>Although normal distribution is not a prerequisite for the following analyses, the visual inspection of the data distribution is useful. Very often biological data are clearly right-skewed, whereas many physical parameters show a close-to-normal distribution. To linearise the relationships between variables and reduce the relationship between the variance and the mean, some variables most likely need a transformation.</p>
+<p><strong>Untransformed data</strong>:</p>
+<pre class="r"><code># Create Histograms for each variable (using a loop)
+par(mfrow = c(3, 3))
+for(i in 2:dim(Data)[2]) {       
+  hist(Data[ ,i], main = &quot;&quot;, xlab = colnames(Data)[i])
+}</code></pre>
+<p><img src="/blog/2019-11-03-example-code-for-integrated-trend-analysis_files/figure-html/unnamed-chunk-2-1.png" width="100%" /></p>
+<p><strong>Log10- and sqrt-transformed data</strong>:</p>
+<p>For a PCA, transformations of some variables may be necessary → When transformations are applied, repeat checking the distributions:
+Here, two examples are given with using a log(x+0.001) to the base of 10 and a root-transformation for all variables (usually needed only for some). But be aware that for log- and sqrt-transformation, values have to be &gt; 0 or &gt;= 0 respectively (so the transformation of the NAO is not possible):</p>
+<pre class="r"><code># Create Histograms for each log10-transformed variable (using a loop, excluding NAO)
+par(mfrow = c(3,3))
+for(i in c(2:7, 9:10)) {       
+  hist(log(Data[ ,i] + 0.001, 10), main = &quot;&quot;, xlab = colnames(Data)[i])
+}</code></pre>
+<p><img src="/blog/2019-11-03-example-code-for-integrated-trend-analysis_files/figure-html/unnamed-chunk-3-1.png" width="100%" /></p>
+<pre class="r"><code># Create Histograms for each root-transformed variable (using a loop, excluding NAO)
+par(mfrow = c(3,3))
+for(i in c(2:7, 9:10)) {       
+  hist(sqrt(Data[ ,i]), main = &quot;&quot;, xlab = colnames(Data)[i])
+}</code></pre>
+<p><img src="/blog/2019-11-03-example-code-for-integrated-trend-analysis_files/figure-html/unnamed-chunk-4-1.png" width="100%" /></p>
+</div>
+<div id="linearity-in-relationship-and-correlation" class="section level2">
+<h2>1.2 Linearity in relationship and correlation</h2>
+<p>The following plots and analysis are shown for completeness:
+Because PCA is a linear method, sometimes we like to check whether the variable relationships are linear, unimodal or any other shape. Usually you can use pairplots for this purpose. However, if the number of variables is high this is not always a good option. Then do single scatterplots and a correlation matrix:</p>
+<p><strong>Pairplot showing additionally the histograms, correlation coefficients and a regression line</strong>:</p>
+<pre class="r"><code># Some add-on functions to show in the pairplot
+panel_cor &lt;- function(x, y) {
+  par(usr = c(0, 1, 0, 1))
+  r &lt;- cor(x, y,use = &quot;pairwise.complete.obs&quot;)
+  txt &lt;- format(r, digits = 1)
+  text(0.5, 0.5, txt, cex = 0.9/strwidth(txt) * abs(r))
+}
+panel_lines &lt;- function (x, y) {
+  points(x, y, bg = NA, cex = 1)
+  sel &lt;- is.finite(x) &amp; is.finite(y)
+  if (any(sel)){
+    lml &lt;- lm(y[sel] ~ x[sel])
+    abline(lml, col = &quot;blue&quot;)}
+}
+panel_hist &lt;- function(x) {
+  usr &lt;- par(&quot;usr&quot;)
+  par(usr = c(usr[1:2], 0, 1.5) )
+  h &lt;- hist(x, plot = FALSE)
+  breaks &lt;- h$breaks
+  nB &lt;- length(breaks)
+  y &lt;- h$counts / max(h$counts)
+  rect(breaks[-nB], 0, breaks[-1], y, col=&quot;grey80&quot;)
+}
+# Excluding Year in the pairplot
+pairs(Data[ , -1], lower.panel=panel_lines,
+      upper.panel=panel_cor, diag.panel=panel_hist)</code></pre>
+<p><img src="/blog/2019-11-03-example-code-for-integrated-trend-analysis_files/figure-html/unnamed-chunk-5-1.png" width="100%" /></p>
+<pre class="r"><code># Now with all biological variables log10-transformed
+LogData &lt;- Data
+for(i in c(2:6)) {      
+    LogData[ ,i] &lt;- log(LogData[ ,i] + 0.001, 10)
+}
+pairs(LogData[ , -1], lower.panel=panel_lines,
+      upper.panel=panel_cor, diag.panel=panel_hist)</code></pre>
+<p><img src="/blog/2019-11-03-example-code-for-integrated-trend-analysis_files/figure-html/unnamed-chunk-5-2.png" width="100%" /></p>
+<p><strong>Single Scatterplots</strong>
+If all possible scatterplots should be investigated, the following code can be used including a smoothing line (lowess) (plots are not shown here)</p>
+<pre class="r"><code>par(mfrow=c(4,4), mar=c(4,4,1,1), tcl=-0.2)
+for(i in 2:(dim(Data) [2])) {
+  for(j in i:(dim(Data) [2])) {      
+    plot(Data[,i],Data[,j], xlab=colnames(Data)[i], ylab=colnames(Data)[j])
+    lines(panel.smooth(Data[,i],Data[,j]), col=&quot;red&quot;)
+  }}</code></pre>
+<p>The correlation matrix for all variables:</p>
+<pre class="r"><code>cor(Data[2:dim(Data)[2]], Data[2:dim(Data)[2]],
+   method=&quot;pearson&quot;, use=&quot;pairwise.complete.obs&quot;)</code></pre>
+<pre><code>##                  FishA       FishB        ZooA        ZooB      PhytoA
+## FishA       1.00000000 -0.70130076 -0.64534876  0.62125994 -0.44906514
+## FishB      -0.70130076  1.00000000  0.58558653 -0.48966855  0.30660884
+## ZooA       -0.64534876  0.58558653  1.00000000 -0.23578928  0.12124821
+## ZooB        0.62125994 -0.48966855 -0.23578928  1.00000000 -0.39796352
+## PhytoA     -0.44906514  0.30660884  0.12124821 -0.39796352  1.00000000
+## NutrientsA  0.29220455 -0.04199256 -0.36156392 -0.13570337  0.06822180
+## NAO         0.01714005 -0.13095245  0.03295777 -0.16996758 -0.04554554
+## Temp        0.04162070 -0.25263775 -0.03668616 -0.05913682  0.03486569
+## Salinity    0.81544737 -0.50698217 -0.45016841  0.37308476 -0.27106491
+##             NutrientsA         NAO        Temp   Salinity
+## FishA       0.29220455  0.01714005  0.04162070  0.8154474
+## FishB      -0.04199256 -0.13095245 -0.25263775 -0.5069822
+## ZooA       -0.36156392  0.03295777 -0.03668616 -0.4501684
+## ZooB       -0.13570337 -0.16996758 -0.05913682  0.3730848
+## PhytoA      0.06822180 -0.04554554  0.03486569 -0.2710649
+## NutrientsA  1.00000000  0.28539400 -0.02569801  0.2718115
+## NAO         0.28539400  1.00000000  0.63859296  0.1141806
+## Temp       -0.02569801  0.63859296  1.00000000  0.0993519
+## Salinity    0.27181154  0.11418063  0.09935190  1.0000000</code></pre>
+</div>
+<div id="temporal-anomalies-of-original-data" class="section level2">
+<h2>1.3 Temporal anomalies of original data</h2>
+<p>The temporal dynamics of variables can be presented in various ways. Here is the R-code for barplots using deviations from the mean <span class="math inline">\(z_{i} = x_{i}-\bar{x}\)</span>.</p>
+<p>Create dataset containing the anomaly values:</p>
+<pre class="r"><code>AnomData &lt;- Data
+# Save the dimensions (number of rows[1] and columns[2] ) in a vector
+n &lt;- dim(AnomData)
+# Loop to convert actual values into anomaly values (incl. missing 
+# values in the average- and anomaly-calculation); the loop starts with the 
+# second column to exclude &quot;Year&quot; (no variable) and ends with the last column 
+# (defined by the second element of the vector n (n[2]) )
+for (i in 2:n[2]) {
+  AnomData[ ,i] &lt;- AnomData[ ,i] - mean(AnomData[ ,i], na.rm = TRUE)}</code></pre>
+<p>(Note: If you want to substract the mean as I did here, you could also simply use the <code>scale()</code> function)</p>
+<p>Plot anomalies as barplot:</p>
+<pre class="r"><code># First, the limits of the y-axes (ylim) are defined by calculating the minimum
+# and maximum anomaly of each variable
+y.low &lt;- apply(AnomData, MARGIN = 2, FUN = min, na.rm = TRUE)
+y.low &lt;- y.low+1/10*y.low
+y.upp &lt;- apply(AnomData, MARGIN = 2, FUN = max, na.rm = TRUE)
+y.upp &lt;- y.upp+1/10*y.upp
+
+par(mfrow = c(3,3), mar = c(5,5,2,1))
+for(i in 2:dim(AnomData)[2]) {       
+  barplot(AnomData[ ,i], col = &quot;black&quot;, space = 0.7, 
+          ylim = c(y.low[i], y.upp[i]), axis.lty = &quot;solid&quot;, 
+          names.arg = AnomData$Year, axisnames = TRUE, 
+          ylab = &quot;Anomalies&quot;, main = colnames(AnomData [i]))
+  box(lty = &quot;solid&quot;, col = &quot;black&quot;)
+  # creates a horizontal reference line at y = 0
+  abline(a = NULL, b = NULL, h = 0, v = NULL, reg = NULL,
+         coef = NULL, untf = FALSE)       
+}</code></pre>
+<p><img src="/blog/2019-11-03-example-code-for-integrated-trend-analysis_files/figure-html/unnamed-chunk-9-1.png" width="100%" /></p>
+</div>
+<div id="traffic-light-plot-of-original-data" class="section level2">
+<h2>1.4 Traffic light plot of original data</h2>
+<p><strong>Data preparation</strong>: Convert actual values into ranks based on quintiles and place the <code>Year</code> column at the end.</p>
+<pre class="r"><code># Place Year column at end
+Data2 &lt;- Data[ ,c(2:ncol(Data), 1)]
+names(Data2)</code></pre>
+<pre><code>##  [1] &quot;FishA&quot;      &quot;FishB&quot;      &quot;ZooA&quot;       &quot;ZooB&quot;       &quot;PhytoA&quot;    
+##  [6] &quot;NutrientsA&quot; &quot;NAO&quot;        &quot;Temp&quot;       &quot;Salinity&quot;   &quot;Year&quot;</code></pre>
+<pre class="r"><code># Save the dimensions (number of rows[1] and columns[2] ) in a vector
+n &lt;- dim(Data2)
+# Get names for the plot axes 
+# the y-axis (without the last column (years) )
+Variablenames &lt;- names(Data2)[-n[2]]
+# the x-axis
+Years &lt;- Data2[ ,n[2]]
+
+# Generate a matrix containing the quintile values for each variable
+# (exluding the time vector by setting the column number and loop end to n[2] -1) 
+Quintiles &lt;- matrix(nrow = 5, ncol = n[2]-1, byrow = FALSE)
+for (i in 1:(n[2]-1)) {
+  Quintiles[, i] &lt;- quantile(Data2[,i],
+                             probs = c(0.2, 0.4, 0.6, 0.8, 1.0), na.rm = TRUE)
+ }
+
+# Generate a dataframe where original values are converted
+# into code 1 to 5 (depending on the quintile) using two loops:
+# first create new dataframe based on the orignal dataframe
+CodedData &lt;- Data2
+# then convert the actual values into codes using a loop:
+# the first (outer) loop repeats process for every variable,
+# the second (inner) loop repeats process for every element within
+# a variable
+for(j in seq(along = CodedData[1:(n[2]-1)])) {
+  for(i in seq(along = CodedData[[j]])) {
+    if(is.na(CodedData[[j]][i]) == TRUE) {
+      is.na(CodedData[[j]][i])&lt;- TRUE} else
+        if(CodedData[[j]][i] &lt; Quintiles[1,j]) {
+          CodedData[[j]][i]&lt;-1} else
+            if((CodedData[[j]][i] &gt;= Quintiles[1,j]) &amp;&amp; 
+                (CodedData[[j]][i] &lt; Quintiles[2,j])) {
+              CodedData[[j]][i]&lt;-2} else
+                if((CodedData[[j]][i] &gt;= Quintiles[2,j]) &amp;&amp; 
+                    (CodedData[[j]][i] &lt; Quintiles[3,j])) {
+                  CodedData[[j]][i]&lt;-3} else
+                    if((CodedData[[j]][i] &gt;= Quintiles[3,j]) &amp;&amp; 
+                        (CodedData[[j]][i] &lt; Quintiles[4,j])) {
+                      CodedData[[j]][i]&lt;-4} else
+                        if(CodedData[[j]][i] &gt;= Quintiles[4,j]) {
+                          CodedData[[j]][i]&lt;-5} }
+} </code></pre>
+<p><strong>Plot preparation</strong>: To order variables in the plot in accordance to the standardised variable averages over the first five data points (excluding the Year column):</p>
+<pre class="r"><code># First create vector  
+Avg5year &lt;- vector(length = n[2]-1)
+# Then fill the vector with the standardised variable averages over the 
+# first five data points (mean of first 5 years - mean of full time series/ 
+# standard deviation of full time series)
+for (i in 1:(n[2]-1)) {
+    Avg5year[i] &lt;- (mean(Data[c(1:5), i], na.rm = TRUE) -
+        mean(Data[, i], na.rm = TRUE)) / 
+        sd(Data[, i], na.rm = TRUE) }
+# Finally, order the variable and create an index vector
+OrdVar &lt;- order(Avg5year)
+# To sort coded dataframe in accordance to the 5-year standardised 
+# average, use the vector OrdVar as an index
+CodedData.sorted &lt;- CodedData[ ,c(1:n[2]-1)][OrdVar]
+# Convert dataframe into a matrix (necessary for an image plot)
+CodedData.mat &lt;- as.matrix(CodedData.sorted)</code></pre>
+<p>One can sort the variables in many ways actually, e.g. using the scores from ordination techniques such as the PCA, but this above approach is less transformed as it sorts by the original values!</p>
+<p><strong>Image plot</strong>: Colours can be easily adjusted;, also the axes titles in case you have a different time vector and/or will use a different sorting procedure:</p>
+<pre class="r"><code>x &lt;- c(1:n[1])
+y &lt;- c(1:(n[2]-1))
+par(mar = c(4,5,3,6), oma = c(0.5,2,0,0), xpd = TRUE)
+image(x, y, z = CodedData.mat, zlim = c(1,5), 
+      col = c(&quot;green&quot;, &quot;yellowgreen&quot;, &quot;yellow&quot;, &quot;gold&quot;, &quot;red&quot;), 
+      axes = FALSE, xlab = &quot;Years&quot;, ylab = &quot;&quot;)
+axis(1, at = seq(1, n[1], by = 1), tick = FALSE, labels = Years, 
+     cex.axis = 0.7, las = 3)
+axis(2, at = seq(1, (n[2]-1), by = 1), tick = FALSE, 
+     labels = Variablenames[OrdVar],
+     cex.axis = 0.7, las = 1, padj = 1) 
+box()
+mtext(&quot;Variables (sorted by the 5-year standardised average)&quot;, 
+      outer = TRUE, side = 2, cex = 0.8)
+legend(x = max(x)+1, y = max(y), legend = c(&quot;&lt; 0.2 quintile&quot;, 
+                                            &quot;&lt; 0.4 quintile&quot;, &quot;&lt; 0.6 quintile&quot;, &quot;&lt; 0.8 quintile&quot;, 
+                                            &quot;&gt; 0.8 quintile&quot;, &quot;missing value&quot;),
+       fill = c(&quot;green&quot;, &quot;yellowgreen&quot;, &quot;yellow&quot;, &quot;gold&quot;, &quot;red&quot;, &quot;white&quot;),
+       cex = 0.6, bty = &quot;n&quot;)</code></pre>
+<p><img src="/blog/2019-11-03-example-code-for-integrated-trend-analysis_files/figure-html/unnamed-chunk-12-1.png" width="100%" /></p>
+</div>
+</div>
+<div id="ordination-method-principal-component-analysis-pca" class="section level1">
+<h1>Ordination method: Principal Component Analysis (PCA)</h1>
+<p><strong>Data preparation</strong>: For the following PCA, missing values need to be replaced. There are different imputation methods, here we will replace NAs with averages of the 2 previous and 2 following years. Further, some variables need to be previously transformed, e.g. by logarithmic transformations to linearise the relationships (in this dummy dataset the biological variables).</p>
+<pre class="r"><code>Data.transf &lt;- Data
+# Save the dimensions (number of rows[1] and columns[2] ) in a vector
+n &lt;- dim(Data.transf)
+
+# Function to replace NAs with 4-yr average (or less depending on position of NA)
+fill_na &lt;- function(x) {
+    loc.na &lt;- which(is.na(x))
+    n &lt;- length(x)
+    for(i in loc.na) {
+         d &lt;- n - i
+            if(i == 1) x[i] &lt;- mean(x[c(i+1, i+2)], na.rm = TRUE)
+            if(i == 2) x[i] &lt;- mean(x[c(i-1, i+1, i+2)], na.rm = TRUE)
+            if(i &gt;= 3) {
+                    if(d &gt;= 2) x[i] &lt;- mean(x[c(i-2, i-1, i+1, i+2)], na.rm = TRUE)
+                    if(d == 1) x[i] &lt;- mean(x[c(i-2, i-1, i+1)], na.rm = TRUE)
+                    if(d == 0) x[i] &lt;- mean(x[c(i-2, i-1)], na.rm = TRUE)
+        }
+    }
+    return(x)
+}
+
+# Apply function
+for(i in 2:n[2]) {
+    Data.transf[ ,i] &lt;- fill_na(Data.transf[ ,i])
+}
+
+# Log10-transform biological variables
+for(i in 2:6) {
+    Data.transf[ ,i] &lt;- log(Data.transf[ ,i] + 0.001, 10)
+}</code></pre>
+<div id="pca-and-numerical-output" class="section level2">
+<h2>PCA and numerical output</h2>
+<p>We will apply a PCA based on the correlation matrix using the function <code>vegan::rda()</code></p>
+<pre class="r"><code># Load package
+library(vegan)
+
+# Use all rows but exclude the &#39;Year&#39; column in the PCA --&gt; [ ,c(2:n[2])]
+# To use the correlation matrix, set scale = TRUE)
+PCA.vegan &lt;- rda(Data.transf[, -1], scale = TRUE)
+
+# Obtaining eigenvalues
+PCA.vegan.eigen &lt;- PCA.vegan$CA$eig
+PCA.vegan.eigen</code></pre>
+<pre><code>##        PC1        PC2        PC3        PC4        PC5        PC6 
+## 3.70377351 1.87105958 1.28927194 0.89014022 0.45089884 0.34988099 
+##        PC7        PC8        PC9 
+## 0.28373765 0.09753584 0.06370144</code></pre>
+<pre class="r"><code># the summary gives the eigenvalues, explained variance, cumulative variance,
+# loadings (species scores) and scores (site scores, which are scaled by a
+# a constant given in the output) 
+PCA.vegan.sum &lt;- summary(PCA.vegan)
+PCA.vegan.sum # displays summary output in R console</code></pre>
+<pre><code>## 
+## Call:
+## rda(X = Data.transf[, -1], scale = TRUE) 
+## 
+## Partitioning of correlations:
+##               Inertia Proportion
+## Total               9          1
+## Unconstrained       9          1
+## 
+## Eigenvalues, and their contribution to the correlations 
+## 
+## Importance of components:
+##                          PC1    PC2    PC3    PC4    PC5     PC6     PC7
+## Eigenvalue            3.7038 1.8711 1.2893 0.8901 0.4509 0.34988 0.28374
+## Proportion Explained  0.4115 0.2079 0.1433 0.0989 0.0501 0.03888 0.03153
+## Cumulative Proportion 0.4115 0.6194 0.7627 0.8616 0.9117 0.95056 0.98208
+##                           PC8      PC9
+## Eigenvalue            0.09754 0.063701
+## Proportion Explained  0.01084 0.007078
+## Cumulative Proportion 0.99292 1.000000
+## 
+## Scaling 2 for species and site scores
+## * Species are scaled proportional to eigenvalues
+## * Sites are unscaled: weighted dispersion equal on all dimensions
+## * General scaling constant of scores:  3.948222 
+## 
+## 
+## Species scores
+## 
+##                 PC1      PC2      PC3      PC4      PC5      PC6
+## FishA      -1.27338  0.06191  0.04905 -0.05048 -0.03400  0.04666
+## FishB       1.12156 -0.01349  0.20544 -0.38137 -0.34239  0.20403
+## ZooA        1.12918  0.08629 -0.40975 -0.25897 -0.09600  0.34203
+## ZooB       -0.76244 -0.67275 -0.61307  0.01982  0.23620  0.49939
+## PhytoA      0.60672  0.22787  0.47440  1.00236  0.05882  0.24981
+## NutrientsA -0.43564  0.63503  0.87163 -0.39170  0.31046  0.31672
+## NAO        -0.06706  1.17652 -0.32584 -0.23195  0.10977 -0.01955
+## Temp       -0.09615  0.94778 -0.72589  0.32668 -0.03960  0.03832
+## Salinity   -1.05249  0.19761  0.16386  0.08737 -0.69579  0.17683
+## 
+## 
+## Site scores (weighted sums of species scores)
+## 
+##           PC1       PC2       PC3      PC4     PC5      PC6
+## sit1  -1.1126 -0.919391 -0.144047  0.80029 -1.0580  0.26193
+## sit2  -1.4576 -0.469841 -0.272886 -0.57423  0.1555  0.75650
+## sit3  -1.2865 -0.055936  0.535008  1.10382  0.1537 -0.70284
+## sit4  -1.0778 -0.329454 -0.338687  0.09543  0.4854  0.58147
+## sit5  -1.0921  1.184508  0.346715 -0.57935  0.3291 -0.60043
+## sit6  -1.0171 -0.293136 -0.480076 -0.68424 -1.5666  0.20153
+## sit7  -0.7009 -0.132985 -0.004617  0.71083 -0.6477  0.60951
+## sit8  -0.4460  0.038670  0.610031  0.41219  0.5484  0.35634
+## sit9  -0.3524 -0.400957  1.697377  0.17418  0.8612 -0.98336
+## sit10 -0.3219 -0.002012 -0.527442  0.25604  1.4888 -0.42628
+## sit11 -0.2316  0.847015 -1.503451 -0.71689  1.0819 -1.15881
+## sit12 -0.1162  1.154041 -1.507185  0.40182 -0.3710  0.44536
+## sit13  0.2403  0.518076  0.812689  0.38965 -0.7164 -1.27168
+## sit14  0.4474  0.915502  0.244698  0.51094 -0.1626  0.87256
+## sit15  0.5611  1.093144  1.059316  0.19702 -0.1251  1.47299
+## sit16  0.1019  0.420521 -0.111634 -1.89295  0.4244 -0.33069
+## sit17  0.4182  1.226544  0.137100 -0.53438 -0.6161  0.33247
+## sit18  0.2354 -1.370381  1.277669 -0.84910 -0.3081 -0.03281
+## sit19  0.5608 -0.637202  0.311097 -1.80355 -0.4546  0.04108
+## sit20  0.6648 -0.497478 -0.854697 -0.26095 -0.5982  1.01578
+## sit21  0.8944 -0.053751  0.059374  0.07529  0.7838  0.68937
+## sit22  0.6216  1.194697  0.612505  0.52284 -0.4093 -0.44923
+## sit23  0.8147 -0.889831 -0.409322  1.10368  1.1137  0.70080
+## sit24  0.7433 -0.176012 -0.098949  0.70775  0.1146 -0.54457
+## sit25  0.5107 -0.704628  0.264039 -0.58045  1.1585  0.77775
+## sit26  0.8246 -0.161386 -0.487457  0.58631 -0.2519 -0.37508
+## sit27  0.9383 -0.374778 -0.010093  0.15187 -1.1663 -1.07009
+## sit28  0.6352 -1.123559 -1.217073  0.27615 -0.2471 -1.16956</code></pre>
+<p>If desired, the Eigenvalues, scores and loadings can be separately exported:</p>
+<pre class="r"><code>write.table(PCA.vegan.sum$cont$importance, file = &quot;PCA_eigenvalues.txt&quot;, sep = &quot; &quot;,
+            row.names = T, col.names = T, quote = F)
+# loadings:
+write.table(PCA.vegan.sum$species, file = &quot;PCA_loadings.txt&quot;, sep = &quot; &quot;,
+            row.names = T, col.names = T, quote = F)
+# scores:
+write.table(PCA.vegan.sum$sites, file = &quot;PCA_scores.txt&quot;, sep = &quot; &quot;,
+            row.names = T, col.names = T, quote = F)</code></pre>
+</div>
+<div id="plots" class="section level2">
+<h2>Plots</h2>
+<p>Create first a character vector for the score labels (the years)</p>
+<pre class="r"><code>years.char &lt;- paste(Data.transf$Year, sep = &quot;&quot;)</code></pre>
+<p><br></p>
+<div id="biplotwith-loadings-and-scores" class="section level3">
+<h3>1. Biplot(with loadings and scores):</h3>
+<p>To have more control of the plot, labels will be added seperately</p>
+<ul>
+<li>the “choices” argument determines the PC axes (1:2 chooses PC1/PC2);</li>
+<li>the argument “scaling = 3” scales species and sites symmetrically by the square root of the eigenvalues</li>
+<li>variable names and scores are not defined by setting <code>type = c(&quot;points&quot;,&quot;none&quot;))</code> as we want to set both manually;</li>
+</ul>
+<pre class="r"><code>biplot(PCA.vegan, choices = 1:2, scaling = 3,
+       display = c(&quot;sites&quot;, &quot;species&quot;), type = c(&quot;points&quot;,&quot;none&quot;),
+       col = c(&quot;darkgreen&quot;))
+# Add the variable names using same scaling value
+text(PCA.vegan, display = &quot;species&quot;, col = &quot;darkgreen&quot;, cex = 0.8, 
+     scaling = 3)
+# Add now the scores with the year label using the same scaling value
+text(PCA.vegan, display = &quot;sites&quot;, labels = years.char, cex = 0.7,  scaling = 3)</code></pre>
+<p><img src="/blog/2019-11-03-example-code-for-integrated-trend-analysis_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+</div>
+<div id="biplot-with-loadings-time-trajectory-is-in-the-background" class="section level3">
+<h3>2. Biplot with loadings, time trajectory is in the background:</h3>
+<pre class="r"><code>biplot(PCA.vegan, choices = 1:2, scaling = 3,
+       display = c(&quot;sites&quot;, &quot;species&quot;), type = c(&quot;points&quot;,&quot;none&quot;),
+       col = c(&quot;darkgreen&quot;))
+# Add now the scores with the year label using the same scaling value
+text(PCA.vegan, display = &quot;sites&quot;, labels = years.char, cex = 0.7,  
+     col = &quot;grey&quot;, scaling = 3)
+# For the lines the coordinates of the scaled PC1/2 scores have to be obtained:
+scores.sc &lt;- scores(PCA.vegan, scaling = 3)
+# Connect the sites in an ascending order of the year
+lines(x = scores.sc$sites[, 1][order(Data.transf$Year)],    
+      y = scores.sc$sites[, 2][order(Data.transf$Year)],
+      lty = 1, col = &quot;grey&quot;)
+# Add the variable names using same scaling value
+text(PCA.vegan, display = &quot;species&quot;, col = &quot;darkgreen&quot;, cex = 0.8, 
+     scaling = 3)</code></pre>
+<p><img src="/blog/2019-11-03-example-code-for-integrated-trend-analysis_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+</div>
+<div id="time-trajectory-plot-with-the-unscaled-scores" class="section level3">
+<h3>3. Time trajectory plot with the unscaled scores;</h3>
+<p>In the plot, scores and loadings are not shown (by setting: type = c(“none”,“none”) )</p>
+<pre class="r"><code>biplot(PCA.vegan, choices = 1:2, scaling = 0,   
+       display = c(&quot;sites&quot;, &quot;species&quot;), type = &quot;n&quot;)
+text(PCA.vegan, display = &quot;sites&quot;, labels = years.char, cex = 0.8,
+     scaling = 0)
+# For the lines the coordinates of the unscaled PC1/2 scores have to be obtained
+scores.unsc &lt;- scores(PCA.vegan, scaling = 0)
+# Connect the sites in an ascending order of the year
+lines(x = scores.unsc$sites[, 1][order(Data.transf$Year)],  
+      y = scores.unsc$sites[, 2][order(Data.transf$Year)],
+      lty = 1, col = &quot;blue&quot;)</code></pre>
+<p><img src="/blog/2019-11-03-example-code-for-integrated-trend-analysis_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+</div>
+<div id="time-series-plot-of-pc1-and-pc2-scores-vs.time" class="section level3">
+<h3>4. Time series plot of PC1 and PC2 scores vs. time</h3>
+<p>Get unscaled PC1/PC2 site scores from <code>rda()</code> results</p>
+<pre class="r"><code>scores.unsc &lt;- scores(PCA.vegan, scaling = 0)
+# Get the min/max value for the limit of the x- and y-axis
+y.low &lt;- min(scores.unsc$sites)
+y.upp &lt;- max(scores.unsc$sites)
+x.low &lt;- min(Data.transf$Year)
+x.upp &lt;- max(Data.transf$Year)
+
+plot(Data.transf$Year, scores.unsc$sites[ ,1], pch = 16, 
+     ylab = &quot;PC scores&quot;, xlab = &quot;Years&quot;, axes = FALSE, 
+     xlim = c(x.low, x.upp), ylim = c(y.low, y.upp), cex = 0.7, cex.lab = 0.9, cex.main = 0.9)
+axis(2, cex.axis = 0.7, las = 1)
+axis(1, cex.axis = 0.7)
+box(col = &quot;black&quot;)
+abline(h = 0, lty = &quot;dotted&quot;)
+lines(Data.transf$Year, scores.unsc$sites[, 1], col = &quot;black&quot;, 
+      lwd = 0.8)
+points(Data.transf$Year, scores.unsc$sites[, 2], 
+       pch = 1, cex = 0.7, col = &quot;black&quot;, type = &quot;b&quot;, lty = 3)
+legend(&quot;bottomright&quot;, legend = c(&quot;PC1 scores&quot;, &quot;PC2 scores&quot;),
+       text.col = c(&quot;black&quot;, &quot;black&quot;), cex = 0.7, 
+       col = c(&quot;black&quot;, &quot;black&quot;), 
+       pch = c(16, 1), lty = c(1, 3),
+       pt.cex = 0.7, bty = &quot;n&quot;)</code></pre>
+<p><img src="/blog/2019-11-03-example-code-for-integrated-trend-analysis_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="clustering-method-constrained-clustering" class="section level1">
+<h1>3. Clustering method: Constrained Clustering</h1>
+<p>Chronological Clustering is not yet available in R. Here we will use a different method designed for spatial data called <strong>Constrained Clustering</strong>. This method is not recommended for temporal data as it is a hierarchical solution but we can use it here to get a first impression if and when we might expect sudden shifts in the multivariate dataset.
+To make the results comparable to the PCA we use the same dataset, i.e. Data.transf, and normalise it afterwards</p>
+<pre class="r"><code># load packages
+library(vegan)
+library(rioja)
+
+# Use same data as for PCA, but normalise the data (excl. Year column):
+Data.stand &lt;- decostand(Data.transf[ ,-1], method=&quot;standardize&quot;, MARGIN = 2, na.rm = T)
+
+# Create a separate time vector for labels
+Time &lt;- Data.transf$Year
+
+# Save the dimensions (number of rows[1] and columns[2] ) in a vector
+n &lt;- dim(Data.stand)
+
+# Calculate the Euclidean distance matrix from the standardised data 
+# using the stats::dist() function:
+Data.dist &lt;- dist(Data.stand, &quot;euclidean&quot;,  diag = TRUE, upper = TRUE)
+
+
+### Constrained hierarchical Clustering as described in &quot;rioja&quot; package: 
+
+# Coniss = constrained incremental sum of squares clustering
+CC &lt;- chclust(Data.dist, method=&quot;coniss&quot;)
+
+# plot outcome: Show both plots next to each other
+par(mfrow = c(1, 2))
+# cluster-plot with labels
+plot(CC,labels= Time, main = &quot;Coniss cluster plot&quot;, cex=0.8)
+# broken stick plot
+bstick(CC) 
+title(&quot;Coniss -broken stick plot&quot;)</code></pre>
+<p><img src="/blog/2019-11-03-example-code-for-integrated-trend-analysis_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p>The broken stock plot suggests 1 shift in the joint time series data, i.e. around 1987/1988.</p>
+<!-- footnotes -->
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>ICES (2010). Report of the ICES/HELCOM Working Group on Integrated Assessments of the Baltic Sea (WGIAB), 19–23 April 2010, ICES Headquarters, Copenhagen, Den- mark. ICES CM 2010/SSGRSP:02. 94 pp.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Diekmann, R., Otto, S., and Möllmann, C. (2012). “Towards Integrated Ecosystem Assessments (IEAs) of the Baltic Sea: Investigating Ecosystem State and Historical Development,” in <a href="https://link.springer.com/book/10.1007/978-3-642-25728-5">Climate Impacts on the Baltic Sea: From Science to Policy</a>, eds. M. Reckermann, K. Brander, B.R. Mackenzie &amp; A. Omstedt. (Berlin Heidelberg: Springer), 161-199.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>Planque, B., and Arneberg, P. (2018). <a href="http://dx.doi.org/10.1093/icesjms/fsx223">Principal component analyses for integrated ecosystem assessments may primarily reflect methodological artefacts</a>. ICES J. Mar. Sci. 75, 1021-1028.<a href="#fnref3" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+
+                        </div>
+                        
+                        
+                        <div id="comments">
+                            <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "www-marinedatascience-co" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+                        </div>
+                        
+
+                    </div>
+                    
+
+                    
+
+                    
+
+                    <div class="col-md-3">
+
+                        
+
+                        
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+      <h3 class="panel-title">Search</h3>
+    </div>
+
+    <div class="panel-body">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" role="search">
+            <div class="input-group">
+                <input type="search" name="q" class="form-control" placeholder="Search">
+                <input type="hidden" name="sitesearch" value="/">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-template-main"><i class="fa fa-search"></i></button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+      <h3 class="panel-title">Categories</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="nav nav-pills nav-stacked">
+            
+            <li><a href="/categories/data-visualization">data-visualization (1)</a>
+            </li>
+            
+            <li><a href="/categories/indicator">indicator (3)</a>
+            </li>
+            
+            <li><a href="/categories/programming">programming (4)</a>
+            </li>
+            
+            <li><a href="/categories/statistical-learning">statistical-learning (2)</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="panel sidebar-menu">
+    <div class="panel-heading">
+      <h3 class="panel-title">Tags</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="tag-cloud">
+            
+            <li><a href="/tags/food-web"><i class="fa fa-tags"></i> food-web</a>
+            </li>
+            
+            <li><a href="/tags/gam"><i class="fa fa-tags"></i> gam</a>
+            </li>
+            
+            <li><a href="/tags/github"><i class="fa fa-tags"></i> github</a>
+            </li>
+            
+            <li><a href="/tags/method-comparison"><i class="fa fa-tags"></i> method-comparison</a>
+            </li>
+            
+            <li><a href="/tags/oceanography"><i class="fa fa-tags"></i> oceanography</a>
+            </li>
+            
+            <li><a href="/tags/r-package"><i class="fa fa-tags"></i> r-package</a>
+            </li>
+            
+            <li><a href="/tags/regime-shifts"><i class="fa fa-tags"></i> regime-shifts</a>
+            </li>
+            
+            <li><a href="/tags/shiny"><i class="fa fa-tags"></i> shiny</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+
+
+
+
+                        
+
+                    </div>
+                    
+
+                    
+
+                </div>
+                
+
+            </div>
+            
+        </div>
+        
+
+        <footer id="footer">
+    <div class="container">
+
+        
+        <div class="col-md-4 col-sm-6">
+            <h4>About me</h4>
+            <img src="/img/profile_v1@2x.png" alt="profile" style="float:left;width:75px;height:75px;padding:5px;"/>
+
+            I am a quantitative marine ecologist who loves combining nerdy programming, statistics, ecology and any activity in and around the oceans.
+
+            <hr class="hidden-md hidden-lg hidden-sm">
+
+        </div>
+        
+        
+
+        <div class="col-md-4 hidden-sm" id="footer-posts">
+
+             
+            <h4>Recent posts</h4>
+
+            <div class="blog-entries">
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/11/03/example-code-for-integrated-trend-analysis/">
+                          
+                            <img src="/img/banners/traffic_light_plot.png" class="img-responsive" alt="Example code for an Integrated Trend Analysis (ITA)">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/11/03/example-code-for-integrated-trend-analysis/">Example code for an Integrated Trend Analysis (ITA)</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/09/28/comparison-of-change-point-detection-methods/">
+                          
+                            <img src="/img/banners/changepoints.png" class="img-responsive" alt="Comparison of change point detection methods">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/09/28/comparison-of-change-point-detection-methods/">Comparison of change point detection methods</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-1/">
+                          
+                            <img src="/img/banners/shiny_droplet.png" class="img-responsive" alt="Run Shiny Server on your own DigitalOcean droplet - Part 1">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/04/28/run-shiny-server-on-your-own-digitalocean-droplet-part-1/">Run Shiny Server on your own DigitalOcean droplet - Part 1</a></h5>
+                    </div>
+                </div>
+                
+            </div>
+
+            <hr class="hidden-md hidden-lg">
+             
+
+        </div>
+        
+
+        
+        <div class="col-md-4 col-sm-6">
+
+          <h4>Contact</h4>
+
+            <strong><a href="https://www.biologie.uni-hamburg.de/en/einrichtungen/imf.html">Institute of Marine Ecosystem and Fishery Science</a></strong>
+        <br>Center for Earth System Research and Sustainability
+        <br>University of Hamburg
+        <br><strong>Germany</strong><br>
+      
+
+            <a href="/contact" class="btn btn-small btn-template-main">Go to contact page</a>
+
+            <hr class="hidden-md hidden-lg hidden-sm">
+
+        </div>
+        
+        
+
+    </div>
+    
+</footer>
+
+
+
+
+
+
+
+<div id="copyright">
+    <div class="container">
+        <div class="col-md-12">
+            
+            <p class="pull-left">&copy; 2018 - This work is licensed under a <a rel='license' href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International License </a></p>
+            
+            <p class="pull-right">
+              <a href="/about/index.html#about-website">Legal Disclosure</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    </div>
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-127654937-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+<script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0/jquery.counterup.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-parallax/1.1.3/jquery-parallax.js"></script>
+<script src="/js/hpneo.gmaps.js"></script>
+<script src="/js/gmaps.init.js"></script>
+<script src="/js/front.js"></script>
+
+
+<script src="/js/owl.carousel.min.js"></script>
+
+
+
+
+
+<script src="/js/highlight.pack.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+<script id="dsq-count-scr" src="//www-marinedatascience-co.disqus.com/count.js" async></script>
+
+
+
+<script>
+  var shiftWindow = function() { scrollBy(0, -175) };
+  if (location.hash) shiftWindow();
+  window.addEventListener("hashchange", shiftWindow);
+</script>
+
+
+  </body>
+</html>
