@@ -184,7 +184,7 @@ $ touch readme.md
 $ git init
 $ git add .
 $ git commit -am "first commit"
-$ git remote add origin git@work:gitWork/test-work.git
+$ git remote add origin git@gitWork:gitWork/test-work.git
 $ git push origin master
 ```
 
@@ -201,7 +201,7 @@ If you don't get any error message go on and repeat this process for your gitPer
 
 ## Pushing and pulling directly from RStudio
 
-If the new repository represents an RStudio project you will notice that under *Project options > 'Git/SVN' > Origin* there will be the correct repo name (i.e., git@work:gitWork/test-work.git), but the 'Push' and 'Pull' buttons in the *Git* Panel are greyed out. If you want to push and pull directly from within RStudio you need to tweak some of the git settings before you can do so. 
+If the new repository represents an RStudio project you will notice that under *Project options > 'Git/SVN' > Origin* there will be the correct repo name (i.e., git@gitWork:gitWork/test-work.git), but the 'Push' and 'Pull' buttons in the *Git* Panel are greyed out. If you want to push and pull directly from within RStudio you need to tweak some of the git settings before you can do so. 
 
 Close RStudio and open the terminal. Change the directory to the repo folder and push again but this time using the `-u` flag:
 
