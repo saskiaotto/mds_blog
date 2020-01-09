@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018 - present [Saskia Otto](https://github.com/saskiaotto)</copyright>
-    <lastBuildDate>Sun, 28 Apr 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 09 Jan 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/programming/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Checklist for R package (re-)submissions on CRAN</title>
+      <link>/blog/2020/01/09/checklist-for-r-package-re-submissions-on-cran/</link>
+      <pubDate>Thu, 09 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2020/01/09/checklist-for-r-package-re-submissions-on-cran/</guid>
+      <description>The following is a checklist of things to consider or do before (re-)submitting a package to CRAN, which I find every now and then helpful when I have go through this progress again. With the release of devtools 2.0 things have also changed a bit from the description provided in the R packages book by Hadley Wickham. So this checklist might be also helpful for you.
+
+20 steps - checklist See if there are any new requirements, policies or recommendations  Check latest CRAN policies on http://cran.</description>
+    </item>
     
     <item>
       <title>Run Shiny Server on your own DigitalOcean droplet - Part 1</title>

@@ -1,0 +1,94 @@
+---
+title: Checklist for R package (re-)submissions on CRAN
+author: Saskia O.
+date: '2020-01-09'
+slug: checklist-for-r-package-re-submissions-on-cran
+categories:
+  - programming
+tags: []
+banner: "img/banners/checklist_CRAN.png"
+---
+
+
+The following is a checklist of things to consider or do before (re-)submitting a package to CRAN, which I find every now and then helpful when I have go through this progress again. With the release of devtools 2.0 things have also changed a bit from the description provided in the [R packages](http://r-pkgs.had.co.nz/) book by Hadley Wickham. So this checklist might be also helpful for you.
+
+---
+
+<br>
+
+## 20 steps - checklist
+
+1. See if there are any new requirements, policies or recommendations
+    - Check latest CRAN policies on http://cran.r-project.org/web/packages/policies.html
+    - See the CRAN checklist for package submission: https://cran.r-project.org/web/packages/submission_checklist.html
+    - Check for new edits in the [R packages](http://r-pkgs.had.co.nz/) online book.
+2. Update R, Rstudio and all dependent R packages. 
+    - For the latter you can also use `devtools::install_deps()` which updates outdated dependencies.
+3. Test your package again after all the updates and package modifications:
+    - Check unit tests with `devtools::test()` (Mac shortcut: <kbd>Cmd+Shift+T</kbd>)
+  	- Check coverage of all your tests with `devtools::test_coverage()`
+  	- Check examples with `devtools::run_examples()`
+  	- Update the documentation with `devtools::document()` and update potential vignettes
+  	- Check all in local environment: `devtools::check()` (Mac shortcut: <kbd>Cmd+Shift+E</kbd>)
+4. Check reverse dependencies: 
+    - The former function `devtools::revdep_check()` has been deprecated and moved to a separate packge. 
+    - Use now `revdepcheck::revdep_check()` 
+        - (if you use this function, be aware that you will have a folder at the top level named 'revdep' with the check results --> look at these files and then delete the entire folder).
+    - If that doesn’t work use: `tools::dependsOnPkgs()`
+5. Update `DESCRIPTION` file
+    - *'Depends'* field (if R Version has changed since your last submission and some function changes would not work with the old R Version)
+    - *'Imports'* field (if R package versions have changed since your last submission)
+    - *'Version'* field: Still keep at this point the old development version (until step 16)
+6. Test your package on different platforms/versions with devtools for **Windows** →`devtools::build_win()` has been deprecated, use now:
+    - `devtools::check_win_release()`
+    - `devtools::check_win_devel()`
+    - `devtools::check_win_oldrelease()`
+7. Test your package on different platforms/versions with [Travis CI](travis-ci.com) for **Ubuntu**
+    - If your Github repo is connected to your Travis CI account and a .travis.yml file has been generated with `devtools::use_travis()` (which lists the versions to test) Travis CI will automatically run the test with every change that is committed and pushed to Github and inform you via email.
+8. Test your package on any platform/version you want with the [rhub](https://r-hub.github.io/rhub/) package
+    - A good start here is the [Getting started](https://r-hub.github.io/rhub/articles/rhub.html) vignette.
+    - The first time you use rhub your email needs to be validated using the function `validate_email()`.
+    - Check for any platform(s) with the generic function `check(platform = ..)`. In the `platform` argument you can specify a single one or a vector of several (shouldn't be too many). Alternatively,
+    - the function `check_for_cran()` chooses all necessary platforms to test for.
+    - `check_on_linux()` and `check_on_windows()` select the operating system.
+    - `check_with_roldrel()`, `check_with_rrelease()`, `check_with_rpatched()` and `check_with_rdevel()` select an R version.
+9. Update `README.md` file:
+    - Make changes in the README.Rmd file (which can be created using `devtools::use_readme_rmd()` )
+    - Knit the .Rmd into .md or use `devtools::build_readme()` which is a wrapper around `rmarkdown::render()`
+10. Update `NEWS.md` file once more (should be constantly updated with every change made!)
+11. Check spelling errors after finalising all files: `devtools::spell_check()`
+12. Update `Index.Rmd` file and package website if necessary (run `pkgdown::build_site()`) → make sure that the build passed on Travis CI, otherwise the badge on the website will show the *failed* badge.
+13. Update `cran-comments.md`: Add 
+    - a summary of the new changes (from the NEWS.md file) 
+    - the test environments,
+    - R CMD check results (explain ERRORs, WARNINGs, NOTEs).
+    - Downstream dependencies.
+14. Push all necessary commits again to GitHub.
+    - Merge branches if necessary via git: `git merge –no-ff branch_name`
+15. Run again a final local R CMD check with `devtools::check()`
+16. For re-submission update now the *'Version'* field in the DESCRIPTION file (after the final push to Github, so on the Github website you have still the development version (until CRAN acceptance) but the new version for the submission)
+17. Submit the package to CRAN.
+    - Use `devtools::release()` which performs more checks prior to submission. If you simply want to re-submit and avoid all the questions use the shortcut `devtools::submit_cran()`.
+    - In this process it will also ask you to check on the website the check results from the latest released version: https://cran.rstudio.com//web/checks/check_results_YOUR_PACKAGE_NAME.html  → go to the website and check
+    - Confirm submission via link in the email.
+18. Check results of submission
+    - in all CRAN checks
+    - in comments inside the email from CRAN.
+19. Fix what needs to be fixed.
+    - Consider increasing version number.
+    - Check everything again and resubmit to CRAN.
+20. After successful submission:
+    - Create a new release with tag version on your GitHub repo. Copy and paste the contents of the relevant NEWS.md section into the release notes
+    - Increment the version of the package in the DESCRIPTION file (to X.X.X.9000).
+
+---
+
+If there is a new version of an imported package your package depends on and there is an issue with the new updoming version (that is not yet on CRAN), my strategy is:
+
+- Start with step 1 and 2 above
+- Then, install the development version of the respective package from e.g. Github.
+- Run the R CMD check and fix the issue until no more errors, warnings or notes occur.
+- Then re-install the official package version from CRAN.
+- Run again R CMD check
+- If everything is fine update the R and package versions in the `DESCRIPTION`file, but don't list the development version of that one package! (step 5)
+- Follow the remaining step 6-20

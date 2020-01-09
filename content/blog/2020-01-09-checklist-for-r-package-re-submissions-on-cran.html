@@ -1,0 +1,126 @@
+---
+title: Checklist for R package (re-)submissions on CRAN
+author: Saskia O.
+date: '2020-01-09'
+slug: checklist-for-r-package-re-submissions-on-cran
+categories:
+  - programming
+tags: []
+banner: "img/banners/checklist_CRAN.png"
+---
+
+
+
+<p>The following is a checklist of things to consider or do before (re-)submitting a package to CRAN, which I find every now and then helpful when I have go through this progress again. With the release of devtools 2.0 things have also changed a bit from the description provided in the <a href="http://r-pkgs.had.co.nz/">R packages</a> book by Hadley Wickham. So this checklist might be also helpful for you.</p>
+<hr />
+<p><br></p>
+<div id="steps---checklist" class="section level2">
+<h2>20 steps - checklist</h2>
+<ol style="list-style-type: decimal">
+<li>See if there are any new requirements, policies or recommendations
+<ul>
+<li>Check latest CRAN policies on <a href="http://cran.r-project.org/web/packages/policies.html" class="uri">http://cran.r-project.org/web/packages/policies.html</a></li>
+<li>See the CRAN checklist for package submission: <a href="https://cran.r-project.org/web/packages/submission_checklist.html" class="uri">https://cran.r-project.org/web/packages/submission_checklist.html</a></li>
+<li>Check for new edits in the <a href="http://r-pkgs.had.co.nz/">R packages</a> online book.</li>
+</ul></li>
+<li>Update R, Rstudio and all dependent R packages.
+<ul>
+<li>For the latter you can also use <code>devtools::install_deps()</code> which updates outdated dependencies.</li>
+</ul></li>
+<li>Test your package again after all the updates and package modifications:
+<ul>
+<li>Check unit tests with <code>devtools::test()</code> (Mac shortcut: <kbd>Cmd+Shift+T</kbd>)</li>
+<li>Check coverage of all your tests with <code>devtools::test_coverage()</code></li>
+<li>Check examples with <code>devtools::run_examples()</code></li>
+<li>Update the documentation with <code>devtools::document()</code> and update potential vignettes</li>
+<li>Check all in local environment: <code>devtools::check()</code> (Mac shortcut: <kbd>Cmd+Shift+E</kbd>)</li>
+</ul></li>
+<li>Check reverse dependencies:
+<ul>
+<li>The former function <code>devtools::revdep_check()</code> has been deprecated and moved to a separate packge.</li>
+<li>Use now <code>revdepcheck::revdep_check()</code>
+<ul>
+<li>(if you use this function, be aware that you will have a folder at the top level named ‘revdep’ with the check results –&gt; look at these files and then delete the entire folder).</li>
+</ul></li>
+<li>If that doesn’t work use: <code>tools::dependsOnPkgs()</code></li>
+</ul></li>
+<li>Update <code>DESCRIPTION</code> file
+<ul>
+<li><em>‘Depends’</em> field (if R Version has changed since your last submission and some function changes would not work with the old R Version)</li>
+<li><em>‘Imports’</em> field (if R package versions have changed since your last submission)</li>
+<li><em>‘Version’</em> field: Still keep at this point the old development version (until step 16)</li>
+</ul></li>
+<li>Test your package on different platforms/versions with devtools for <strong>Windows</strong> →<code>devtools::build_win()</code> has been deprecated, use now:
+<ul>
+<li><code>devtools::check_win_release()</code></li>
+<li><code>devtools::check_win_devel()</code></li>
+<li><code>devtools::check_win_oldrelease()</code></li>
+</ul></li>
+<li>Test your package on different platforms/versions with <a href="travis-ci.com">Travis CI</a> for <strong>Ubuntu</strong>
+<ul>
+<li>If your Github repo is connected to your Travis CI account and a .travis.yml file has been generated with <code>devtools::use_travis()</code> (which lists the versions to test) Travis CI will automatically run the test with every change that is committed and pushed to Github and inform you via email.</li>
+</ul></li>
+<li>Test your package on any platform/version you want with the <a href="https://r-hub.github.io/rhub/">rhub</a> package
+<ul>
+<li>A good start here is the <a href="https://r-hub.github.io/rhub/articles/rhub.html">Getting started</a> vignette.</li>
+<li>The first time you use rhub your email needs to be validated using the function <code>validate_email()</code>.</li>
+<li>Check for any platform(s) with the generic function <code>check(platform = ..)</code>. In the <code>platform</code> argument you can specify a single one or a vector of several (shouldn’t be too many). Alternatively,</li>
+<li>the function <code>check_for_cran()</code> chooses all necessary platforms to test for.</li>
+<li><code>check_on_linux()</code> and <code>check_on_windows()</code> select the operating system.</li>
+<li><code>check_with_roldrel()</code>, <code>check_with_rrelease()</code>, <code>check_with_rpatched()</code> and <code>check_with_rdevel()</code> select an R version.</li>
+</ul></li>
+<li>Update <code>README.md</code> file:
+<ul>
+<li>Make changes in the README.Rmd file (which can be created using <code>devtools::use_readme_rmd()</code> )</li>
+<li>Knit the .Rmd into .md or use <code>devtools::build_readme()</code> which is a wrapper around <code>rmarkdown::render()</code></li>
+</ul></li>
+<li>Update <code>NEWS.md</code> file once more (should be constantly updated with every change made!)</li>
+<li>Check spelling errors after finalising all files: <code>devtools::spell_check()</code></li>
+<li>Update <code>Index.Rmd</code> file and package website if necessary (run <code>pkgdown::build_site()</code>) → make sure that the build passed on Travis CI, otherwise the badge on the website will show the <em>failed</em> badge.</li>
+<li>Update <code>cran-comments.md</code>: Add
+<ul>
+<li>a summary of the new changes (from the NEWS.md file)</li>
+<li>the test environments,</li>
+<li>R CMD check results (explain ERRORs, WARNINGs, NOTEs).</li>
+<li>Downstream dependencies.</li>
+</ul></li>
+<li>Push all necessary commits again to GitHub.
+<ul>
+<li>Merge branches if necessary via git: <code>git merge –no-ff branch_name</code></li>
+</ul></li>
+<li>Run again a final local R CMD check with <code>devtools::check()</code></li>
+<li>For re-submission update now the <em>‘Version’</em> field in the DESCRIPTION file (after the final push to Github, so on the Github website you have still the development version (until CRAN acceptance) but the new version for the submission)</li>
+<li>Submit the package to CRAN.
+<ul>
+<li>Use <code>devtools::release()</code> which performs more checks prior to submission. If you simply want to re-submit and avoid all the questions use the shortcut <code>devtools::submit_cran()</code>.</li>
+<li>In this process it will also ask you to check on the website the check results from the latest released version: <a href="https://cran.rstudio.com//web/checks/check_results_YOUR_PACKAGE_NAME.html" class="uri">https://cran.rstudio.com//web/checks/check_results_YOUR_PACKAGE_NAME.html</a> → go to the website and check</li>
+<li>Confirm submission via link in the email.</li>
+</ul></li>
+<li>Check results of submission
+<ul>
+<li>in all CRAN checks</li>
+<li>in comments inside the email from CRAN.</li>
+</ul></li>
+<li>Fix what needs to be fixed.
+<ul>
+<li>Consider increasing version number.</li>
+<li>Check everything again and resubmit to CRAN.</li>
+</ul></li>
+<li>After successful submission:
+<ul>
+<li>Create a new release with tag version on your GitHub repo. Copy and paste the contents of the relevant NEWS.md section into the release notes</li>
+<li>Increment the version of the package in the DESCRIPTION file (to X.X.X.9000).</li>
+</ul></li>
+</ol>
+<hr />
+<p>If there is a new version of an imported package your package depends on and there is an issue with the new updoming version (that is not yet on CRAN), my strategy is:</p>
+<ul>
+<li>Start with step 1 and 2 above</li>
+<li>Then, install the development version of the respective package from e.g. Github.</li>
+<li>Run the R CMD check and fix the issue until no more errors, warnings or notes occur.</li>
+<li>Then re-install the official package version from CRAN.</li>
+<li>Run again R CMD check</li>
+<li>If everything is fine update the R and package versions in the <code>DESCRIPTION</code>file, but don’t list the development version of that one package! (step 5)</li>
+<li>Follow the remaining step 6-20</li>
+</ul>
+</div>
