@@ -9,6 +9,7 @@ tags: []
 banner: "img/banners/checklist_CRAN.png"
 ---
 
+<p class="date-update">Last update: 2020/01/10</p> 
 
 The following is a checklist of things to consider or do before (re-)submitting a package to CRAN, which I find every now and then helpful when I have go through this progress again. With the release of devtools 2.0 things have also changed a bit from the description provided in the [R packages](http://r-pkgs.had.co.nz/) book by Hadley Wickham. So this checklist might be also helpful for you.
 
@@ -52,10 +53,12 @@ The following is a checklist of things to consider or do before (re-)submitting 
     - the function `check_for_cran()` chooses all necessary platforms to test for.
     - `check_on_linux()` and `check_on_windows()` select the operating system.
     - `check_with_roldrel()`, `check_with_rrelease()`, `check_with_rpatched()` and `check_with_rdevel()` select an R version.
-9. Update `README.md` file:
+9. Update `README.Rmd` file:
     - Make changes in the README.Rmd file (which can be created using `devtools::use_readme_rmd()` )
     - Knit the .Rmd into .md or use `devtools::build_readme()` which is a wrapper around `rmarkdown::render()`
-10. Update `NEWS.md` file once more (should be constantly updated with every change made!)
+10. Update `NEWS.md` file once more 
+    - should be constantly updated with every change made!
+    - until this point, still use the development version
 11. Check spelling errors after finalising all files: `devtools::spell_check()`
 12. Update `Index.Rmd` file and package website if necessary (run `pkgdown::build_site()`) → make sure that the build passed on Travis CI, otherwise the badge on the website will show the *failed* badge.
 13. Update `cran-comments.md`: Add 
@@ -66,7 +69,10 @@ The following is a checklist of things to consider or do before (re-)submitting 
 14. Push all necessary commits again to GitHub.
     - Merge branches if necessary via git: `git merge –no-ff branch_name`
 15. Run again a final local R CMD check with `devtools::check()`
-16. For re-submission update now the *'Version'* field in the DESCRIPTION file (after the final push to Github, so on the Github website you have still the development version (until CRAN acceptance) but the new version for the submission)
+16. For re-submission 
+    - update now the *'Version'* field in the DESCRIPTION file (after the final push to Github, so on the Github website you have still the development version (until CRAN acceptance) but the new version for the submission)
+    - replace in the `NEWS.md` file the development version with the new submitted version number
+    - If you also have a short summary of the changes in each version in your `README.Rmd` file than add the summary under the new version now.
 17. Submit the package to CRAN.
     - Use `devtools::release()` which performs more checks prior to submission. If you simply want to re-submit and avoid all the questions use the shortcut `devtools::submit_cran()`.
     - In this process it will also ask you to check on the website the check results from the latest released version: https://cran.rstudio.com//web/checks/check_results_YOUR_PACKAGE_NAME.html  → go to the website and check

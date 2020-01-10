@@ -18,9 +18,7 @@
       <pubDate>Thu, 09 Jan 2020 00:00:00 +0000</pubDate>
       
       <guid>/blog/2020/01/09/checklist-for-r-package-re-submissions-on-cran/</guid>
-      <description>The following is a checklist of things to consider or do before (re-)submitting a package to CRAN, which I find every now and then helpful when I have go through this progress again. With the release of devtools 2.0 things have also changed a bit from the description provided in the R packages book by Hadley Wickham. So this checklist might be also helpful for you.
-
-20 steps - checklist See if there are any new requirements, policies or recommendations  Check latest CRAN policies on http://cran.</description>
+      <description>Last update: 2020/01/10 The following is a checklist of things to consider or do before (re-)submitting a package to CRAN, which I find every now and then helpful when I have go through this progress again. With the release of devtools 2.0 things have also changed a bit from the description provided in the R packages book by Hadley Wickham. So this checklist might be also helpful for you.</description>
     </item>
     
     <item>

@@ -226,7 +226,10 @@
                         <p class="text-muted text-uppercase mb-small text-right">By <a href="#">Saskia O.</a> | January 9, 2020</p>
 
                         <div id="post-content">
-                          <p>The following is a checklist of things to consider or do before (re-)submitting a package to CRAN, which I find every now and then helpful when I have go through this progress again. With the release of devtools 2.0 things have also changed a bit from the description provided in the <a href="http://r-pkgs.had.co.nz/">R packages</a> book by Hadley Wickham. So this checklist might be also helpful for you.</p>
+                          <p class="date-update">
+Last update: 2020/01/10
+</p>
+<p>The following is a checklist of things to consider or do before (re-)submitting a package to CRAN, which I find every now and then helpful when I have go through this progress again. With the release of devtools 2.0 things have also changed a bit from the description provided in the <a href="http://r-pkgs.had.co.nz/">R packages</a> book by Hadley Wickham. So this checklist might be also helpful for you.</p>
 <hr />
 <p><br></p>
 <div id="steps---checklist" class="section level2">
@@ -284,12 +287,16 @@
 <li><code>check_on_linux()</code> and <code>check_on_windows()</code> select the operating system.</li>
 <li><code>check_with_roldrel()</code>, <code>check_with_rrelease()</code>, <code>check_with_rpatched()</code> and <code>check_with_rdevel()</code> select an R version.</li>
 </ul></li>
-<li>Update <code>README.md</code> file:
+<li>Update <code>README.Rmd</code> file:
 <ul>
 <li>Make changes in the README.Rmd file (which can be created using <code>devtools::use_readme_rmd()</code> )</li>
 <li>Knit the .Rmd into .md or use <code>devtools::build_readme()</code> which is a wrapper around <code>rmarkdown::render()</code></li>
 </ul></li>
-<li>Update <code>NEWS.md</code> file once more (should be constantly updated with every change made!)</li>
+<li>Update <code>NEWS.md</code> file once more
+<ul>
+<li>should be constantly updated with every change made!</li>
+<li>until this point, still use the development version</li>
+</ul></li>
 <li>Check spelling errors after finalising all files: <code>devtools::spell_check()</code></li>
 <li>Update <code>Index.Rmd</code> file and package website if necessary (run <code>pkgdown::build_site()</code>) → make sure that the build passed on Travis CI, otherwise the badge on the website will show the <em>failed</em> badge.</li>
 <li>Update <code>cran-comments.md</code>: Add
@@ -304,7 +311,12 @@
 <li>Merge branches if necessary via git: <code>git merge –no-ff branch_name</code></li>
 </ul></li>
 <li>Run again a final local R CMD check with <code>devtools::check()</code></li>
-<li>For re-submission update now the <em>‘Version’</em> field in the DESCRIPTION file (after the final push to Github, so on the Github website you have still the development version (until CRAN acceptance) but the new version for the submission)</li>
+<li>For re-submission
+<ul>
+<li>update now the <em>‘Version’</em> field in the DESCRIPTION file (after the final push to Github, so on the Github website you have still the development version (until CRAN acceptance) but the new version for the submission)</li>
+<li>replace in the <code>NEWS.md</code> file the development version with the new submitted version number</li>
+<li>If you also have a short summary of the changes in each version in your <code>README.Rmd</code> file than add the summary under the new version now.</li>
+</ul></li>
 <li>Submit the package to CRAN.
 <ul>
 <li>Use <code>devtools::release()</code> which performs more checks prior to submission. If you simply want to re-submit and avoid all the questions use the shortcut <code>devtools::submit_cran()</code>.</li>
