@@ -236,7 +236,7 @@ $ ssh -T gitPersonal
 
 you're ready to connect your home machine to the existing repos. 
 
-# 4. Connecting your second computer to a specific repos
+# 4. Connecting your second computer to a specific repo
 
 <span style="font-size:1.2rem;">NOTE: Here it is important that you DON'T follow the recommendations on the GitHub help or any other blog that assumes you have only 1 account and do some tweaks instead!!<span>
 
